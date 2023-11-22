@@ -42,26 +42,36 @@
                         <a class="nav-link active" aria-current="page" href="{{ url_for('secret') }}">Secret</a>
                     </li>
                 </ul>
-                {% if current_user.is_anonymous %}
-                <a href="{{ url_for('login') }}"><button class="btn btn-outline-primary">Login</button></a>
-                <a href="{{ url_for('register') }}"><button class="btn btn-outline-primary">Register</button></a>
-                {% else %}
-                <a href="{{ url_for('user_profile')}}">{{ current_user.name}}</a>
-                <a href="{{ url_for('logout') }}"><button class="btn btn-outline-primary">Logout</button></a>
-                {% endif %}
+                <ul class="navbar-nav  mb-2 mb-lg-0">
+                    {% if current_user.is_anonymous %}
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{{ url_for('login') }}">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{{ url_for('register') }}">Register</a>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{{ url_for('user_profile')}}">{{
+                            current_user.name}}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{{ url_for('logout') }}">Logout</a>
+                    </li>
+                    {% endif %}
+                </ul>
             </div>
         </div>
     </nav>
-    {% with messages = get_flashed_messages() %}
-    {% if messages %}
-    <ul>
-        {% for message in messages %}
-        <li>{{ message }}</li>
-        {% endfor %}
-    </ul>
-    {% endif %}
-    {% endwith %}
     <div class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, message in messages %}
+        <div class="alert alert-{{category}} mt-4 col-md-6 m-auto" role="alert">{{ message }}</div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+
         {% block content %} {% endblock %}
     </div>
 </body>
