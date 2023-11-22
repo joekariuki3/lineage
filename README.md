@@ -1,2 +1,2 @@
 # Lineage
-## A web application family tree application
+## A Family tree web application
