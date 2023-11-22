@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<p>{{ current_user.user_id}}</p>
+<p>{{ current_user.name}}</p>
+<p>{{current_user.email}}</p>
+
+<a href="{{url_for('edit_profile')}}">update details</a>
+{% endblock %}

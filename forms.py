@@ -20,3 +20,8 @@ class LoginForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired()])
     remember_me = BooleanField('Remember Me')
     submit = SubmitField('Sign In')
+
+class EditProfileForm(FlaskForm):
+    name = StringField('Name', validators=[DataRequired()])
+    email = EmailField('Email', validators=[DataRequired(), Email()])
+    submit = SubmitField('Update')
