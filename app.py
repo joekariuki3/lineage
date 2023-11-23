@@ -135,30 +135,59 @@ def create_family():
         return redirect(url_for('index'))
     return render_template('create_family.html', title='Create Family', form=form, memberForm=memberForm)
 
+# delete a Family
+@app.route('/family/delete/<id>')
+@login_required
+def delete_family(id):
+    family = Family.query.filter_by(family_id=id).first()
+    if current_user.user_id == family.user_id:
+        db.session.delete(family)
+        db.session.commit()
+        flash('Family deleted successful', 'success')
+    else:
+        flash('You are not allowed to delete this family', 'info')
+    return redirect(url_for('user_profile'))
+
 #Add family member
 @app.route('/member', methods=['GET', 'POST'])
+@app.route('/member/<member1_id>', methods=['GET', 'POST'])
 @login_required
-def add_member(f_id='', memberForm={}):
+def add_member(f_id='', memberForm={}, member1_id=''):
     root = False
-    if not f_id:
+    member1 = ''
+    if not member1_id == '':
+        member1 = Member.query.filter_by(member_id=member1_id).first()
+    if f_id == '':
         f_id = request.form.get('family')
     if not memberForm == {}:
         form = memberForm
         root = True
     form = AddMemberForm()
     if form.validate_on_submit():
+        a_live = False
+        if form.alive.data == 'Yes':
+            a_live = True
         newMember = Member(first_name = form.first_name.data,
                            last_name = form.last_name.data,
                            birthdate = form.birthdate.data,
                            gender = form.gender.data,
                            root=root,
                            family_id = f_id,
+                           alive = a_live,
+                           deathdate = form.deathdate.data,
                            )
         db.session.add(newMember)
         db.session.commit()
         flash('Member added Successfully', 'success')
+        add_relationship(member1.member_id, newMember.member_id, form.relationship.data)
         return redirect(url_for('index'))
-    return render_template('add_member.html', title='Add member', form=form, families=current_user.families)
+    return render_template('add_member.html', title='Add member', form=form, families=current_user.families, member1=member1)
+
+# relationship
+def add_relationship(member1_id, member2_id, relationship_type):
+    new_relationship = Relationship(member_id_1=member1_id, member_id_2=member2_id, relationship_type=relationship_type)
+    db.session.add(new_relationship)
+    db.session.commit()
 
 # executed as main run
 if __name__ == '__main__':

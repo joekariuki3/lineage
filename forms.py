@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, EmailField, SelectField,DateField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, EmailField, SelectField,DateField, RadioField
 from wtforms.validators import DataRequired, EqualTo, Email, ValidationError
 from models import User
 from flask_login import current_user
@@ -36,6 +36,9 @@ class AddMemberForm(FlaskForm):
     last_name = StringField('Last Name', validators=[DataRequired()])
     gender = SelectField('Gender', choices=[('Male', 'Male'), ('Male', 'Female'), ('Male', 'Others') ], validators=[DataRequired()])
     birthdate = DateField('Birth Date')
+    alive = RadioField('Alive', choices=[('Yes'), ('No')], validators=[DataRequired()])
+    deathdate = DateField('Death Date')
+    relationship = SelectField('Relationship', choices=[('spouse'), ('child')], validators=[DataRequired()])
     submit = SubmitField('Add')
 
 

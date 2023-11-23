@@ -16,8 +16,8 @@ class Family(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=True)
     # Relationships
     users = db.relationship('User', back_populates='families')
-    events = db.relationship('Event', back_populates='family')
-    members = db.relationship('Member', back_populates='family')
+    events = db.relationship('Event', cascade="all,delete", back_populates='family')
+    members = db.relationship('Member', cascade="all,delete", back_populates='family')
 
 class Member(db.Model):
     """Class representing a family member in the application."""
@@ -27,8 +27,10 @@ class Member(db.Model):
     first_name = db.Column(db.String(50), nullable=False)
     last_name = db.Column(db.String(50), nullable=False)
     birthdate = db.Column(db.Date)
+    deathdate = db.Column(db.Date)
     gender = db.Column(db.String(10))
     root = db.Column(db.Boolean)
+    alive = db.Column(db.Boolean)
 
 
     # Foreign Keys

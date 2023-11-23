@@ -87,6 +87,38 @@
                 {{ memberForm.birthdate(class="form-control form-control-lg") }}
                 {% endif %}
             </div>
+            <div class="form-group">
+                {{ memberForm.alive.label(class="form-control-lable")}}
+
+                <!-- if errors -->
+                {% if memberForm.alive.errors%}
+                {{ memberForm.alive(class="form-control form-control-lg is-invalid d-flex list-unstyled
+                justify-content-around") }}
+                <div class="invalid-feedback">
+                    {% for error in memberForm.alive.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+                {% else %}
+                {{ memberForm.alive(class="form-control form-control-lg d-flex list-unstyled justify-content-around") }}
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ memberForm.deathdate.label(class="form-control-lable")}}
+
+                <!-- if errors -->
+                {% if memberForm.deathdate.errors%}
+                {{ memberForm.deathdate(class="form-control form-control-lg is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in memberForm.deathdate.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+                {% else %}
+                {{ memberForm.deathdate(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+
             <!-- root member end -->
 
             <div class="form-group">

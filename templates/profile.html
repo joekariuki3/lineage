@@ -31,7 +31,11 @@
                                         <h4>info</h4>
                                         {% if current_user.families%}
                                         {% for family in current_user.families%}
-                                        <p class="text-muted">{{family.name}}</p>
+                                        <p class="text-muted">
+                                            {{family.name}}
+                                            <a href="{{url_for('delete_family', id=family.family_id)}}">Delete</a>
+                                        </p>
+
                                         {% endfor %}
                                         {% endif%}
                                     </div>

@@ -17,6 +17,23 @@
                 </select>
                 <!-- if errors -->
             </div>
+            <span>what is the relationship between the New member and {{member1.first_name}}</span>
+            <div class="form-group">
+                {{ form.relationship.label(class="form-control-lable")}}
+
+                <!-- if errors -->
+                {% if form.relationship.errors%}
+                {{ form.relationship(class="form-control form-control-lg is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.relationship.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+                {% else %}
+                {{ form.relationship(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+
             <div class="form-group">
                 {{ form.first_name.label(class="form-control-lable")}}
 
@@ -32,6 +49,7 @@
                 {{ form.first_name(class="form-control form-control-lg") }}
                 {% endif %}
             </div>
+
             <div class="form-group">
                 {{ form.last_name.label(class="form-control-lable")}}
 
@@ -78,8 +96,40 @@
                 {% endif %}
             </div>
             <div class="form-group">
+                {{ form.alive.label(class="form-control-lable")}}
+
+                <!-- if errors -->
+                {% if form.alive.errors%}
+                {{ form.alive(class="form-control form-control-lg is-invalid d-flex list-unstyled
+                justify-content-around") }}
+                <div class="invalid-feedback">
+                    {% for error in form.alive.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+                {% else %}
+                {{ form.alive(class="form-control form-control-lg d-flex list-unstyled justify-content-around") }}
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form.deathdate.label(class="form-control-lable")}}
+
+                <!-- if errors -->
+                {% if form.deathdate.errors%}
+                {{form.deathdate(class="form-control form-control-lg is-invalid ")}}
+                <div class="invalid-feedback">
+                    {% for error in form.deathdate.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+                {% else %}
+                {{form.deathdate(class="form-control form-control-lg")}}
+                {% endif %}
+            </div>
+            <div class="form-group">
                 {{ form.submit(class="btn btn-lg btn-outline-primary ") }}
             </div>
+
         </fieldset>
     </form>
 </div>

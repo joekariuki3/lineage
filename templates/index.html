@@ -5,7 +5,12 @@
 {% for family in families %}
 <p>{{family.name}}</p>
 {% for member in family.members %}
-<p>-> {{member.first_name}}</p>
+{% if member.root %}
+<p>
+    ({{member.member_id}}) {{member.first_name}} {{member.last_name}} |
+    <a href="{{url_for('add_member', member1_id=member.member_id)}}">Add Member </a>
+</p>
+{% endif %}
 {% endfor %}
 {% endfor %}
 {% else %}
