@@ -5,7 +5,7 @@ from flask_login import LoginManager, current_user, login_user, logout_user, log
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from models import db, Family, Member, User, Event, Relationship
-from forms import RegisterForm, LoginForm, EditProfileForm
+from forms import RegisterForm, LoginForm, EditProfileForm, CreateFamilyForm,AddMemberForm
 
 app = Flask(__name__)
 login = LoginManager(app)
@@ -51,7 +51,10 @@ def secret():
 # Home
 @app.route('/')
 def index():
-    return render_template('index.html')
+    families = []
+    if current_user.is_authenticated:
+        families = Family.query.filter_by(user_id=current_user.user_id)
+    return render_template('index.html', families=families)
 
 # Register
 @app.route('/register', methods=['GET','POST'])
@@ -115,6 +118,49 @@ def edit_profile():
     return render_template('edit_profile.html', title='Edit Profile',
                            form=form)
 
+# create family
+@app.route('/family', methods=['GET', 'POST'])
+@login_required
+def create_family():
+    form = CreateFamilyForm()
+    memberForm = AddMemberForm()
+    if form.validate_on_submit() and memberForm.validate_on_submit():
+        family_name = form.name.data
+        new_family = Family(name=family_name, user_id=current_user.user_id)
+        db.session.add(new_family)
+        db.session.commit()
+        flash('Family added Successfully', 'success')
+        # add root member
+        add_member(new_family.family_id, memberForm)
+        return redirect(url_for('index'))
+    return render_template('create_family.html', title='Create Family', form=form, memberForm=memberForm)
+
+#Add family member
+@app.route('/member', methods=['GET', 'POST'])
+@login_required
+def add_member(f_id='', memberForm={}):
+    root = False
+    if not f_id:
+        f_id = request.form.get('family')
+    if not memberForm == {}:
+        form = memberForm
+        root = True
+    form = AddMemberForm()
+    if form.validate_on_submit():
+        newMember = Member(first_name = form.first_name.data,
+                           last_name = form.last_name.data,
+                           birthdate = form.birthdate.data,
+                           gender = form.gender.data,
+                           root=root,
+                           family_id = f_id,
+                           )
+        db.session.add(newMember)
+        db.session.commit()
+        flash('Member added Successfully', 'success')
+        return redirect(url_for('index'))
+    return render_template('add_member.html', title='Add member', form=form, families=current_user.families)
+
+# executed as main run
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()  # Create tables based on models

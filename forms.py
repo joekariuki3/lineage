@@ -1,7 +1,8 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, EmailField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, EmailField, SelectField,DateField
 from wtforms.validators import DataRequired, EqualTo, Email, ValidationError
 from models import User
+from flask_login import current_user
 
 class RegisterForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired()])
@@ -25,3 +26,16 @@ class EditProfileForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired()])
     email = EmailField('Email', validators=[DataRequired(), Email()])
     submit = SubmitField('Update')
+
+class CreateFamilyForm(FlaskForm):
+    name = StringField('Family Name', validators=[DataRequired()])
+    submit = SubmitField('Add')
+
+class AddMemberForm(FlaskForm):
+    first_name = StringField('First Name', validators=[DataRequired()])
+    last_name = StringField('Last Name', validators=[DataRequired()])
+    gender = SelectField('Gender', choices=[('Male', 'Male'), ('Male', 'Female'), ('Male', 'Others') ], validators=[DataRequired()])
+    birthdate = DateField('Birth Date')
+    submit = SubmitField('Add')
+
+

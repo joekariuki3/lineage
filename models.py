@@ -13,7 +13,9 @@ class Family(db.Model):
 
     family_id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=True)
     # Relationships
+    users = db.relationship('User', back_populates='families')
     events = db.relationship('Event', back_populates='family')
     members = db.relationship('Member', back_populates='family')
 
@@ -26,6 +28,8 @@ class Member(db.Model):
     last_name = db.Column(db.String(50), nullable=False)
     birthdate = db.Column(db.Date)
     gender = db.Column(db.String(10))
+    root = db.Column(db.Boolean)
+
 
     # Foreign Keys
     family_id = db.Column(db.Integer, db.ForeignKey('families.family_id'), nullable=False)
@@ -42,12 +46,14 @@ class User(db.Model, UserMixin):
     name = db.Column(db.String(50), nullable=False)
     email = db.Column(db.String(50), unique=True, nullable=False)
     password = db.Column(db.String(2500), nullable=False)
+    families = db.relationship('Family', back_populates='users')
 
     def set_password(self, user_password):
         self.password = generate_password_hash(user_password)
 
     def check_password(self, user_password):
         return check_password_hash(self.password, user_password)
+
     def get_id(self):
            return (self.user_id)
 

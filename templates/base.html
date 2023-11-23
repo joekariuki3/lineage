@@ -38,9 +38,19 @@
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="#">About</a>
                     </li>
+                    {% if not current_user.is_anonymous %}
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="{{ url_for('secret') }}">Secret</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="{{ url_for('create_family') }}">Add
+                            Family</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="{{ url_for('add_member') }}">Add
+                            Member</a>
+                    </li>
+                    {% endif%}
                 </ul>
                 <ul class="navbar-nav  mb-2 mb-lg-0">
                     {% if current_user.is_anonymous %}
