@@ -6,10 +6,14 @@
 <p>{{family.name}}</p>
 {% for member in family.members %}
 {% if member.root %}
-<p>
-    ({{member.member_id}}) {{member.first_name}} {{member.last_name}} |
-    <a href="{{url_for('add_member', member1_id=member.member_id)}}">Add Member </a>
-</p>
+<details>
+    <summary class="member" member1_id="{{member.member_id}}" onclick="getNuclear(event)">
+        {{member.first_name}} {{member.last_name}} |
+        <a href="{{url_for('add_member', member1_id=member.member_id)}}">Add {{member.first_name}} spouse</a>
+    </summary>
+    <div class="" id="spouse_{{member.member_id}}"></div>
+    <div class="" id="children_{{member.member_id}}"></div>
+</details>
 {% endif %}
 {% endfor %}
 {% endfor %}

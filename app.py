@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 import os
-from flask import Flask, url_for, render_template, flash, redirect, request
+from flask import Flask, url_for, render_template, flash, redirect, request, make_response, jsonify
 from flask_login import LoginManager, current_user, login_user, logout_user, login_required
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
@@ -182,6 +182,32 @@ def add_member(f_id='', memberForm={}, member1_id=''):
         add_relationship(member1.member_id, newMember.member_id, form.relationship.data)
         return redirect(url_for('index'))
     return render_template('add_member.html', title='Add member', form=form, families=current_user.families, member1=member1)
+
+# API call retrieve nuclear family of member with id passed
+@app.route('/member/nuclear', methods=['POST', 'GET'])
+@login_required
+def get_nuclear():
+    data = request.get_json()
+    if not data:
+        return make_response(jsonify({"error": "Not a JSON"}), 400)
+    elif "member1_id" not in data:
+        return make_response(jsonify({"error": "Missing member1_id"}), 400)
+    nuclear_family = {"spouses": [], "children": []}
+    spouses = Relationship.query.filter_by(member_id_1=int(data['member1_id']), relationship_type='spouse').all()
+    children = Relationship.query.filter_by(member_id_1=int(data['member1_id']), relationship_type='child').all()
+    for spouse in spouses:
+        spouse_member = Member.query.filter_by(member_id=spouse.member_id_2).first()
+        spouse_member = spouse_member.__dict__
+        del spouse_member['_sa_instance_state']
+        nuclear_family['spouses'].append(spouse_member)
+    for child in children:
+        child_member = Member.query.filter_by(member_id=child.member_id_2).first()
+        child_member = child_member.__dict__
+        del child_member['_sa_instance_state']
+        nuclear_family['children'].append(child_member)
+    response =  make_response(jsonify(nuclear_family), 200)
+    return response
+
 
 # relationship
 def add_relationship(member1_id, member2_id, relationship_type):
