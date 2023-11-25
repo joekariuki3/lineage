@@ -89,10 +89,9 @@ function getSpouse(event) {
           $(`#spouse_${id}`).append(
             `<details>
                 <summary class="member" member1_id="${id}" spouse_id="${spouse.member_id}" onclick="getChildren(event)">
-                    ${spouse.first_name} ${spouse.last_name} |
-
-                    <a href="/member/${id}/${spouse.member_id}/child">Add child</a>
-                 </summary>
+                    ${spouse.first_name} ${spouse.last_name}
+                    </summary>
+                    <a href="/member/${id}/${spouse.member_id}/child">Add child of ${spouse.first_name}</a>
                  <div class="" id="children_${spouse.member_id}"></div>
             </details>`
           );
@@ -121,13 +120,12 @@ function getChildren(event) {
       success: function (resp) {
         const children = resp;
         $.each(children, function (index, child) {
-          console.log(s_id);
           $(`#children_${s_id}`).append(
             `<details>
               <summary class="member" member1_id="${child.member_id}" onclick="getSpouse(event)">
-                ${child.first_name} ${child.last_name} |
+                ${child.first_name} ${child.last_name}
+                </summary>
                 <a href="/member/${child.member_id}/spouse">Add ${child.first_name} ${child.last_name} spouse</a>
-              </summary>
               <div class="" id="spouse_${child.member_id}"></div>
             </details>`
           );
@@ -141,3 +139,12 @@ function getChildren(event) {
     });
   }
 }
+
+$(".alive li input").on("change", function () {
+  if ($(this).val() === "No") {
+    // remove hide class to show deathdate meaning person is not alive
+    $(".deathdate").removeClass("hide");
+  } else {
+    $(".deathdate").addClass("hide");
+  }
+});

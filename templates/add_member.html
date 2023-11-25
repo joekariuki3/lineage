@@ -94,12 +94,12 @@
                 {{ form.birthdate(class="form-control form-control-lg") }}
                 {% endif %}
             </div>
-            <div class="form-group">
+            <div class="form-group alive">
                 {{ form.alive.label(class="form-control-lable")}}
 
                 <!-- if errors -->
                 {% if form.alive.errors%}
-                {{ form.alive(class="form-control form-control-lg is-invalid d-flex list-unstyled
+                {{ form.alive(class=" form-control form-control-lg is-invalid d-flex list-unstyled
                 justify-content-around") }}
                 <div class="invalid-feedback">
                     {% for error in form.alive.errors %}
@@ -107,10 +107,11 @@
                     {% endfor %}
                 </div>
                 {% else %}
-                {{ form.alive(class="form-control form-control-lg d-flex list-unstyled justify-content-around") }}
+                {{ form.alive(class="form-control form-control-lg d-flex list-unstyled justify-content-around")
+                }}
                 {% endif %}
             </div>
-            <div class="form-group">
+            <div class="form-group deathdate hide">
                 {{ form.deathdate.label(class="form-control-lable")}}
 
                 <!-- if errors -->

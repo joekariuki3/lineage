@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, EmailField, SelectField,DateField, RadioField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, EmailField, SelectField,DateField, RadioField, validators
 from wtforms.validators import DataRequired, EqualTo, Email, ValidationError
 from models import User
 from flask_login import current_user
@@ -37,7 +37,7 @@ class AddMemberForm(FlaskForm):
     gender = SelectField('Gender', choices=[('Male', 'Male'), ('Male', 'Female'), ('Male', 'Others') ], validators=[DataRequired()])
     birthdate = DateField('Birth Date')
     alive = RadioField('Alive', choices=[('Yes'), ('No')], validators=[DataRequired()])
-    deathdate = DateField('Death Date')
+    deathdate = DateField('Death Date', validators=(validators.Optional(),))
     submit = SubmitField('Add')
 
 class AddMemberSpouseForm(FlaskForm):
@@ -46,7 +46,7 @@ class AddMemberSpouseForm(FlaskForm):
     gender = SelectField('Gender', choices=[('Male', 'Male'), ('Male', 'Female'), ('Male', 'Others') ], validators=[DataRequired()])
     birthdate = DateField('Birth Date')
     alive = RadioField('Alive', choices=[('Yes'), ('No')], validators=[DataRequired()])
-    deathdate = DateField('Death Date')
+    deathdate = DateField('Death Date', validators=(validators.Optional(),))
     relationship = SelectField('Relationship', choices=[('spouse')], validators=[DataRequired()])
     submit = SubmitField('Add')
 class AddMemberChildForm(FlaskForm):
@@ -55,7 +55,7 @@ class AddMemberChildForm(FlaskForm):
     gender = SelectField('Gender', choices=[('Male', 'Male'), ('Male', 'Female'), ('Male', 'Others') ], validators=[DataRequired()])
     birthdate = DateField('Birth Date')
     alive = RadioField('Alive', choices=[('Yes'), ('No')], validators=[DataRequired()])
-    deathdate = DateField('Death Date')
+    deathdate = DateField('Death Date', validators=(validators.Optional(),))
     relationship = SelectField('Relationship', choices=[('child')], validators=[DataRequired()])
     submit = SubmitField('Add')
 

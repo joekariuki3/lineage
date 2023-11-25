@@ -8,10 +8,10 @@
 {% if member.root %}
 <details>
     <summary class="member" member1_id="{{member.member_id}}" onclick="getSpouse(event)">
-        {{member.first_name}} {{member.last_name}} |
-        <a href="{{url_for('add_spouse', member_id=member.member_id)}}">Add {{member.first_name}} {{member.last_name}}
-            spouse</a>
+        {{member.first_name}} {{member.last_name}}
     </summary>
+    <a href="{{url_for('add_spouse', member_id=member.member_id)}}">Add {{member.first_name}} {{member.last_name}}
+        spouse</a>
     <div class="" id="spouse_{{member.member_id}}"></div>
 </details>
 {% endif %}
