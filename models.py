@@ -31,6 +31,8 @@ class Member(db.Model):
     gender = db.Column(db.String(10))
     root = db.Column(db.Boolean)
     alive = db.Column(db.Boolean)
+    mother = db.Column(db.Integer, nullable=True)
+    father = db.Column(db.Integer, nullable=True)
 
 
     # Foreign Keys
@@ -38,7 +40,7 @@ class Member(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=True)
 
     # Relationships
-    family = db.relationship('Family', back_populates='members')
+    family = db.relationship('Family', cascade="all,delete", back_populates='members')
 
 class User(db.Model, UserMixin):
     """Class representing a user in the application."""
@@ -73,7 +75,7 @@ class Event(db.Model):
     family_id = db.Column(db.Integer, db.ForeignKey('families.family_id'), nullable=False)
 
     # Relationships
-    family = db.relationship('Family', back_populates='events')
+    family = db.relationship('Family', cascade="all,delete", back_populates='events')
 
 class Relationship(db.Model):
     """Class representing relationships between family members."""
