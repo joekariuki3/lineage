@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="content-section col-md-6 m-auto">
+    <form action="" method="post" novalidate>
+        {{ form.hidden_tag() }}
+        <fieldset class="form-group">
+            <legend class="border-bottom mb-4 mt-4">
+                <h1>{{title}}</h1>
+            </legend>
+            <div class="form-group">
+                {{ form.first_name.label(class="form-control-lable")}}
+
+                <!-- if errors -->
+                {% if form.first_name.errors%}
+                {{ form.first_name(class="form-control form-control-lg is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.first_name.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+                {% else %}
+                {{ form.first_name(class="form-control form-control-lg", value=member.first_name) }}
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                {{ form.last_name.label(class="form-control-lable")}}
+
+                <!-- if errors -->
+                {% if form.last_name.errors%}
+                {{ form.last_name(class="form-control form-control-lg is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.last_name.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+                {% else %}
+                {{ form.last_name(class="form-control form-control-lg", value=member.last_name) }}
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form.gender.label(class="form-control-lable")}}
+
+                <!-- if errors -->
+                {% if form.gender.errors%}
+                {{ form.gender(class="form-control form-control-lg is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.gender.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+                {% else %}
+                {{ form.gender(class="form-control form-control-lg", value=member.gender) }}
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form.birthdate.label(class="form-control-lable")}}
+
+                <!-- if errors -->
+                {% if form.birthdate.errors%}
+                {{ form.birthdate(class="form-control form-control-lg is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.birthdate.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+                {% else %}
+                {{ form.birthdate(class="form-control form-control-lg", value=member.birthdate) }}
+                {% endif %}
+            </div>
+            <div class="form-group alive">
+                {{ form.alive.label(class="form-control-lable")}}
+
+                <!-- if errors -->
+                {% if form.alive.errors%}
+                {{ form.alive(class=" form-control form-control-lg is-invalid d-flex list-unstyled
+                justify-content-around") }}
+                <div class="invalid-feedback">
+                    {% for error in form.alive.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+                {% else %}
+                {{ form.alive(class="form-control form-control-lg d-flex list-unstyled justify-content-around",
+                value=member.alive)
+                }}
+                {% endif %}
+            </div>
+            <div class="form-group deathdate hide">
+                {{ form.deathdate.label(class="form-control-lable")}}
+
+                <!-- if errors -->
+                {% if form.deathdate.errors%}
+                {{form.deathdate(class="form-control form-control-lg is-invalid ")}}
+                <div class="invalid-feedback">
+                    {% for error in form.deathdate.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+                {% else %}
+                {{form.deathdate(class="form-control form-control-lg", value=member.deathdate)}}
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form.submit(class="btn btn-lg btn-outline-primary ") }}
+            </div>
+
+        </fieldset>
+    </form>
+</div>
+{% endblock %}

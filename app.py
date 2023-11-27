@@ -5,7 +5,7 @@ from flask_login import LoginManager, current_user, login_user, logout_user, log
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from models import db, Family, Member, User, Event, Relationship
-from forms import RegisterForm, LoginForm, EditProfileForm, CreateFamilyForm,AddMemberForm, AddMemberSpouseForm, AddMemberChildForm
+from forms import RegisterForm, LoginForm, EditProfileForm, CreateFamilyForm,AddMemberForm, AddMemberSpouseForm, AddMemberChildForm, updateMemberForm
 
 app = Flask(__name__)
 login = LoginManager(app)
@@ -273,6 +273,35 @@ def add_child(member_id, spouse_id):
         return redirect(url_for('index'))
     return render_template('add_member.html', title='Add member', form=form, families=current_user.families, member1=member1)
 
+# member profile
+@app.route('/member/<member_id>', methods=['GET'])
+@login_required
+def member_profile(member_id):
+    member = Member.query.filter_by(member_id=member_id).first()
+    return render_template('member_profile.html', title=f'{member.first_name} information ', member=member)
+
+
+# update member
+@app.route('/update_member/<member_id>', methods=['GET', 'POST'])
+@login_required
+def update_member(member_id):
+    form = updateMemberForm()
+    a_live = False
+    member = Member.query.filter_by(member_id=member_id).first()
+    if form.validate_on_submit():
+        if form.alive.data == 'Yes':
+            a_live = True
+        member.first_name = form.first_name.data
+        member.last_name = form.last_name.data
+        member.birthdate = form.birthdate.data
+        member.gender = form.gender.data
+        member.deathdate = form.deathdate.data
+        member.alive = a_live
+        db.session.commit()
+        flash(f'{member.first_name} changes have been Updated.', 'success')
+        return redirect(url_for('member_profile', member_id=member.member_id))
+    return render_template('update_member.html', title=f'update {member.first_name} information ',
+                           form=form, member=member)
 
 # API call retrieve nuclear family of member with id passed
 # return spouses

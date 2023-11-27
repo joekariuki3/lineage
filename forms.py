@@ -34,7 +34,7 @@ class CreateFamilyForm(FlaskForm):
 class AddMemberForm(FlaskForm):
     first_name = StringField('First Name', validators=[DataRequired()])
     last_name = StringField('Last Name', validators=[DataRequired()])
-    gender = SelectField('Gender', choices=[('Male', 'Male'), ('Male', 'Female'), ('Male', 'Others') ], validators=[DataRequired()])
+    gender = SelectField('Gender', choices=[('Male', 'Male'), ('Female', 'Female'), ('Others', 'Others') ], validators=[DataRequired()])
     birthdate = DateField('Birth Date')
     alive = RadioField('Alive', choices=[('Yes'), ('No')], validators=[DataRequired()])
     deathdate = DateField('Death Date', validators=(validators.Optional(),))
@@ -43,7 +43,7 @@ class AddMemberForm(FlaskForm):
 class AddMemberSpouseForm(FlaskForm):
     first_name = StringField('First Name', validators=[DataRequired()])
     last_name = StringField('Last Name', validators=[DataRequired()])
-    gender = SelectField('Gender', choices=[('Male', 'Male'), ('Male', 'Female'), ('Male', 'Others') ], validators=[DataRequired()])
+    gender = SelectField('Gender', choices=[('Male', 'Male'), ('Female', 'Female'), ('Others', 'Others') ], validators=[DataRequired()])
     birthdate = DateField('Birth Date')
     alive = RadioField('Alive', choices=[('Yes'), ('No')], validators=[DataRequired()])
     deathdate = DateField('Death Date', validators=(validators.Optional(),))
@@ -52,10 +52,19 @@ class AddMemberSpouseForm(FlaskForm):
 class AddMemberChildForm(FlaskForm):
     first_name = StringField('First Name', validators=[DataRequired()])
     last_name = StringField('Last Name', validators=[DataRequired()])
-    gender = SelectField('Gender', choices=[('Male', 'Male'), ('Male', 'Female'), ('Male', 'Others') ], validators=[DataRequired()])
+    gender = SelectField('Gender', choices=[('Male', 'Male'), ('Female', 'Female'), ('Others', 'Others') ], validators=[DataRequired()])
     birthdate = DateField('Birth Date')
     alive = RadioField('Alive', choices=[('Yes'), ('No')], validators=[DataRequired()])
     deathdate = DateField('Death Date', validators=(validators.Optional(),))
     relationship = SelectField('Relationship', choices=[('child')], validators=[DataRequired()])
     submit = SubmitField('Add')
+
+class updateMemberForm(FlaskForm):
+    first_name = StringField('First Name', validators=[DataRequired()])
+    last_name = StringField('Last Name', validators=[DataRequired()])
+    gender = SelectField('Gender', choices=[('Male', 'Male'), ('Female', 'Female'), ('Others', 'Others') ], validators=[DataRequired()])
+    birthdate = DateField('Birth Date')
+    alive = RadioField('Alive', choices=[('Yes'), ('No')], validators=[DataRequired()])
+    deathdate = DateField('Death Date', validators=(validators.Optional(),))
+    submit = SubmitField('Update')
 
