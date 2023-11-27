@@ -153,16 +153,13 @@ def delete_family(id):
 def add_root(family_id, memberForm={}):
     if not memberForm == {}:
         form = memberForm
-        a_live = False
-        if form.alive.data == 'Yes':
-            a_live = True
         newMember = Member(first_name = form.first_name.data,
                            last_name = form.last_name.data,
                            birthdate = form.birthdate.data,
                            gender = form.gender.data,
                            root=True,
                            family_id = family_id,
-                           alive = a_live,
+                           alive = eval(form.alive.data),
                            deathdate = form.deathdate.data,
                            )
         db.session.add(newMember)
@@ -177,20 +174,17 @@ def add_root(family_id, memberForm={}):
 @login_required
 def add_spouse(member_id):
     form = AddMemberSpouseForm()
-    a_live = False
     member1 = Member.query.filter_by(member_id=member_id).first()
     family_id = member1.family_id
     title = f'Adding spouse of {member1.first_name} {member1.last_name}'
     if form.validate_on_submit():
-        if form.alive.data == 'Yes':
-            a_live = True
         newMember = Member(first_name = form.first_name.data,
                            last_name = form.last_name.data,
                            birthdate = form.birthdate.data,
                            gender = form.gender.data,
                            root=False,
                            family_id = family_id,
-                           alive = a_live,
+                           alive = eval(form.alive.data),
                            deathdate = form.deathdate.data,
                            )
         db.session.add(newMember)
@@ -205,7 +199,6 @@ def add_spouse(member_id):
 @login_required
 def add_child(member_id, spouse_id):
     form = AddMemberChildForm()
-    a_live = False
     father = ''
     mother = ''
     member1 = Member.query.filter_by(member_id=member_id).first()
@@ -218,15 +211,13 @@ def add_child(member_id, spouse_id):
         father = spouse
     family_id = member1.family_id
     if form.validate_on_submit():
-        if form.alive.data == 'Yes':
-            a_live = True
         newMember = Member(first_name = form.first_name.data,
                            last_name = form.last_name.data,
                            birthdate = form.birthdate.data,
                            gender = form.gender.data,
                            root=False,
                            family_id = family_id,
-                           alive = a_live,
+                           alive = eval(form.alive.data),
                            deathdate = form.deathdate.data,
                            father = father.member_id,
                            mother = mother.member_id
@@ -286,17 +277,17 @@ def member_profile(member_id):
 @login_required
 def update_member(member_id):
     form = updateMemberForm()
-    a_live = False
     member = Member.query.filter_by(member_id=member_id).first()
+
+    form.gender.data = member.gender
+    form.gender.data = member.alive
     if form.validate_on_submit():
-        if form.alive.data == 'Yes':
-            a_live = True
         member.first_name = form.first_name.data
         member.last_name = form.last_name.data
         member.birthdate = form.birthdate.data
         member.gender = form.gender.data
         member.deathdate = form.deathdate.data
-        member.alive = a_live
+        member.alive = eval(form.alive.data)
         db.session.commit()
         flash(f'{member.first_name} changes have been Updated.', 'success')
         return redirect(url_for('member_profile', member_id=member.member_id))
