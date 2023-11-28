@@ -5,47 +5,118 @@
 <section class="vh-100">
     <div class="container mt-5">
         <div class="row d-flex justify-content-center align-items-center h-100">
-            <div class="col col-lg-6 mb-4 mb-lg-0">
+            <div class="col col-lg-8 mb-4 mb-lg-0">
                 <div class="card mb-3" style="border-radius: .5rem;">
                     <div class="row g-0">
-                        <div class="col-md-4 gradient-custom text-center"
-                            style="border-top-left-radius: .5rem; border-bottom-left-radius: .5rem;">
-                            <img src="https://static.vecteezy.com/system/resources/thumbnails/020/765/399/small/default-profile-account-unknown-icon-black-silhouette-free-vector.jpg"
-                                alt="Avatar" class="img-fluid my-1" style="width: 80px; " />
-                            <h5>{{ member.first_name}} {{ member.last_name}}</h5>
-                            <i class="far fa-edit mb-5"></i>
-                        </div>
-                        <div class="col-md-8">
-                            <div class="card-body p-4">
+                        <div class="col-md-12">
+                            <div class="col-md-12 gradient-custom text-center"
+                                style="border-top-left-radius: .5rem; border-bottom-left-radius: .5rem;">
+                                <img src="https://static.vecteezy.com/system/resources/thumbnails/020/765/399/small/default-profile-account-unknown-icon-black-silhouette-free-vector.jpg"
+                                    alt="Avatar" class="img-fluid my-1" style="width: 80px; " />
+                                <h5>{{ member.first_name}} {{ member.last_name}}</h5>
+                                {% if member.root%}
+                                <p class="text-muted">(Root)</p>
+                                {% endif %}
+                                <i class="far fa-edit mb-5"></i>
+                            </div>
+                            <div class="card-body p-4 text-center">
                                 <div class="row pt-1">
-                                    <div class="col-12 mb-3">
-                                        <h6>Gender</h6>
+                                    <div class="col-6 mb-3 ">
+                                        <h6>Gender
+                                        </h6>
                                         <p class="text-muted">{{member.gender}}</p>
                                     </div>
-                                    <div class="col-12 mb-3">
-                                        <h6>birthdate</h6>
+                                    <div class="col-6 mb-3">
+                                        <h6>Birth Date</h6>
                                         <p class="text-muted">{{member.birthdate}}</p>
                                     </div>
-                                    <div class="col-12 mb-3">
-                                        <h6>deathdate</h6>
+                                    {% if not member.alive %}
+                                    <div class="col-6 mb-3">
+                                        <h6>Death Date</h6>
                                         <p class="text-muted">{{member.deathdate}}</p>
                                     </div>
-                                    <div class="col-12 mb-3">
-                                        <h6>root</h6>
-                                        <p class="text-muted">{{member.root}}</p>
+                                    {% endif %}
+                                    {% if member.mother %}
+                                    {% for family_member in family_members %}
+                                    {% if family_member.member_id == member.mother %}
+                                    <div class="col-6 mb-3">
+                                        <h6>Mother</h6>
+                                        <p class="text-muted">
+                                            {{family_member.first_name}} {{family_member.last_name}}
+                                        </p>
                                     </div>
-                                    <div class="col-12 mb-3">
-                                        <h6>alive</h6>
-                                        <p class="text-muted">{{member.alive}}</p>
+                                    {% endif %}
+                                    {% endfor %}
+                                    {% endif %}
+
+                                    {% if member.father %}
+                                    {% for family_member in family_members %}
+                                    {% if family_member.member_id == member.father %}
+                                    <div class="col-6 mb-3">
+                                        <h6>Father</h6>
+                                        <p class="text-muted">
+                                            {{family_member.first_name}} {{family_member.last_name}}
+                                        </p>
                                     </div>
-                                    <div class="col-12 mb-3">
-                                        <h6>mother</h6>
-                                        <p class="text-muted">{{member.mother}}</p>
+                                    {% endif %}
+                                    {% endfor %}
+                                    {% endif %}
+
+                                    {% if siblings%}
+                                    <div class="col-6 mb-3">
+                                        <h6>{{siblings | length}} sibling</h6>
+                                        <details>
+                                            <summary>
+                                                view
+                                            </summary>
+                                            {% for sibling in siblings %}
+                                            <p class="text-muted">
+                                                {{sibling.first_name}} {{sibling.last_name}} |
+                                                <a href="{{url_for('member_profile',
+                                                    member_id=sibling.member_id)}}">More..</a>
+                                            </p>
+                                            {% endfor %}
+                                        </details>
                                     </div>
-                                    <div class="col-12 mb-3">
-                                        <h6>father</h6>
-                                        <p class="text-muted">{{member.father}}</p>
+                                    {% endif %}
+                                    {% if spouses%}
+                                    <div class="col-6 mb-3">
+                                        <h6>{{ spouses | length}} spouse</h6>
+                                        <details>
+                                            <summary>
+                                                view
+                                            </summary>
+                                            {% for spouse in spouses %}
+                                            <p class="text-muted">
+                                                {{spouse.first_name}} {{spouse.last_name}}
+                                                |
+                                                <a href="{{url_for('member_profile',
+                                                    member_id=spouse.member_id)}}">More..</a>
+                                            </p>
+                                            {% endfor %}
+                                        </details>
                                     </div>
+                                    {% endif %}
+                                    {% if children%}
+                                    <div class="col-6 mb-3">
+                                        <h6>{{children | length}} children</h6>
+                                        <details>
+                                            <summary>
+                                                view
+                                            </summary>
+                                            {% for child in children %}
+                                            <p class="text-muted">
+                                                {{child.first_name}} {{child.last_name}} |
+                                                <a
+                                                    href="{{url_for('member_profile', member_id=child.member_id)}}">More...</a>
+                                            </p>
+                                            {% endfor %}
+                                        </details>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                <div class="row pt-1">
+
                                 </div>
                                 <hr class="mt-0 mb-4">
                                 <div class="d-flex justify-content-center">

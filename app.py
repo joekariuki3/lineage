@@ -269,7 +269,43 @@ def add_child(member_id, spouse_id):
 @login_required
 def member_profile(member_id):
     member = Member.query.filter_by(member_id=member_id).first()
-    return render_template('member_profile.html', title=f'{member.first_name} information ', member=member)
+    family_id = member.family_id
+    family_members = Member.query.filter_by(family_id=family_id).all()
+    family_members = [ family_member for family_member in family_members if not family_member.member_id == member.member_id]
+
+    # get sibling
+    siblings = [ person for person in family_members if person.mother and person.mother == member.mother]
+
+    # get children
+    childrenMother = Member.query.filter_by(mother=member_id).all()
+    childrenFather = Member.query.filter_by(father=member_id).all()
+    children = []
+    if childrenFather:
+        children = childrenFather
+    elif childrenMother:
+        children = childrenMother
+
+    # get spouse
+    spousesMember1 = Relationship.query.filter_by(member_id_1=member.member_id).filter_by(relationship_type='spouse').all()
+    spousesMember2 = Relationship.query.filter_by(member_id_2=member.member_id).filter_by(relationship_type='spouse').all()
+    print(spousesMember1)
+    print(spousesMember2)
+    allSpouses = []
+    for spouse in spousesMember1:
+        if not spouse.member_id_1 == member_id:
+            memberSpouse = Member.query.filter_by(member_id=spouse.member_id_2).first()
+            allSpouses.append(memberSpouse)
+    for spouse in spousesMember2:
+        if not spouse.member_id_2 == member_id:
+            memberSpouse = Member.query.filter_by(member_id=spouse.member_id_1).first()
+            allSpouses.append(memberSpouse)
+
+    return render_template('member_profile.html', title=f'{member.first_name} information ',
+                           member=member,
+                           family_members=family_members,
+                           siblings=siblings,
+                           spouses=allSpouses,
+                           children=children)
 
 
 # update member
@@ -280,7 +316,7 @@ def update_member(member_id):
     member = Member.query.filter_by(member_id=member_id).first()
 
     form.gender.data = member.gender
-    form.gender.data = member.alive
+    form.alive.data = str(member.alive)
     if form.validate_on_submit():
         member.first_name = form.first_name.data
         member.last_name = form.last_name.data
