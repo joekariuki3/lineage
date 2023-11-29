@@ -66,10 +66,10 @@ class Event(db.Model):
     __tablename__ = 'events'
 
     event_id = db.Column(db.Integer, primary_key=True)
+    event_date = db.Column(db.DateTime, nullable=False)
     event_name = db.Column(db.String(100), nullable=False)
-    event_date = db.Column(db.Date, nullable=False)
-    event_time = db.Column(db.Time)
     location = db.Column(db.String(100))
+    description = db.Column(db.String(100))
 
     # Foreign Key
     family_id = db.Column(db.Integer, db.ForeignKey('families.family_id'), nullable=False)

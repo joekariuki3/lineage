@@ -1,6 +1,7 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, EmailField, SelectField,DateField, RadioField, validators
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, EmailField, SelectField,DateField, RadioField, validators, TextAreaField
 from wtforms.validators import DataRequired, EqualTo, Email, ValidationError
+from wtforms.fields import DateTimeLocalField
 from models import User
 from flask_login import current_user
 
@@ -68,3 +69,10 @@ class updateMemberForm(FlaskForm):
     deathdate = DateField('Death Date', validators=(validators.Optional(),))
     submit = SubmitField('Update')
 
+class AddEventForm(FlaskForm):
+    date = DateTimeLocalField('Event Date', validators=[DataRequired()])
+    # date = DateField('')
+    name = StringField('Event Name', validators=[DataRequired()])
+    location = StringField('Venue', validators=[DataRequired()])
+    description = TextAreaField('Event Description', validators=[DataRequired()])
+    submit = SubmitField('Add Event')

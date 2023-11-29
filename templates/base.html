@@ -46,6 +46,27 @@
                         <a class="nav-link active" aria-current="page" href="{{ url_for('create_family') }}">Add
                             Family</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="{{ url_for('add_event') }}">Add
+                            Event</a>
+                    </li>
+                    {% if current_user.families | length > 1 %}
+                    <details>
+                        <summary>View Family Event</summary>
+                        {% for family in current_user.families%}
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page"
+                                href="{{url_for('get_events', family_id =family.family_id)}}">{{family.name}}</a>
+                        </li>
+                        {% endfor%}
+                    </details>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page"
+                            href="{{url_for('get_events', family_id =current_user.families[0].family_id)}}">View Family
+                            Event</a>
+                    </li>
+                    {% endif %}
                     {% endif%}
                 </ul>
                 <ul class="navbar-nav  mb-2 mb-lg-0">

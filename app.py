@@ -5,7 +5,7 @@ from flask_login import LoginManager, current_user, login_user, logout_user, log
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from models import db, Family, Member, User, Event, Relationship
-from forms import RegisterForm, LoginForm, EditProfileForm, CreateFamilyForm,AddMemberForm, AddMemberSpouseForm, AddMemberChildForm, updateMemberForm
+from forms import RegisterForm, LoginForm, EditProfileForm, CreateFamilyForm,AddMemberForm, AddMemberSpouseForm, AddMemberChildForm, updateMemberForm, AddEventForm
 
 app = Flask(__name__)
 login = LoginManager(app)
@@ -412,6 +412,36 @@ def add_relationship(member1_id, member2_id, relationship_type):
     new_relationship = Relationship(member_id_1=member1_id, member_id_2=member2_id, relationship_type=relationship_type)
     db.session.add(new_relationship)
     db.session.commit()
+
+# add event
+@app.route('/event/', methods=['POST', 'GET'])
+@login_required
+def add_event():
+    form = AddEventForm()
+    if form.validate_on_submit():
+        date = form.date.data
+        name = form.name.data
+        location = form.location.data
+        description = form.description.data
+        # get family id
+        family_id = request.form.get('family')
+        newEvent = Event(event_date=date,
+                     event_name=name,
+                     location=location,
+                     description=description,
+                     family_id=family_id)
+        db.session.add(newEvent)
+        db.session.commit()
+        flash(f'{newEvent.event_name} added Successfully', 'success')
+        return(redirect(url_for('index')))
+    return render_template('add_event.html', title='Add Event', form=form)
+
+# get All events
+@app.route('/event/<family_id>', methods=['POST', 'GET'])
+@login_required
+def get_events(family_id):
+    events = Event.query.filter_by(family_id=family_id).all()
+    return render_template('events.html', events=events)
 
 # executed as main run
 if __name__ == '__main__':
