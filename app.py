@@ -149,6 +149,7 @@ def delete_family(id):
     return redirect(url_for('user_profile'))
 
 #Add family member
+
 # Add root member
 def add_root(family_id, memberForm={}):
     if not memberForm == {}:
@@ -229,41 +230,6 @@ def add_child(member_id, spouse_id):
         return redirect(url_for('index'))
     return render_template('add_member.html', title='Add child', form=form, families=current_user.families, member1=member1)
 
-# old add
-# @app.route('/member', methods=['GET', 'POST'])
-# @app.route('/member/<member1_id>', methods=['GET', 'POST'])
-# @login_required
-# def add_member(f_id='', memberForm={}, member1_id=''):
-    root = False
-    member1 = ''
-    if not member1_id == '':
-        member1 = Member.query.filter_by(member_id=member1_id).first()
-    if f_id == '':
-        f_id = request.form.get('family')
-    if not memberForm == {}:
-        form = memberForm
-        root = True
-    form = AddMemberForm()
-    if form.validate_on_submit():
-        a_live = False
-        if form.alive.data == 'Yes':
-            a_live = True
-        newMember = Member(first_name = form.first_name.data,
-                           last_name = form.last_name.data,
-                           birthdate = form.birthdate.data,
-                           gender = form.gender.data,
-                           root=root,
-                           family_id = f_id,
-                           alive = a_live,
-                           deathdate = form.deathdate.data,
-                           )
-        db.session.add(newMember)
-        db.session.commit()
-        flash('Member added Successfully', 'success')
-        add_relationship(member1.member_id, newMember.member_id, form.relationship.data)
-        return redirect(url_for('index'))
-    return render_template('add_member.html', title='Add member', form=form, families=current_user.families, member1=member1)
-
 # member profile
 @app.route('/member/<member_id>', methods=['GET'])
 @login_required
@@ -307,7 +273,6 @@ def member_profile(member_id):
                            spouses=allSpouses,
                            children=children)
 
-
 # update member
 @app.route('/update_member/<member_id>', methods=['GET', 'POST'])
 @login_required
@@ -330,7 +295,7 @@ def update_member(member_id):
     return render_template('update_member.html', title=f'update {member.first_name} information ',
                            form=form, member=member)
 
-# API call retrieve nuclear family of member with id passed
+# API call
 # return spouses
 @app.route('/member/spouses', methods=['POST', 'GET'])
 @login_required
@@ -406,7 +371,6 @@ def get_children():
     response =  make_response(jsonify(nuclear_family), 200)
     return response
 
-
 # relationship
 def add_relationship(member1_id, member2_id, relationship_type):
     new_relationship = Relationship(member_id_1=member1_id, member_id_2=member2_id, relationship_type=relationship_type)
@@ -442,6 +406,39 @@ def add_event():
 def get_events(family_id):
     events = Event.query.filter_by(family_id=family_id).all()
     return render_template('events.html', events=events)
+
+# delete an Event
+@app.route('/delete/event/<event_id>')
+@login_required
+def delete_event(event_id):
+    event = Event.query.get_or_404(event_id)
+    user_ids = [family.family_id for family in current_user.families]
+    if event.family_id in user_ids:
+        db.session.delete(event)
+        db.session.commit()
+        flash(f'{event.event_name} Deleted successfully')
+        return redirect(url_for('get_events', family_id=event.family_id))
+    flash('You dont have permission to delete this event', 'warning')
+    return redirect(url_for('get_events', family_id=event.family_id))
+
+# edit an Event
+@app.route('/edit/event/<event_id>', methods=['GET', 'POST'])
+@login_required
+def edit_event(event_id):
+    event = Event.query.get_or_404(event_id)
+    form = AddEventForm()
+    user_ids = [family.family_id for family in current_user.families]
+    if form.validate_on_submit() and event.family_id in user_ids:
+        print(form.data)
+        event.event_date = form.date.data
+        event.event_name = form.name.data
+        event.location = form.location.data
+        event.description = form.description.data
+        db.session.commit()
+        flash(f'{event.event_name} details Updated', 'success')
+        return redirect(url_for('get_events', family_id=event.family_id))
+    form.description.data = event.description
+    return render_template('edit_event.html', title='Update Event details', event=event, form=form)
 
 # executed as main run
 if __name__ == '__main__':

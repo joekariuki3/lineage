@@ -75,7 +75,7 @@ class Event(db.Model):
     family_id = db.Column(db.Integer, db.ForeignKey('families.family_id'), nullable=False)
 
     # Relationships
-    family = db.relationship('Family', cascade="all,delete", back_populates='events')
+    family = db.relationship('Family', back_populates='events')
 
 class Relationship(db.Model):
     """Class representing relationships between family members."""
