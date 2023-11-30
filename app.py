@@ -429,7 +429,6 @@ def edit_event(event_id):
     form = AddEventForm()
     user_ids = [family.family_id for family in current_user.families]
     if form.validate_on_submit() and event.family_id in user_ids:
-        print(form.data)
         event.event_date = form.date.data
         event.event_name = form.name.data
         event.location = form.location.data
