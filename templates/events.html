@@ -2,13 +2,15 @@
 
 {% block content %}
 {% if events %}
+<h2 class="mt-4">Upcoming Events </h2>
 {% for event in events%}
 
-<div class="card col-md-4 mb-4">
+<div class="card col-md-4 mb-4 mt-4 d-flex justify-content-center">
     <h5 class="card-header">{{event.event_name}}</h5>
     <div class="card-body">
         <h5 class="card-title">Venue: {{event.location}}</h5>
         <p class="card-text">{{event.description}}</p>
+        <p class="small text-muted">{{event.event_date}}</p>
         <a href="{{url_for('edit_event', event_id=event.event_id)}}" class="btn btn-outline-primary">Edit</a>
         <a href="#" class="btn btn-outline-danger" data-toggle="modal"
             data-target="#deleteModal{{event.event_id}}">Delete</a>

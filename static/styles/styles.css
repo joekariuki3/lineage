@@ -1,3 +1,45 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: "Montserrat", sans-serif;
+  /* font-family: "Oswald", sans-serif; */
+  /* font-family: "Playfair Display", serif; */
+  /* font-family: "Poppins", sans-serif; */
+  /* font-family: "Roboto", sans-serif; */
+}
+.nav-item {
+  font-size: 1.3rem;
+}
+.nav-item:hover {
+  color: black;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+main {
+  display: flex;
+}
+.sidebar-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.center-section {
+  height: 80vh;
+  display: flex;
+  flex-direction: column;
+}
 .hide {
   display: none;
+}
+.button {
+  padding-left: 2.5rem;
+  padding-right: 2.5rem;
+}
+legend h1 {
+  text-align: center;
+}
+label {
+  /* font-weight: 500; */
+  font-size: large;
 }

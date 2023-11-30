@@ -43,11 +43,6 @@ def internal_error(error):
 def load_user(id):
     return User.query.get(int(id))
 
-# secret page
-@app.route('/secret')
-@login_required
-def secret():
-    return render_template('secret.html')
 # Home
 @app.route('/')
 def index():
