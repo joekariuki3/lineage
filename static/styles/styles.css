@@ -10,24 +10,41 @@
 }
 .nav-item {
   font-size: 1.3rem;
+  font-weight: 500;
+  color: black;
+  padding: 0 1rem;
 }
 .nav-item:hover {
-  color: black;
-  font-size: 1.2rem;
-  font-weight: 600;
+  background-color: rgb(227, 227, 227);
+  border-radius: 1.4rem;
 }
-main {
-  display: flex;
+
+.navbar-brand {
+  font-weight: 800;
+  font-size: 2rem;
+}
+svg {
+  width: 1.5rem;
+  height: 1.5rem;
+  margin-right: 0.3rem;
 }
 .sidebar-top {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
+.dropdown-item:hover {
+  background-color: rgb(227, 227, 227);
+  font-weight: bold;
+}
 .center-section {
   height: 80vh;
   display: flex;
   flex-direction: column;
+}
+#show-big {
+  display: block;
+  margin-right: 2rem;
 }
 .hide {
   display: none;
@@ -36,10 +53,128 @@ main {
   padding-left: 2.5rem;
   padding-right: 2.5rem;
 }
+.key {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 1rem;
+}
+.select-family {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
 legend h1 {
   text-align: center;
 }
 label {
   /* font-weight: 500; */
   font-size: large;
+}
+.family-section {
+  /* border: 1px solid black; */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/* build tree start */
+.tree {
+  --spacing: 1.5rem;
+  --radius: 10px;
+}
+
+.tree li {
+  display: block;
+  position: relative;
+  padding-left: calc(2 * var(--spacing) - var(--radius) - 2px);
+}
+
+.tree ul {
+  margin-left: calc(var(--radius) - var(--spacing));
+  padding-left: 4px;
+  padding-top: 10px;
+}
+
+.tree ul li {
+  border-left: 2px solid #ddd;
+  padding-bottom: 15px;
+}
+
+.tree ul li:last-child {
+  border-color: transparent;
+}
+
+.tree ul li::before {
+  content: "";
+  display: block;
+  position: absolute;
+  top: calc(var(--spacing) / -2);
+  left: -7px;
+  width: calc(var(--spacing) + 2px);
+  height: calc(var(--spacing) + 1px);
+  border: solid #ddd;
+  border-width: 0 0 3px 3px;
+}
+
+.tree summary {
+  display: block;
+  cursor: pointer;
+}
+
+.tree summary::marker,
+.tree summary::-webkit-details-marker {
+  display: none;
+}
+
+.tree summary:focus {
+  outline: none;
+}
+
+.tree summary:focus-visible {
+  outline: 1px dotted #000;
+}
+
+.tree li::after,
+.tree summary::before {
+  content: "";
+  display: block;
+  position: absolute;
+  top: calc(var(--spacing) / 2 - var(--radius));
+  left: calc(var(--spacing) - var(--radius) - 1px);
+  width: calc(2 * var(--radius));
+  height: calc(2 * var(--radius));
+  border-radius: 50%;
+  background: #ddd;
+}
+
+.tree summary::before {
+  content: "+";
+  z-index: 1;
+  background: rgb(27, 154, 27);
+  color: #fff;
+  line-height: calc(2 * var(--radius) - 1px);
+  text-align: center;
+}
+
+.tree details[open] > summary::before {
+  content: "−";
+}
+.wife {
+  color: #fc46aa;
+}
+.husband {
+  color: #279bc9;
+}
+
+.deceased {
+  color: gray;
+}
+/* build tree finish */
+@media screen and (max-width: 500px) {
+  #show-big {
+    display: none;
+  }
 }

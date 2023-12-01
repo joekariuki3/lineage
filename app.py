@@ -44,11 +44,14 @@ def load_user(id):
     return User.query.get(int(id))
 
 # Home
+@app.route('/<family_id>')
 @app.route('/')
-def index():
+def index(family_id=0):
     families = []
-    if current_user.is_authenticated:
-        families = Family.query.filter_by(user_id=current_user.user_id)
+    if not family_id == 0:
+        families = Family.query.filter_by(family_id=family_id).all()
+    elif current_user.is_authenticated:
+        families = Family.query.filter_by(user_id=current_user.user_id).all()
     return render_template('index.html', families=families)
 
 # Register

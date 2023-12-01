@@ -17,15 +17,21 @@ function getSpouse(event) {
         const spouses = resp;
         $.each(spouses, function (index, spouse) {
           $(`#spouse_${id}`).append(
-            `<details>
-                <summary class="member" member1_id="${id}" spouse_id="${spouse.member_id}" onclick="getChildren(event)">
+            `<ul>
+              <li>
+                <details>
+                  <summary class="member" member1_id="${id}" spouse_id="${spouse.member_id}" onclick="getChildren(event)">
                     ${spouse.first_name} ${spouse.last_name}
                     </summary>
-                    <a href="/member/${id}/${spouse.member_id}/child">Add child of ${spouse.first_name}</a> |
-                    <a href="/member/${spouse.member_id}">more info</a>
-
-                 <div class="" id="children_${spouse.member_id}"></div>
-            </details>`
+                    <div class="memeber-buttons">
+                      <a href="/member/${id}/${spouse.member_id}/child">Add child of ${spouse.first_name}</a> |
+                      <a href="/member/${spouse.member_id}">more info</a>
+                    </div>
+                  <div class="" id="children_${spouse.member_id}"></div>
+                </details>
+              </li>
+            </ul>
+            `
           );
         });
       },
@@ -53,14 +59,21 @@ function getChildren(event) {
         const children = resp;
         $.each(children, function (index, child) {
           $(`#children_${s_id}`).append(
-            `<details>
-              <summary class="member" member1_id="${child.member_id}" onclick="getSpouse(event)">
-                ${child.first_name} ${child.last_name}
-                </summary>
-                <a href="/member/${child.member_id}/spouse">Add ${child.first_name} ${child.last_name} spouse</a> |
-                <a href="/member/${child.member_id}">more info</a>
-              <div class="" id="spouse_${child.member_id}"></div>
-            </details>`
+            `<ul>
+                <li>
+                  <details>
+                    <summary class="member" member1_id="${child.member_id}" onclick="getSpouse(event)">
+                      ${child.first_name} ${child.last_name}
+                    </summary>
+                    <div class="memeber-buttons">
+                      <a href="/member/${child.member_id}/spouse">Add ${child.first_name} ${child.last_name} spouse</a> |
+                      <a href="/member/${child.member_id}">more info</a>
+                    </div>
+                    <div class="" id="spouse_${child.member_id}"></div>
+                  </details>
+                </li>
+              </ul>
+            `
           );
         });
       },
