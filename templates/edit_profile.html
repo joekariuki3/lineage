@@ -8,7 +8,7 @@
             <legend class="border-bottom mb-4 mt-4">
                 <h1>{{title}}</h1>
             </legend>
-            <div class="form-group">
+            <div class="form-group mt-4">
                 {{ form.name.label(class="form-control-lable")}}
 
                 <!-- if errors -->
@@ -23,7 +23,7 @@
                 {{ form.name(class="form-control form-control-lg") }}
                 {% endif %}
             </div>
-            <div class="form-group">
+            <div class="form-group mt-4">
                 {{ form.email.label(class="form-control-lable")}}
 
                 <!-- if errors -->
@@ -39,8 +39,8 @@
                 {% endif %}
             </div>
             <br>
-            <div class="form-group">
-                {{ form.submit(class="btn btn-lg btn-outline-primary ") }}
+            <div class="form-group mt-4 mb-2 d-flex justify-content-center">
+                {{ form.submit(class="btn btn-lg btn-primary button") }}
             </div>
         </fieldset>
     </form>

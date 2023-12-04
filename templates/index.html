@@ -6,15 +6,15 @@
 <div class="key">
 
 
-    <div class="main__key" style="display: flex; align-items: center; display: flex; margin-bottom: 40px;">
+  <div class="main__key" style="display: flex; align-items: center; display: flex; margin-bottom: 40px;">
 
-        <div class="key" style="
+    <div class="key" style="
             display: flex;
             align-items: center;
             margin-right: 15px;
             display: flex;
           ">
-            <div class="key__list key__active" style="
+      <div class="key__list key__active" style="
               width: 15px;
               height: 15px;
               border-radius: 50%;
@@ -23,92 +23,96 @@
 
 
             "></div>
-            Node
-        </div>
-        <div class="key" style="
+      Node
+    </div>
+    <div class="key" style="
             display: flex;
             align-items: center;
             margin-right: 15px;
             display: flex;
           ">
-            <div class="key__list key__deceased" style="
+      <div class="key__list key__deceased" style="
               width: 15px;
               height: 15px;
               border-radius: 50%;
               margin-right: 5px;
               background: gray;
             "></div>
-            Deceased
-        </div>
-        <div class="key" style="
+      Deceased
+    </div>
+    <div class="key" style="
             display: flex;
             align-items: center;
             margin-right: 15px;
             display: flex;
           ">
-            <div class="key__list key__wife" style="
+      <div class="key__list key__wife" style="
               width: 15px;
               height: 15px;
               border-radius: 50%;
               margin-right: 5px;
               background: #fc46aa;
             "></div>
-            Wife
-        </div>
-        <div class="key" style="
+      Wife
+    </div>
+    <div class="key" style="
             display: flex;
             align-items: center;
             margin-right: 15px;
             display: flex;
           ">
-            <div class="key__list key__husband" style="
+      <div class="key__list key__husband" style="
               width: 15px;
               height: 15px;
               border-radius: 50%;
               margin-right: 5px;
               background: #279bc9;
             "></div>
-            Husband
-        </div>
+      Husband
     </div>
+  </div>
 </div>
 <!-- end header  -->
 {% if families and families | length > 1 %}
 <div class="dropdown select-family">
-    <h2>{{families | length }} Families found</h2>
-    <button class="btn btn-outline-secondary dropdown-toggle mt-4" type="button" id="dropdownMenu2"
-        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        Select one to display
-    </button>
-    <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-        {% for family in families %}
-        <a class="dropdown-item" href="{{url_for('index', family_id=family.family_id)}}">{{family.name}}</a>
-        {% endfor %}
-    </div>
+  <h2>{{families | length }} Families found</h2>
+  <button class="btn btn-outline-secondary dropdown-toggle mt-4" type="button" id="dropdownMenu2" data-toggle="dropdown"
+    aria-haspopup="true" aria-expanded="false">
+    Select one to display
+  </button>
+  <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+    {% for family in families %}
+    <a class="dropdown-item" href="{{url_for('index', family_id=family.family_id)}}">{{family.name}}</a>
+    {% endfor %}
+  </div>
 </div>
 {% elif families and families | length == 1 %}
 <div class="family-section">
-    <h2>{{families[0].name}}</h2>
-    {% for member in families[0].members %}
-    {% if member.root %}
-    <ul class="tree">
-        <li>
-            <details>
-                <summary class="member" member1_id="{{member.member_id}}" onclick="getSpouse(event)">
-                    {{member.first_name}} {{member.last_name}}
-                </summary>
-                <div class="memeber-buttons">
-                    <a href="{{url_for('add_spouse', member_id=member.member_id)}}">Add {{member.first_name}}
-                        {{member.last_name}}
-                        spouse</a> |
-                    <a href="{{url_for('member_profile', member_id=member.member_id)}}">More info</a>
-                </div>
-                <div id="spouse_{{member.member_id}}"></div>
-            </details>
-        </li>
-    </ul>
-    {% endif %}
-    {% endfor %}
+  <h2>{{families[0].name}}</h2>
+  {% for member in families[0].members %}
+  {% if member.root %}
+  <ul class="tree">
+    <li>
+      <details>
+        {% if member.alive %}
+        <summary class="member" member1_id="{{member.member_id}}" onclick="getSpouse(event)">
+          {% else%}
+          <summary class="member deceased" member1_id="{{member.member_id}}" onclick="getSpouse(event)">
+            {% endif%}
+            {{member.first_name}} {{member.last_name}}
+          </summary>
+          <div class="member-buttons mt-1">
+            <a href="{{url_for('add_spouse', member_id=member.member_id)}}" class="btn btn-light btn-sm">
+              + spouse
+            </a> |
+            <a href="{{url_for('member_profile', member_id=member.member_id)}}"> More...</a>
+          </div>
+          <div id="spouse_{{member.member_id}}"></div>
+      </details>
+    </li>
+  </ul>
+  {% endif %}
+  {% endfor %}
 </div>
 {% else %}
 <p>No family</p>

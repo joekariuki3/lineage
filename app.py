@@ -6,6 +6,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from models import db, Family, Member, User, Event, Relationship
 from forms import RegisterForm, LoginForm, EditProfileForm, CreateFamilyForm,AddMemberForm, AddMemberSpouseForm, AddMemberChildForm, updateMemberForm, AddEventForm
+from datetime import datetime
 
 app = Flask(__name__)
 login = LoginManager(app)
@@ -395,15 +396,17 @@ def add_event():
         db.session.add(newEvent)
         db.session.commit()
         flash(f'{newEvent.event_name} added Successfully', 'success')
-        return(redirect(url_for('index')))
+        return(redirect(url_for('get_events', family_id=newEvent.family_id)))
     return render_template('add_event.html', title='Add Event', form=form)
 
 # get All events
 @app.route('/event/<family_id>', methods=['POST', 'GET'])
 @login_required
 def get_events(family_id):
-    events = Event.query.filter_by(family_id=family_id).all()
-    return render_template('events.html', events=events)
+    currentTime = datetime.now()
+    upcomingEvents = Event.query.order_by(Event.event_date.asc()).filter_by(family_id=family_id).filter(Event.event_date>=currentTime ).all()
+    pastEvents = Event.query.order_by(Event.event_date.asc()).filter_by(family_id=family_id).filter(Event.event_date<=currentTime ).all()
+    return render_template('events.html', upcomingEvents=upcomingEvents, pastEvents=pastEvents)
 
 # delete an Event
 @app.route('/delete/event/<event_id>')
@@ -414,7 +417,7 @@ def delete_event(event_id):
     if event.family_id in user_ids:
         db.session.delete(event)
         db.session.commit()
-        flash(f'{event.event_name} Deleted successfully')
+        flash(f'{event.event_name} Deleted successfully', 'info')
         return redirect(url_for('get_events', family_id=event.family_id))
     flash('You dont have permission to delete this event', 'warning')
     return redirect(url_for('get_events', family_id=event.family_id))

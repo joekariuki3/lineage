@@ -155,7 +155,7 @@ label {
   z-index: 1;
   background: rgb(27, 154, 27);
   color: #fff;
-  line-height: calc(2 * var(--radius) - 1px);
+  line-height: calc(2 * var(--radius) - 0px);
   text-align: center;
 }
 
@@ -172,8 +172,36 @@ label {
 .deceased {
   color: gray;
 }
+
 /* build tree finish */
+
+summary {
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+.events {
+  display: flex;
+}
+.events .upcoming,
+.events .past {
+  width: 50%;
+}
+
+/* mobile */
 @media screen and (max-width: 500px) {
+  #show-big {
+    display: none;
+  }
+  .events {
+    flex-direction: column;
+  }
+  .events .upcoming,
+  .events .past {
+    width: 100%;
+  }
+}
+@media screen and (max-width: 1000px) {
   #show-big {
     display: none;
   }
