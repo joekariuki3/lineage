@@ -2,7 +2,22 @@
 
 {% block content %}
 
-<!-- start header  -->
+
+{% if families and families | length > 1 %}
+<div class="dropdown select-family">
+  <h2>{{families | length }} Families found</h2>
+  <button class="btn btn-outline-secondary dropdown-toggle mt-4" type="button" id="dropdownMenu2" data-toggle="dropdown"
+    aria-haspopup="true" aria-expanded="false">
+    Select one to display
+  </button>
+  <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+    {% for family in families %}
+    <a class="dropdown-item" href="{{url_for('index', family_id=family.family_id)}}">{{family.name}}</a>
+    {% endfor %}
+  </div>
+</div>
+{% elif families and families | length == 1 %}
+<!-- start key  -->
 <div class="key">
 
 
@@ -72,21 +87,7 @@
     </div>
   </div>
 </div>
-<!-- end header  -->
-{% if families and families | length > 1 %}
-<div class="dropdown select-family">
-  <h2>{{families | length }} Families found</h2>
-  <button class="btn btn-outline-secondary dropdown-toggle mt-4" type="button" id="dropdownMenu2" data-toggle="dropdown"
-    aria-haspopup="true" aria-expanded="false">
-    Select one to display
-  </button>
-  <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-    {% for family in families %}
-    <a class="dropdown-item" href="{{url_for('index', family_id=family.family_id)}}">{{family.name}}</a>
-    {% endfor %}
-  </div>
-</div>
-{% elif families and families | length == 1 %}
+<!-- end key  -->
 <div class="family-section">
   <h2>{{families[0].name}}</h2>
   {% for member in families[0].members %}
@@ -102,9 +103,11 @@
             {{member.first_name}} {{member.last_name}}
           </summary>
           <div class="member-buttons mt-1">
+            {% if current_user.is_authenticated%}
             <a href="{{url_for('add_spouse', member_id=member.member_id)}}" class="btn btn-light btn-sm">
               + spouse
             </a> |
+            {% endif%}
             <a href="{{url_for('member_profile', member_id=member.member_id)}}"> More...</a>
           </div>
           <div id="spouse_{{member.member_id}}"></div>

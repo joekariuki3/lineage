@@ -53,6 +53,8 @@ def index(family_id=0):
         families = Family.query.filter_by(family_id=family_id).all()
     elif current_user.is_authenticated:
         families = Family.query.filter_by(user_id=current_user.user_id).all()
+    elif current_user.is_anonymous:
+        families = Family.query.all()
     return render_template('index.html', families=families)
 
 # Register
@@ -231,7 +233,7 @@ def add_child(member_id, spouse_id):
 
 # member profile
 @app.route('/member/<member_id>', methods=['GET'])
-@login_required
+# @login_required
 def member_profile(member_id):
     member = Member.query.filter_by(member_id=member_id).first()
     family_id = member.family_id
@@ -253,8 +255,6 @@ def member_profile(member_id):
     # get spouse
     spousesMember1 = Relationship.query.filter_by(member_id_1=member.member_id).filter_by(relationship_type='spouse').all()
     spousesMember2 = Relationship.query.filter_by(member_id_2=member.member_id).filter_by(relationship_type='spouse').all()
-    print(spousesMember1)
-    print(spousesMember2)
     allSpouses = []
     for spouse in spousesMember1:
         if not spouse.member_id_1 == member_id:
@@ -297,7 +297,7 @@ def update_member(member_id):
 # API call
 # return spouses
 @app.route('/member/spouses', methods=['POST', 'GET'])
-@login_required
+# @login_required
 def get_spouse():
     data = request.get_json()
     if not data:
@@ -311,12 +311,16 @@ def get_spouse():
         spouse_member = spouse_member.__dict__
         del spouse_member['_sa_instance_state']
         spousesList.append(spouse_member)
-    response =  make_response(jsonify(spousesList), 200)
+    if current_user.is_authenticated:
+        login = {'authenticated': True}
+    else:
+        login = {'authenticated': False}
+    response =  make_response(jsonify(spousesList, login), 200)
     return response
 
 # return children
 @app.route('/member/children', methods=['POST', 'GET'])
-@login_required
+# @login_required
 def get_children():
     data = request.get_json()
     if not data:
@@ -343,7 +347,11 @@ def get_children():
             child_member = child_member.__dict__
             del child_member['_sa_instance_state']
             childrenList.append(child_member)
-        response =  make_response(jsonify(childrenList), 200)
+        if current_user.is_authenticated:
+            login = {'authenticated': True}
+        else:
+            login = {'authenticated': False}
+        response =  make_response(jsonify(childrenList, login), 200)
         return response
 
 # @app.route('/member/nuclear', methods=['POST', 'GET'])
@@ -401,7 +409,7 @@ def add_event():
 
 # get All events
 @app.route('/event/<family_id>', methods=['POST', 'GET'])
-@login_required
+# @login_required
 def get_events(family_id):
     currentTime = datetime.now()
     upcomingEvents = Event.query.order_by(Event.event_date.asc()).filter_by(family_id=family_id).filter(Event.event_date>=currentTime ).all()

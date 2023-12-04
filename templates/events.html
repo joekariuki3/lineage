@@ -32,6 +32,7 @@
                         <h5 class="card-title">Venue: {{event.location}}</h5>
                         <p class="card-text">{{event.description}}</p>
                         <p class="small text-muted">{{event.event_date}}</p>
+                        {% if current_user.is_authenticated%}
                         <a href="{{url_for('edit_event', event_id=event.event_id)}}" class="btn btn-outline-primary">
                             <svg fill="#000000" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
                                 xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 24 24" xml:space="preserve">
@@ -64,6 +65,7 @@
                             </svg>
                             Delete
                         </a>
+                        {% endif%}
                     </div>
                     <!-- modal start -->
                     <div class="modal fade" id="deleteModal{{event.event_id}}" tabindex="-1" role="dialog"
@@ -127,6 +129,7 @@
                         <h5 class="card-title">Venue: {{event.location}}</h5>
                         <p class="card-text">{{event.description}}</p>
                         <p class="small text-muted">{{event.event_date}}</p>
+                        {% if current_user.is_authenticated%}
                         <a href="{{url_for('edit_event', event_id=event.event_id)}}" class="btn btn-outline-primary">
                             <svg fill="#000000" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
                                 xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 24 24" xml:space="preserve">
@@ -159,6 +162,7 @@
                             </svg>
                             Delete
                         </a>
+                        {% endif %}
                     </div>
                     <!-- modal start -->
                     <div class="modal fade" id="deleteModal{{event.event_id}}" tabindex="-1" role="dialog"
