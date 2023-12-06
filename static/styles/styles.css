@@ -23,10 +23,21 @@
   font-weight: 800;
   font-size: 2rem;
 }
+.hero-words {
+}
+.hero-img img {
+  border-radius: 0.5rem;
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
+}
 svg {
   width: 1.5rem;
   height: 1.5rem;
   margin-right: 0.3rem;
+}
+svg.svg-home {
+  width: 7rem;
+  height: 7rem;
+  margin-right: 0;
 }
 .sidebar-top {
   display: flex;
@@ -189,9 +200,12 @@ summary {
 }
 
 /* mobile */
-@media screen and (max-width: 500px) {
+@media screen and (max-width: 600px) {
   #show-big {
     display: none;
+  }
+  .hero {
+    flex-direction: column-reverse;
   }
   .events {
     flex-direction: column;

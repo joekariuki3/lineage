@@ -17,7 +17,7 @@ class Family(db.Model):
     # Relationships
     users = db.relationship('User', back_populates='families')
     events = db.relationship('Event', cascade="all,delete", back_populates='family')
-    members = db.relationship('Member', cascade="all,delete", back_populates='family')
+    members = db.relationship('Member', cascade="all,delete-orphan", back_populates='family')
 
 class Member(db.Model):
     """Class representing a family member in the application."""
@@ -40,7 +40,10 @@ class Member(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=True)
 
     # Relationships
-    family = db.relationship('Family', cascade="all,delete", back_populates='members')
+    family = db.relationship('Family', back_populates='members')
+    relationships1 = db.relationship('Relationship', foreign_keys="[Relationship.member_id_1]", cascade="all, delete-orphan", back_populates='member1')
+    relationships2 = db.relationship('Relationship', foreign_keys="[Relationship.member_id_2]", cascade="all, delete-orphan", back_populates='member2')
+
 
 class User(db.Model, UserMixin):
     """Class representing a user in the application."""
@@ -84,6 +87,11 @@ class Relationship(db.Model):
     relationship_id = db.Column(db.Integer, primary_key=True)
     relationship_type = db.Column(db.String(20), nullable=False)
 
-    # Foreign Keys
-    member_id_1 = db.Column(db.Integer, db.ForeignKey('members.member_id'), nullable=False)
-    member_id_2 = db.Column(db.Integer, db.ForeignKey('members.member_id'), nullable=False)
+   # Foreign Keys
+    member_id_1 = db.Column(db.Integer, db.ForeignKey('members.member_id', name='fk_member_id_1'), nullable=False)
+    member_id_2 = db.Column(db.Integer, db.ForeignKey('members.member_id', name='fk_member_id_2'), nullable=False)
+
+    # Relationships
+    member1 = db.relationship('Member', foreign_keys=[member_id_1], back_populates='relationships1')
+    member2 = db.relationship('Member', foreign_keys=[member_id_2], back_populates='relationships2')
+

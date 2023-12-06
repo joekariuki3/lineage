@@ -45,8 +45,12 @@ def load_user(id):
     return User.query.get(int(id))
 
 # Home
-@app.route('/<family_id>')
 @app.route('/')
+def home():
+    return render_template('index.html', title="Lineage Home")
+
+@app.route('/family/<family_id>')
+@app.route('/family')
 def index(family_id=0):
     families = []
     if not family_id == 0:
@@ -55,7 +59,7 @@ def index(family_id=0):
         families = Family.query.filter_by(user_id=current_user.user_id).all()
     elif current_user.is_anonymous:
         families = Family.query.all()
-    return render_template('index.html', families=families)
+    return render_template('family.html', families=families)
 
 # Register
 @app.route('/register', methods=['GET','POST'])
@@ -120,7 +124,7 @@ def edit_profile():
                            form=form)
 
 # create family
-@app.route('/family', methods=['GET', 'POST'])
+@app.route('/create-family', methods=['GET', 'POST'])
 @login_required
 def create_family():
     form = CreateFamilyForm()
@@ -145,6 +149,7 @@ def delete_family(id):
         db.session.delete(family)
         db.session.commit()
         flash('Family deleted successful', 'success')
+        return redirect(url_for('user_profile'))
     else:
         flash('You are not allowed to delete this family', 'info')
     return redirect(url_for('user_profile'))
