@@ -9,11 +9,13 @@
             <h1 class="mt-4 fw-bold">Lineage</h1>
             <h3 class="mt-4">Family Tree App</h3>
             <p class="lead">A simple way to connect with your family members and explore your family tree.</p>
-            {% if family %}
-            <a href="{{url_for('register')}}" class="btn btn-lg btn-outline-primary mt-3">View {{family.name}}</a>
+            {% if families and families | length == 1 %}
+            <a href="{{url_for('index', family_id=families[0].family_id)}}"
+                class="btn btn-lg btn-outline-primary mt-3">View {{families[0].name}}</a>
             {% else %}
             <a href="{{url_for('register')}}" class="btn btn-lg btn-outline-primary mt-3">Register to add Family</a>
-            <a href="{{url_for('login')}}" class="btn btn-lg btn-primary mt-3">Login to view Family</a>
+            <a href="{{url_for('login')}} " class="btn btn-lg btn-primary mt-3">Login to
+                view Family</a>
             {% endif%}
         </div>
         <div class="hero-img">

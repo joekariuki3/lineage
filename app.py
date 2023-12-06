@@ -4,10 +4,10 @@ from flask import Flask, url_for, render_template, flash, redirect, request, mak
 from flask_login import LoginManager, current_user, login_user, logout_user, login_required
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
-from models import db, Family, Member, User, Event, Relationship
+from models import db, Family, Member, User, Event, Relationship, Link
 from forms import RegisterForm, LoginForm, EditProfileForm, CreateFamilyForm,AddMemberForm, AddMemberSpouseForm, AddMemberChildForm, updateMemberForm, AddEventForm
 from datetime import datetime
-
+from itsdangerous import URLSafeSerializer
 app = Flask(__name__)
 login = LoginManager(app)
 login.login_view = 'login'
@@ -28,6 +28,9 @@ migrate = Migrate()
 #initiate migration
 migrate.init_app(app, db)
 
+secret_key = os.environ.get('SECRET_KEY')
+auth_s = URLSafeSerializer(secret_key, "auth")
+
 
 # handle errors
 @app.errorhandler(404)
@@ -45,9 +48,20 @@ def load_user(id):
     return User.query.get(int(id))
 
 # Home
+@app.route('/<family_id>')
 @app.route('/')
-def home():
-    return render_template('index.html', title="Lineage Home")
+def home(family_id=''):
+    families = []
+    if not family_id == '':
+        try:
+            data = auth_s.loads(family_id)
+            print(data)
+            family_id = data["family_id"]
+            if family_id:
+                families = Family.query.filter_by(family_id=family_id).all()
+        except Exception as e:
+            pass
+    return render_template('index.html', title="Lineage Home", families=families)
 
 @app.route('/family/<family_id>')
 @app.route('/family')
@@ -57,8 +71,6 @@ def index(family_id=0):
         families = Family.query.filter_by(family_id=family_id).all()
     elif current_user.is_authenticated:
         families = Family.query.filter_by(user_id=current_user.user_id).all()
-    elif current_user.is_anonymous:
-        families = Family.query.all()
     return render_template('family.html', families=families)
 
 # Register
@@ -106,6 +118,33 @@ def logout():
 def user_profile():
     return render_template('profile.html', title='User_Profile')
 
+#create link for members
+@app.route('/create_link/<family_id>', methods=['POST', 'GET'])
+@login_required
+def create_link(family_id):
+    links = Link.query.filter_by(family_id=family_id).all()
+    if len(links) < 1:
+        # create new link
+        token = auth_s.dumps({"family_id": family_id})
+        newLink = Link(link=token, family_id=family_id)
+        db.session.add(newLink)
+        db.session.commit()
+        url_root = request.url_root
+        flash('Link created', 'success')
+        return render_template('profile.html', title='User_Profile', url_root=url_root)
+    flash('You already have a link. Delete the current one to create a new one', 'warning')
+    return render_template('profile.html', title='User_Profile')
+# delete link
+@app.route('/delete_link/<link_id>')
+@login_required
+def delete_link(link_id):
+    link = Link.query.filter_by(link_id=link_id).first()
+    if link:
+        db.session.delete(link)
+        db.session.commit()
+        flash('Link deleted', 'success')
+        return redirect(url_for('user_profile'))
+    return redirect(url_for('user_profile'))
 # edit profile
 @app.route('/edit_profile', methods=['GET', 'POST'])
 @login_required
@@ -276,6 +315,7 @@ def member_profile(member_id):
                            siblings=siblings,
                            spouses=allSpouses,
                            children=children)
+
 
 # update member
 @app.route('/update_member/<member_id>', methods=['GET', 'POST'])

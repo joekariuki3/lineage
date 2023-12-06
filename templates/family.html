@@ -3,20 +3,7 @@
 {% block content %}
 
 
-{% if families and families | length > 1 %}
-<div class="dropdown select-family">
-  <h2>{{families | length }} Families found</h2>
-  <button class="btn btn-outline-secondary dropdown-toggle mt-4" type="button" id="dropdownMenu2" data-toggle="dropdown"
-    aria-haspopup="true" aria-expanded="false">
-    Select one to display
-  </button>
-  <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-    {% for family in families %}
-    <a class="dropdown-item" href="{{url_for('index', family_id=family.family_id)}}">{{family.name}}</a>
-    {% endfor %}
-  </div>
-</div>
-{% elif families and families | length == 1 %}
+{% if families and families | length == 1 %}
 <!-- start key  -->
 <div class="key">
 

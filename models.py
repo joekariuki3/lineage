@@ -18,6 +18,21 @@ class Family(db.Model):
     users = db.relationship('User', back_populates='families')
     events = db.relationship('Event', cascade="all,delete", back_populates='family')
     members = db.relationship('Member', cascade="all,delete-orphan", back_populates='family')
+    links = db.relationship('Link', cascade="all,delete-orphan", back_populates='family')
+
+class Link(db.Model):
+    """Class representing a link in the application."""
+    __tablename__ = 'links'
+
+    link_id = db.Column(db.Integer, primary_key=True)
+    link = db.Column(db.String(500), nullable=True)
+
+     # Foreign Key
+    family_id = db.Column(db.Integer, db.ForeignKey('families.family_id'), nullable=False)
+
+    # Relationships
+    family = db.relationship('Family', back_populates='links')
+
 
 class Member(db.Model):
     """Class representing a family member in the application."""
