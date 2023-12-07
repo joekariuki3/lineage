@@ -28,6 +28,8 @@ migrate = Migrate()
 #initiate migration
 migrate.init_app(app, db)
 
+#get the secret key and use it to create a token for uniq url link
+# for family members who are not authorized
 secret_key = os.environ.get('SECRET_KEY')
 auth_s = URLSafeSerializer(secret_key, "auth")
 
@@ -48,6 +50,8 @@ def load_user(id):
     return User.query.get(int(id))
 
 # Home
+# if a member has a link containing <family_id> 1st route
+# go to landing page
 @app.route('/<family_id>')
 @app.route('/')
 def home(family_id=''):
@@ -63,6 +67,7 @@ def home(family_id=''):
             pass
     return render_template('index.html', title="Lineage Home", families=families)
 
+# go to family page to view family tree
 @app.route('/family/<family_id>')
 @app.route('/family')
 def index(family_id=0):
@@ -73,7 +78,7 @@ def index(family_id=0):
         families = Family.query.filter_by(user_id=current_user.user_id).all()
     return render_template('family.html', families=families)
 
-# Register
+# Register user
 @app.route('/register', methods=['GET','POST'])
 def register():
     if current_user.is_authenticated:
@@ -88,7 +93,7 @@ def register():
         return redirect(url_for('login'))
     return render_template('register.html', title='Register', form=form)
 
-# login
+# login user
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
@@ -106,13 +111,13 @@ def login():
         return redirect(next_page)
     return render_template('login.html', title='Login', form=form)
 
-# logout
+# logout user
 @app.route('/logout')
 def logout():
     logout_user()
     return redirect(url_for('index'))
 
-# userProfile
+# user Profile
 @app.route('/user/profile')
 @login_required
 def user_profile():
@@ -134,6 +139,7 @@ def create_link(family_id):
         return render_template('profile.html', title='User_Profile', url_root=url_root)
     flash('You already have a link. Delete the current one to create a new one', 'warning')
     return render_template('profile.html', title='User_Profile')
+
 # delete link
 @app.route('/delete_link/<link_id>')
 @login_required
@@ -145,7 +151,8 @@ def delete_link(link_id):
         flash('Link deleted', 'success')
         return redirect(url_for('user_profile'))
     return redirect(url_for('user_profile'))
-# edit profile
+
+# edit user profile
 @app.route('/edit_profile', methods=['GET', 'POST'])
 @login_required
 def edit_profile():
@@ -194,7 +201,6 @@ def delete_family(id):
     return redirect(url_for('user_profile'))
 
 #Add family member
-
 # Add root member
 def add_root(family_id, memberForm={}):
     if not memberForm == {}:
@@ -340,7 +346,7 @@ def update_member(member_id):
                            form=form, member=member)
 
 # API call
-# return spouses
+# return spouse(s)
 @app.route('/member/spouses', methods=['POST', 'GET'])
 # @login_required
 def get_spouse():
@@ -363,7 +369,7 @@ def get_spouse():
     response =  make_response(jsonify(spousesList, login), 200)
     return response
 
-# return children
+# return child/children
 @app.route('/member/children', methods=['POST', 'GET'])
 # @login_required
 def get_children():
@@ -400,8 +406,8 @@ def get_children():
         return response
 
 # @app.route('/member/nuclear', methods=['POST', 'GET'])
-# @login_required
-# def get_nuclear():
+@login_required
+def get_nuclear():
     data = request.get_json()
     if not data:
         return make_response(jsonify({"error": "Not a JSON"}), 400)
@@ -423,7 +429,7 @@ def get_children():
     response =  make_response(jsonify(nuclear_family), 200)
     return response
 
-# relationship
+# make a relationship between member_1 and member_2
 def add_relationship(member1_id, member2_id, relationship_type):
     new_relationship = Relationship(member_id_1=member1_id, member_id_2=member2_id, relationship_type=relationship_type)
     db.session.add(new_relationship)
