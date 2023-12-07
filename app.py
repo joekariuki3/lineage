@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+from dotenv import load_dotenv
 import os
 from flask import Flask, url_for, render_template, flash, redirect, request, make_response, jsonify
 from flask_login import LoginManager, current_user, login_user, logout_user, login_required
@@ -8,15 +9,18 @@ from models import db, Family, Member, User, Event, Relationship, Link
 from forms import RegisterForm, LoginForm, EditProfileForm, CreateFamilyForm,AddMemberForm, AddMemberSpouseForm, AddMemberChildForm, updateMemberForm, AddEventForm
 from datetime import datetime
 from itsdangerous import URLSafeSerializer
+
+load_dotenv()
+
 app = Flask(__name__)
 login = LoginManager(app)
 login.login_view = 'login'
 
 # Set the secret key using an environment variable
-app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 
 # Set the database URI using an environment variable
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('LINEAGE_DATABASE_URI')
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('LINEAGE_DATABASE_URI')
 
 # Silence the deprecation warning
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -30,7 +34,7 @@ migrate.init_app(app, db)
 
 #get the secret key and use it to create a token for uniq url link
 # for family members who are not authorized
-secret_key = os.environ.get('SECRET_KEY')
+secret_key = os.getenv('SECRET_KEY')
 auth_s = URLSafeSerializer(secret_key, "auth")
 
 
