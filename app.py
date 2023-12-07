@@ -121,7 +121,8 @@ def logout():
 @app.route('/user/profile')
 @login_required
 def user_profile():
-    return render_template('profile.html', title='User_Profile')
+    url_root = request.url_root
+    return render_template('profile.html', title='User_Profile', url_root=url_root)
 
 #create link for members
 @app.route('/create_link/<family_id>', methods=['POST', 'GET'])
