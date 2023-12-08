@@ -9,22 +9,24 @@
   /* font-family: "Roboto", sans-serif; */
 }
 .nav-item {
-  font-size: 1.3rem;
+  font-size: 1rem;
   font-weight: 500;
-  color: black;
-  padding: 0 1rem;
+  padding: 0 0.5rem;
 }
-.nav-item:hover {
+.sidebar .nav-link {
+  margin: 0.5rem 0;
+}
+.nav-link:hover {
   background-color: rgb(227, 227, 227);
-  border-radius: 1.4rem;
+  color: black;
+  border-radius: 20px;
 }
 
 .navbar-brand {
   font-weight: 800;
-  font-size: 2rem;
+  font-size: 1.5rem;
 }
-.hero-words {
-}
+
 .hero-img img {
   border-radius: 0.5rem;
   box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
@@ -263,8 +265,12 @@ summary {
   #show-big {
     display: none;
   }
+
   .hero {
     flex-direction: column-reverse;
+  }
+  .hero-words {
+    text-align: center;
   }
   .events {
     flex-direction: column;

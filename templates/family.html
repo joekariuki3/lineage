@@ -3,7 +3,23 @@
 {% block content %}
 
 
-{% if families and families | length == 1 %}
+{% if families and families | length > 1 %}
+<div class="dropdown select-family mt-4">
+  <h3 class="text-center">{{current_user.name}} you are managing {{families | length }} Families</h3>
+  <div class="btn-group mt-4">
+    <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown"
+      data-bs-display="static" aria-expanded="false">
+      Select one to display
+    </button>
+    <ul class="dropdown-menu dropdown-menu-lg-end">
+      {% for family in families %}
+      <li><a class="dropdown-item" href="{{url_for('index', family_id=family.family_id)}}"
+          type="button">{{family.name}}</a></li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+{% elif families and families | length == 1 %}
 <!-- start key  -->
 <div class="key">
 
@@ -22,8 +38,6 @@
               border-radius: 50%;
               margin-right: 5px;
               background: rgb(27, 154, 27);
-
-
             "></div>
       Node
     </div>

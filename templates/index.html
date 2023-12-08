@@ -3,7 +3,7 @@
 {% block content %}
 
 <!-- Hero Section -->
-<section id="home" class="text-center mt-4 mb-4">
+<section id="home" class="mt-4 mb-4">
     <div class="container d-flex align-items-center hero">
         <div class="hero-words">
             <h1 class="mt-4 fw-bold">Lineage</h1>
@@ -13,9 +13,14 @@
             <a href="{{url_for('index', family_id=families[0].family_id)}}"
                 class="btn btn-lg btn-outline-primary mt-3">View {{families[0].name}}</a>
             {% else %}
+            {% if current_user.is_authenticated %}
+            <a href="{{url_for('index')}}" class="btn btn-lg btn-outline-primary mt-3">View Family</a>
+            {% else%}
             <a href="{{url_for('register')}}" class="btn btn-lg btn-outline-primary mt-3">Register to add Family</a>
             <a href="{{url_for('login')}} " class="btn btn-lg btn-primary mt-3">Login to
-                view Family</a>
+                view Family
+            </a>
+            {% endif%}
             {% endif%}
         </div>
         <div class="hero-img">
