@@ -1,12 +1,12 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="content-section col-md-6 m-auto">
+<div class="content-section container col-md-5 m-auto">
     <form action="" method="post" novalidate>
         {{ form.hidden_tag() }}
         <fieldset class="form-group">
             <legend class="border-bottom mb-4 mt-4">
-                <h1>{{title}}</h1>
+                <h3 class="fw-bold text-center">{{title}}</h3>
             </legend>
             <div class="form-group mt-4">
                 {{ form.name.label(class="form-control-lable")}}

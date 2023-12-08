@@ -82,8 +82,11 @@ legend h1 {
   text-align: center;
 }
 label {
-  /* font-weight: 500; */
+  font-weight: 500;
   font-size: large;
+}
+.form-control {
+  border: 1px solid#484747;
 }
 .family-section {
   /* border: 1px solid black; */

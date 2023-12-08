@@ -1,14 +1,14 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="content-section col-md-6 m-auto">
+<div class="content-section container col-md-6 mt-auto mb-auto ">
     <form action="" method="post" novalidate>
         {{ form.hidden_tag() }}
         <fieldset class="form-group">
             <legend class="border-bottom mb-4 mt-4">
-                <h1>{{title}}</h1>
+                <h3 class="fw-bold text-center">{{title}}</h3>
             </legend>
-            <div class="form-group">
+            <div class="form-group mt-4">
                 {{ form.date.label(class="form-control-lable")}}
 
                 <!-- if errors -->
@@ -23,7 +23,7 @@
                 {{ form.date(class="form-control form-control-lg", value=event.event_date) }}
                 {% endif %}
             </div>
-            <div class="form-group">
+            <div class="form-group mt-4">
                 {{ form.name.label(class="form-control-lable")}}
 
                 <!-- if errors -->
@@ -38,7 +38,7 @@
                 {{ form.name(class="form-control form-control-lg", value = event.event_name) }}
                 {% endif %}
             </div>
-            <div class="form-group">
+            <div class="form-group mt-4">
                 {{ form.location.label(class="form-control-lable")}}
 
                 <!-- if errors -->
@@ -53,7 +53,7 @@
                 {{ form.location(class="form-control form-control-lg", value = event.location) }}
                 {% endif %}
             </div>
-            <div class="form-group">
+            <div class="form-group mt-4">
                 {{ form.description.label(class="form-control-lable")}}
 
                 <!-- if errors -->
@@ -69,8 +69,8 @@
                 {% endif %}
             </div>
             <br>
-            <div class="form-group">
-                {{ form.submit(class="btn btn-lg btn-outline-primary ", value = 'Update Event') }}
+            <div class="form-group mt-4 mb-2 d-flex justify-content-center">
+                {{ form.submit(class="btn btn-lg btn-primary ", value = 'Update Event') }}
             </div>
         </fieldset>
     </form>

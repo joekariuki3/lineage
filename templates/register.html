@@ -2,11 +2,11 @@
 
 {% block content %}
 <section class="center-section">
-    <div class="content-section col-md-6 m-auto">
+    <div class="content-section  container col-md-4 mt-auto mb-auto">
         <form action="" method="post" novalidate>
             {{ form.hidden_tag() }}
             <fieldset class="form-group">
-                <legend class="mb-4 mt-4">
+                <legend class="mb-4">
                     <h1>{{title}}</h1>
                 </legend>
                 <div class="form-group mt-4">
@@ -69,13 +69,13 @@
                     {% endif %}
                 </div>
                 <br>
-                <div class="form-group mt-4 mb-2 d-flex justify-content-center">
+                <div class="form-group  mb-2 d-flex justify-content-center">
                     {{ form.submit(class="btn btn-lg btn-primary button") }}
                 </div>
             </fieldset>
         </form>
-        <div class=" border-top pt-3">
-            <small class="text-muted">
+        <div class=" border-top mb-4 text-center">
+            <small class="text-muted ">
                 Already Have An Account? <a class="ml-2" href="{{url_for('login')}}">Login</a>
             </small>
         </div>

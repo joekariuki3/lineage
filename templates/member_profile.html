@@ -5,33 +5,32 @@
 <section class="vh-100">
     <div class="container mt-5">
         <div class="row d-flex justify-content-center align-items-center h-100">
-            <div class="col col-lg-8 mb-4 mb-lg-0">
-                <div class="card mb-3" style="border-radius: .5rem;">
+            <div class="col col-lg-7 mb-4 mb-lg-0">
+                <div class="card" style="border-radius: .5rem;">
                     <div class="row g-0">
                         <div class="col-md-12">
                             <div class="col-md-12 gradient-custom text-center"
                                 style="border-top-left-radius: .5rem; border-bottom-left-radius: .5rem;">
                                 <img src="https://static.vecteezy.com/system/resources/thumbnails/020/765/399/small/default-profile-account-unknown-icon-black-silhouette-free-vector.jpg"
                                     alt="Avatar" class="img-fluid my-1" style="width: 80px; " />
-                                <h5>{{ member.first_name}} {{ member.last_name}}</h5>
+                                <h5 class="fw-bold">{{ member.first_name}} {{ member.last_name}}</h5>
                                 {% if member.root%}
                                 <p class="text-muted">(Root)</p>
                                 {% endif %}
-                                <i class="far fa-edit mb-5"></i>
                             </div>
-                            <div class="card-body p-4 text-center">
-                                <div class="row pt-1">
-                                    <div class="col-6 mb-3 ">
+                            <div class="card-body  text-center">
+                                <div class="row">
+                                    <div class="col-4">
                                         <h6>Gender
                                         </h6>
                                         <p class="text-muted">{{member.gender}}</p>
                                     </div>
-                                    <div class="col-6 mb-3">
+                                    <div class="col-4 mb-3">
                                         <h6>Birth Date</h6>
                                         <p class="text-muted">{{member.birthdate}}</p>
                                     </div>
                                     {% if not member.alive %}
-                                    <div class="col-6 mb-3">
+                                    <div class="col-4 mb-3">
                                         <h6>Death Date</h6>
                                         <p class="text-muted">{{member.deathdate}}</p>
                                     </div>
@@ -39,7 +38,7 @@
                                     {% if member.mother %}
                                     {% for family_member in family_members %}
                                     {% if family_member.member_id == member.mother %}
-                                    <div class="col-6 mb-3">
+                                    <div class="col-4 mb-3">
                                         <h6>Mother</h6>
                                         <p class="text-muted">
                                             {{family_member.first_name}} {{family_member.last_name}}
@@ -52,7 +51,7 @@
                                     {% if member.father %}
                                     {% for family_member in family_members %}
                                     {% if family_member.member_id == member.father %}
-                                    <div class="col-6 mb-3">
+                                    <div class="col-4 mb-3">
                                         <h6>Father</h6>
                                         <p class="text-muted">
                                             {{family_member.first_name}} {{family_member.last_name}}
@@ -121,6 +120,7 @@
                                 <hr class="mt-0 mb-4">
                                 <div class="d-flex justify-content-center">
                                     <a href="{{url_for('update_member', member_id=member.member_id)}}">update
+                                        {{member.first_name}}
                                         details</a>
                                 </div>
                             </div>

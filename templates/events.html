@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="events">
+<div class="events container">
     <div class="upcoming">
-        <h2 class="mt-4 text-center">{{upcomingEvents | length}} Upcoming Events </h2>
+        <h2 class="mt-4 text-center">{{upcomingEvents | length}} Upcoming</h2>
         {% if upcomingEvents %}
         <div class="accordion col-md-10 " id="accordionEvent">
             {% for event in upcomingEvents%}
@@ -99,7 +99,7 @@
         {% endif%}
     </div>
     <div class="past">
-        <h2 class="mt-4 text-center">{{pastEvents | length}} Past Events </h2>
+        <h2 class="mt-4 text-center">{{pastEvents | length}} Past</h2>
         <!-- collapse -->
         {% if pastEvents %}
         <div class="accordion col-md-10" id="accordionPastEvent">
