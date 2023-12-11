@@ -38,11 +38,12 @@ secret_key = os.getenv('SECRET_KEY')
 auth_s = URLSafeSerializer(secret_key, "auth")
 
 
-# handle errors
+# handle 404 error
 @app.errorhandler(404)
 def not_found_error(error):
     return render_template('404.html'), 404
 
+# handles 500 error
 @app.errorhandler(500)
 def internal_error(error):
     db.session.rollback()
@@ -110,7 +111,7 @@ def login():
             return redirect(url_for('login'))
         login_user(user, remember=form.remember_me.data)
         next_page = request.args.get('next')
-        if not next_page:
+        if not next_page:# if there is a query string in the url requires login 1st then go to the next_page
             next_page = url_for('index')
         return redirect(next_page)
     return render_template('login.html', title='Login', form=form)
@@ -133,17 +134,17 @@ def user_profile():
 @login_required
 def create_link(family_id):
     links = Link.query.filter_by(family_id=family_id).all()
+    url_root = request.url_root
     if len(links) < 1:
         # create new link
         token = auth_s.dumps({"family_id": family_id})
         newLink = Link(link=token, family_id=family_id)
         db.session.add(newLink)
         db.session.commit()
-        url_root = request.url_root
         flash('Link created', 'success')
         return render_template('profile.html', title='User_Profile', url_root=url_root)
     flash('You already have a link. Delete the current one to create a new one', 'warning')
-    return render_template('profile.html', title='User_Profile')
+    return render_template('profile.html', title='User_Profile', url_root=url_root)
 
 # delete link
 @app.route('/delete_link/<link_id>')
