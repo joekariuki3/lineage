@@ -6,7 +6,6 @@ from flask_login import UserMixin
 db = SQLAlchemy()
 
 
-
 class Family(db.Model):
     """Class representing a family in the application."""
     __tablename__ = 'families'
@@ -71,12 +70,15 @@ class User(db.Model, UserMixin):
     families = db.relationship('Family', back_populates='users')
 
     def set_password(self, user_password):
+        """change password from string to hash value to store to database"""
         self.password = generate_password_hash(user_password)
 
     def check_password(self, user_password):
+        """check the passed string if matches the hash value stored in the database"""
         return check_password_hash(self.password, user_password)
 
     def get_id(self):
+           """returns an id of a user"""
            return (self.user_id)
 
 class Event(db.Model):
