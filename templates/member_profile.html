@@ -117,12 +117,14 @@
                                 <div class="row pt-1">
 
                                 </div>
+                                {% if current_user.is_authenticated%}
                                 <hr class="mt-0 mb-4">
                                 <div class="d-flex justify-content-center">
                                     <a href="{{url_for('update_member', member_id=member.member_id)}}">update
                                         {{member.first_name}}
                                         details</a>
                                 </div>
+                                {% endif%}
                             </div>
                         </div>
                     </div>
