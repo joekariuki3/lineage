@@ -203,7 +203,69 @@ summary {
 .events .past {
   width: 50%;
 }
-
+.event-card-header {
+  display: flex;
+}
+.event-card-calender {
+  /* width: 15%; */
+  display: flex;
+  align-items: center;
+  margin-right: 5px;
+}
+.event-card-header-info {
+  width: 70%;
+  display: flex;
+  flex-direction: column;
+}
+.event-card-header-info .event-title {
+  /* width: 20%; */
+  overflow: hidden;
+  text-wrap: nowrap;
+  text-overflow: ellipsis;
+}
+.event-card-header-info svg {
+  width: 1rem;
+  height: 1rem;
+}
+.event-card-time-location {
+  display: flex;
+}
+.event-card-calender time {
+  align-items: center;
+  background-color: rgb(255, 255, 255);
+  border-radius: 0.6em;
+  box-shadow: rgb(229, 230, 230) 0px 0px 10px 2px;
+  display: flex;
+  flex-direction: column;
+  font-size: 0.38em;
+  height: 6em;
+  overflow: hidden;
+  width: 6em;
+}
+.event-card-calender time strong.bg-primary {
+  color: rgb(255, 255, 255);
+  font-size: 1.5em;
+  line-height: 1.25em;
+  padding: 0.1em 0px;
+  text-align: center;
+  top: 0px;
+  width: 100%;
+}
+.event-card-time-location .time {
+  width: 30%;
+  margin-right: 1rem;
+  overflow: hidden;
+  text-wrap: nowrap;
+  text-overflow: ellipsis;
+  font-size: 0.8rem;
+}
+.event-card-time-location .location {
+  overflow: hidden;
+  font-size: 0.8rem;
+  overflow: hidden;
+  text-wrap: nowrap;
+  text-overflow: ellipsis;
+}
 .copy-text {
   position: relative;
   /* padding: 2px; */
