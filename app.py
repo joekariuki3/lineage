@@ -122,6 +122,7 @@ def reset_password(token):
         return redirect(url_for('index'))
     user = User.verify_reset_password_token(app.config['SECRET_KEY'], token)
     if not user:
+        flash('Link expired. Request for a new link', 'warning')
         return redirect(url_for('index'))
     form = ResetPasswordForm()
     if form.validate_on_submit():
@@ -218,7 +219,14 @@ def create_link(family_id):
         newLink = Link(link=token, family_id=family_id)
         db.session.add(newLink)
         db.session.commit()
-        flash('Link created', 'success')
+        send_email('[Lineage] Link to share with family Members',
+               sender=app.config['ADMINS'],
+               recipients=[current_user.email],
+               text_body=render_template('email/link.txt',
+                                         link=f'{url_root}{newLink.link}', user=current_user),
+               html_body=render_template('email/link.html',
+                                         link=f'{url_root}{newLink.link}', user=current_user))
+        flash(f'Link created and sent to {current_user.email}', 'success')
         return render_template('profile.html', title='User_Profile', url_root=url_root)
     flash('You already have a link. Delete the current one to create a new one', 'warning')
     return render_template('profile.html', title='User_Profile', url_root=url_root)
