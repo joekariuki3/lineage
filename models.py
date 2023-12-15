@@ -2,6 +2,8 @@
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
+from time import time
+import jwt
 
 db = SQLAlchemy()
 
@@ -80,6 +82,20 @@ class User(db.Model, UserMixin):
     def get_id(self):
            """returns an id of a user"""
            return (self.user_id)
+
+    def get_reset_password_token(self, secret, expires_in=600):
+        return jwt.encode(
+            {'reset_password': self.user_id, 'exp': time() + expires_in},
+            secret, algorithm='HS256')
+
+    @staticmethod
+    def verify_reset_password_token(secret, token):
+        try:
+            id = jwt.decode(token, secret,
+                            algorithms=['HS256'])['reset_password']
+        except:
+            return
+        return db.session.get(User, id)
 
 class Event(db.Model):
     """Class representing a family event in the application."""

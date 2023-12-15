@@ -3,3 +3,4 @@ __pycache__
 lineagevenv
 .env
 .vscode
+tumamail.py
