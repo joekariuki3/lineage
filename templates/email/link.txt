@@ -1,0 +1,10 @@
+Dear {{ user.name }},
+
+Share the below link to your family members for them to Explore
+the family tree and events
+
+{{link}}
+
+Sincerely,
+
+The Lineage Team
