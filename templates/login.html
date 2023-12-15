@@ -49,10 +49,14 @@
                 </div>
             </fieldset>
         </form>
-        <div class="border-top text-center">
-            <small class="text-muted pt-3">
+        <p>
+            Forgot Your Password?
+            <a href="{{ url_for('reset_password_request') }}">Click to Reset It</a>
+        </p>
+        <div class="border-top ">
+            <p>
                 New User? <a class="ml-2" href="{{url_for('register')}}"> Register</a>
-            </small>
+            </p>
         </div>
     </div>
 </section>

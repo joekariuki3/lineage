@@ -6,13 +6,25 @@ from flask_login import LoginManager, current_user, login_user, logout_user, log
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from models import db, Family, Member, User, Event, Relationship, Link
-from forms import RegisterForm, LoginForm, EditProfileForm, CreateFamilyForm,AddMemberForm, AddMemberSpouseForm, AddMemberChildForm, updateMemberForm, AddEventForm
+from forms import RegisterForm, LoginForm, EditProfileForm, CreateFamilyForm,AddMemberForm, AddMemberSpouseForm, AddMemberChildForm, updateMemberForm, AddEventForm, ResetPasswordRequestForm, ResetPasswordForm
 from datetime import datetime
 from itsdangerous import URLSafeSerializer
 
+# for loging
+import logging
+from logging.handlers import SMTPHandler
+
+# for mail
+from flask_mail import Mail, Message
+from threading import Thread # send email asynchronously in the background
+
+# load dot environment to get environment variables from .env file
 load_dotenv()
 
 app = Flask(__name__)
+
+
+# for login authentication
 login = LoginManager(app)
 login.login_view = 'login'
 
@@ -37,6 +49,28 @@ migrate.init_app(app, db)
 secret_key = os.getenv('SECRET_KEY')
 auth_s = URLSafeSerializer(secret_key, "auth")
 
+# Mail
+app.config['MAIL_SERVER'] = os.getenv('MAIL_SERVER')
+app.config['MAIL_PORT'] = int(os.getenv('MAIL_PORT') or 25)
+app.config['MAIL_USE_TLS'] = os.getenv('MAIL_USE_TLS') is not None
+app.config['MAIL_USERNAME'] = os.getenv('MAIL_USERNAME')
+app.config['MAIL_PASSWORD'] = os.getenv('MAIL_PASSWORD')
+app.config['ADMINS'] = os.getenv('ADMINS')
+
+# setup mail
+mail = Mail(app)
+
+# send email
+def send_async_email(app, msg):
+    with app.app_context():
+        mail.send(msg)
+
+def send_email(subject, sender, recipients, text_body, html_body):
+    msg = Message(subject, sender=sender, recipients=recipients)
+    msg.body = text_body
+    msg.html = html_body
+    Thread(target=send_async_email, args=(app, msg)).start()
+
 
 # handle 404 error
 @app.errorhandler(404)
@@ -53,6 +87,49 @@ def internal_error(error):
 @login.user_loader
 def load_user(id):
     return User.query.get(int(id))
+
+
+# reset password
+@app.route('/reset_password_request', methods=['POST', 'GET'])
+def reset_password_request():
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+    form = ResetPasswordRequestForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(email=form.email.data).first()
+        if user:
+            send_password_reset_email(user)
+        flash('Check your email for the instructions to reset your password', 'info')
+        return redirect(url_for('login'))
+    return render_template('reset_password_request.html',
+                           title='Reset Password', form=form)
+
+# send reset password link to user
+def send_password_reset_email(user):
+    token = user.get_reset_password_token(app.config['SECRET_KEY'])
+    send_email('[Lineage] Reset Your Password',
+               sender=app.config['ADMINS'],
+               recipients=[user.email],
+               text_body=render_template('email/reset_password.txt',
+                                         user=user, token=token),
+               html_body=render_template('email/reset_password.html',
+                                         user=user, token=token))
+
+# reset password from email link
+@app.route('/reset_password/<token>', methods=['GET', 'POST'])
+def reset_password(token):
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+    user = User.verify_reset_password_token(app.config['SECRET_KEY'], token)
+    if not user:
+        return redirect(url_for('index'))
+    form = ResetPasswordForm()
+    if form.validate_on_submit():
+        user.set_password(form.password.data)
+        db.session.commit()
+        flash('Your password has been reset.', 'success')
+        return redirect(url_for('login'))
+    return render_template('reset_password.html', title="New password", form=form)
 
 # Home
 # if a member has a link containing <family_id> 1st route

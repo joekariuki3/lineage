@@ -27,6 +27,17 @@ class LoginForm(FlaskForm):
     remember_me = BooleanField('Remember Me')
     submit = SubmitField('Login')
 
+class ResetPasswordRequestForm(FlaskForm):
+    """User resets password"""
+    email = StringField('Email', validators=[DataRequired(), Email()])
+    submit = SubmitField('Request Password Reset')
+
+class ResetPasswordForm(FlaskForm):
+    password = PasswordField('Password', validators=[DataRequired()])
+    password2 = PasswordField(
+        'Repeat Password', validators=[DataRequired(), EqualTo('password')])
+    submit = SubmitField('Save New password')
+
 class EditProfileForm(FlaskForm):
     """form to update details of a user"""
     name = StringField('Name', validators=[DataRequired()])
