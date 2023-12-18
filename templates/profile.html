@@ -17,7 +17,13 @@
                             <p>Admin</p>
                             <div class="col-12 mb-3">
                                 <h5>Email</h5>
-                                <p class="text-muted">{{current_user.email}}</p>
+                                <p class="text-muted">
+                                    {{current_user.email}}
+                                    {% if not current_user.emailVerify %}
+                                    <a href="{{url_for('verifyEmail', user_id=current_user.user_id)}}"
+                                        class="link-success">Verify Email</a>
+                                    {% endif %}
+                                </p>
                             </div>
                             {% if current_user.is_authenticated%}
                             <div class="d-flex justify-content-center">

@@ -69,6 +69,7 @@ class User(db.Model, UserMixin):
     name = db.Column(db.String(50), nullable=False)
     email = db.Column(db.String(50), unique=True, nullable=False)
     password = db.Column(db.String(2500), nullable=False)
+    emailVerify = db.Column(db.Boolean, default=False)
     families = db.relationship('Family', back_populates='users')
 
     def set_password(self, user_password):

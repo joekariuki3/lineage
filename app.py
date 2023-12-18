@@ -142,7 +142,6 @@ def home(family_id=''):
     if not family_id == '':
         try:
             data = auth_s.loads(family_id)
-            print(data)
             family_id = data["family_id"]
             if family_id:
                 families = Family.query.filter_by(family_id=family_id).all()
@@ -172,9 +171,49 @@ def register():
         user.set_password(form.password.data)
         db.session.add(user)
         db.session.commit()
+        sendEmailVerificationLink(user)
         flash('Registration was a success Login Now', 'success')
         return redirect(url_for('login'))
     return render_template('register.html', title='Register', form=form)
+
+def sendEmailVerificationLink(user):
+        # get url
+        url_root = request.url_root
+        # create token to send to user via email for verification
+        token = auth_s.dumps({"user_id": user.user_id})
+        send_email('[Lineage] Verify Email',
+               sender=app.config['ADMINS'],
+               recipients=[user.email],
+               text_body=render_template('email/verifyEmail.txt',
+                                         link=f'{url_root}{token}',
+                                         user=user),
+               html_body=render_template('email/verifyEmail.html',
+                                         link=f'{url_root}verify_email/{token}',
+                                         user=user))
+        flash(f'Verify your email. Link has been sent to {user.email}', 'success')
+
+#verifyEmail
+@app.route('/user/verify_email/<user_id>')
+@login_required
+def verifyEmail(user_id):
+    user = User.query.filter_by(user_id=user_id).first()
+    sendEmailVerificationLink(user)
+    return redirect(url_for('user_profile'))
+
+# update email verification to True
+@app.route('/verify_email/<token>')
+def UpdateVerifyEmail(token):
+    try:
+        data = auth_s.loads(token)
+        user_id = data["user_id"]
+        if user_id:
+            user = User.query.filter_by(user_id=user_id).first()
+            user.emailVerify = True
+            db.session.commit()
+            flash('Email verified', 'success')
+    except Exception as e:
+        pass
+    return redirect(url_for('login'))
 
 # login user
 @app.route('/login', methods=['GET', 'POST'])
@@ -219,6 +258,7 @@ def create_link(family_id):
         newLink = Link(link=token, family_id=family_id)
         db.session.add(newLink)
         db.session.commit()
+        # send Link to email
         send_email('[Lineage] Link to share with family Members',
                sender=app.config['ADMINS'],
                recipients=[current_user.email],
