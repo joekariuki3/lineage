@@ -1,0 +1,10 @@
+Dear {{ user.name }},
+
+Click on the Link below to verify your email
+
+
+{{link}}
+
+Sincerely,
+
+The Lineage Team
