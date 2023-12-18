@@ -124,6 +124,34 @@
                                         {{member.first_name}}
                                         details</a>
                                 </div>
+                                <a href="#" class="link-danger" data-toggle="modal"
+                                    data-target="#deleteModal{{member.member_id}}">Delete {{member.first_name}}</a>
+                                <!-- modal start -->
+                                <div class="modal fade" id="deleteModal{{member.member_id}}" tabindex="-1" role="dialog"
+                                    aria-labelledby="deleteModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="deleteModalLabel">Delete
+                                                    {{member.first_name}}</h5>
+                                                <button type="button" class="btn-close" data-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>Are you sure you want to DELETE {{member.first_name}} ?
+                                                </p>
+                                                <p>All members Under {{member.first_name}} will also be DELETED</p>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-primary" data-dismiss="modal">No
+                                                    Close</button>
+                                                <a href="{{url_for('delete_member', member_id=member.member_id)}}"
+                                                    class="btn btn-danger">Yes Delete</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- modal end -->
                                 {% endif%}
                             </div>
                         </div>

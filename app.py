@@ -476,6 +476,22 @@ def update_member(member_id):
     return render_template('update_member.html', title=f'update {member.first_name} information ',
                            form=form, member=member)
 
+# delete member
+@app.route('/delete_member/<member_id>')
+@login_required
+def delete_member(member_id):
+    member = Member.query.filter_by(member_id=member_id).first()
+    # user deleting member should be in sane family as member
+    currentUserFamilyIds = [family.family_id for family in current_user.families ]
+    if member and member.family_id in currentUserFamilyIds:
+        db.session.delete(member)
+        db.session.commit()
+        flash(f'{member.first_name} has been Deleted', 'success')
+        return redirect(url_for('index'))
+    flash('Not allowed to Delete', 'danger')
+    return redirect(url_for('index'))
+
+
 # API call
 # return spouse(s)
 @app.route('/member/spouses', methods=['POST', 'GET'])

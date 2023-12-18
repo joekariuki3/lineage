@@ -127,5 +127,5 @@ class Relationship(db.Model):
 
     # Relationships
     member1 = db.relationship('Member', foreign_keys=[member_id_1], back_populates='relationships1')
-    member2 = db.relationship('Member', foreign_keys=[member_id_2], back_populates='relationships2')
+    member2 = db.relationship('Member', foreign_keys=[member_id_2],  back_populates='relationships2')
 
