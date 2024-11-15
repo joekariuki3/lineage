@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 from dotenv import load_dotenv
 import os
 from flask import Flask, url_for, render_template, flash, redirect, request, make_response, jsonify
@@ -142,7 +142,6 @@ def home(family_id=''):
     if not family_id == '':
         try:
             data = auth_s.loads(family_id)
-            print(data)
             family_id = data["family_id"]
             if family_id:
                 families = Family.query.filter_by(family_id=family_id).all()
@@ -172,9 +171,49 @@ def register():
         user.set_password(form.password.data)
         db.session.add(user)
         db.session.commit()
+        sendEmailVerificationLink(user)
         flash('Registration was a success Login Now', 'success')
         return redirect(url_for('login'))
     return render_template('register.html', title='Register', form=form)
+
+def sendEmailVerificationLink(user):
+        # get url
+        url_root = request.url_root
+        # create token to send to user via email for verification
+        token = auth_s.dumps({"user_id": user.user_id})
+        send_email('[Lineage] Verify Email',
+               sender=app.config['ADMINS'],
+               recipients=[user.email],
+               text_body=render_template('email/verifyEmail.txt',
+                                         link=f'{url_root}{token}',
+                                         user=user),
+               html_body=render_template('email/verifyEmail.html',
+                                         link=f'{url_root}verify_email/{token}',
+                                         user=user))
+        flash(f'Verify your email. Link has been sent to {user.email}', 'success')
+
+#verifyEmail
+@app.route('/user/verify_email/<user_id>')
+@login_required
+def verifyEmail(user_id):
+    user = User.query.filter_by(user_id=user_id).first()
+    sendEmailVerificationLink(user)
+    return redirect(url_for('user_profile'))
+
+# update email verification to True
+@app.route('/verify_email/<token>')
+def UpdateVerifyEmail(token):
+    try:
+        data = auth_s.loads(token)
+        user_id = data["user_id"]
+        if user_id:
+            user = User.query.filter_by(user_id=user_id).first()
+            user.emailVerify = True
+            db.session.commit()
+            flash('Email verified', 'success')
+    except Exception as e:
+        pass
+    return redirect(url_for('login'))
 
 # login user
 @app.route('/login', methods=['GET', 'POST'])
@@ -193,6 +232,27 @@ def login():
             next_page = url_for('index')
         return redirect(next_page)
     return render_template('login.html', title='Login', form=form)
+
+# login a guest user
+@app.route('/guest')
+def guest():
+    guest_name = os.getenv('GUEST_NAME')
+    guest_email = os.getenv('GUEST_EMAIL')
+    guest_password = os.getenv('GUEST_PASSWORD')
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+    user = User.query.filter_by(email=guest_email).first()
+    if user is None:
+        # create guest user
+        if guest_name is None or guest_email is None or guest_password is None:
+            flash("Guest name, email and password are required. Contact admin", 'danger')
+            return redirect(url_for('login'))
+        user = User(name=guest_name, email=guest_email)
+        user.set_password(guest_password)
+        db.session.add(user)
+        db.session.commit()
+    login_user(user)
+    return redirect(url_for('index'))
 
 # logout user
 @app.route('/logout')
@@ -219,6 +279,7 @@ def create_link(family_id):
         newLink = Link(link=token, family_id=family_id)
         db.session.add(newLink)
         db.session.commit()
+        # send Link to email
         send_email('[Lineage] Link to share with family Members',
                sender=app.config['ADMINS'],
                recipients=[current_user.email],
@@ -435,6 +496,22 @@ def update_member(member_id):
         return redirect(url_for('member_profile', member_id=member.member_id))
     return render_template('update_member.html', title=f'update {member.first_name} information ',
                            form=form, member=member)
+
+# delete member
+@app.route('/delete_member/<member_id>')
+@login_required
+def delete_member(member_id):
+    member = Member.query.filter_by(member_id=member_id).first()
+    # user deleting member should be in sane family as member
+    currentUserFamilyIds = [family.family_id for family in current_user.families ]
+    if member and member.family_id in currentUserFamilyIds:
+        db.session.delete(member)
+        db.session.commit()
+        flash(f'{member.first_name} has been Deleted', 'success')
+        return redirect(url_for('index'))
+    flash('Not allowed to Delete', 'danger')
+    return redirect(url_for('index'))
+
 
 # API call
 # return spouse(s)

@@ -69,6 +69,7 @@ class User(db.Model, UserMixin):
     name = db.Column(db.String(50), nullable=False)
     email = db.Column(db.String(50), unique=True, nullable=False)
     password = db.Column(db.String(2500), nullable=False)
+    emailVerify = db.Column(db.Boolean, default=False)
     families = db.relationship('Family', back_populates='users')
 
     def set_password(self, user_password):
@@ -126,5 +127,5 @@ class Relationship(db.Model):
 
     # Relationships
     member1 = db.relationship('Member', foreign_keys=[member_id_1], back_populates='relationships1')
-    member2 = db.relationship('Member', foreign_keys=[member_id_2], back_populates='relationships2')
+    member2 = db.relationship('Member', foreign_keys=[member_id_2],  back_populates='relationships2')
 
