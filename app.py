@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 from dotenv import load_dotenv
 import os
 from flask import Flask, url_for, render_template, flash, redirect, request, make_response, jsonify
@@ -232,6 +232,27 @@ def login():
             next_page = url_for('index')
         return redirect(next_page)
     return render_template('login.html', title='Login', form=form)
+
+# login a guest user
+@app.route('/guest')
+def guest():
+    guest_name = os.getenv('GUEST_NAME')
+    guest_email = os.getenv('GUEST_EMAIL')
+    guest_password = os.getenv('GUEST_PASSWORD')
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+    user = User.query.filter_by(email=guest_email).first()
+    if user is None:
+        # create guest user
+        if guest_name is None or guest_email is None or guest_password is None:
+            flash("Guest name, email and password are required. Contact admin", 'danger')
+            return redirect(url_for('login'))
+        user = User(name=guest_name, email=guest_email)
+        user.set_password(guest_password)
+        db.session.add(user)
+        db.session.commit()
+    login_user(user)
+    return redirect(url_for('index'))
 
 # logout user
 @app.route('/logout')
