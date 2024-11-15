@@ -1,6 +1,7 @@
-__pycache__
+venv
 *.sql
-lineagevenv
+__pycache__
 .env
 .vscode
-tumamail.py
+*tumamail*
+*.db
