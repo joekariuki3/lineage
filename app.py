@@ -403,7 +403,7 @@ def add_spouse(member_id):
 @app.route('/member/<member_id>/<spouse_id>/child', methods=['GET', 'POST'])
 @login_required
 def add_child(member_id, spouse_id):
-    form = MemberForm(add_member_mode=RelationshipConstants.Child)
+    form = MemberForm(add_relative_mode=RelationshipConstants.Child)
     father = ''
     mother = ''
     member1 = Member.query.filter_by(member_id=member_id).first()
@@ -540,7 +540,7 @@ def get_spouse():
 
 # return child/children
 @app.route('/member/children', methods=['POST', 'GET'])
-# @login_required
+@login_required
 def get_children():
     data = request.get_json()
     if not data:

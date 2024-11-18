@@ -12,7 +12,7 @@ class PasswordConstants:
     ConfirmPasswordPlaceholder = '********'
     PasswordRequired = 'Password is required'
     ConfirmPasswordRequired = 'Confirm Password is required'
-    PasswordMatch = 'Passwords must match Confirm Password'
+    PasswordMatch = 'Confirm Passwords must match Password'
 
 class FamilyConstants:
     FamilyPlaceholder = 'Family Name'
@@ -36,8 +36,8 @@ class GenderConstants:
     GenderRequired = 'Gender is required'
 
 class RelationshipConstants:
-    Spouse = 'Spouse'
-    Child = 'Child'
+    Spouse = 'spouse'
+    Child = 'child'
     RelationshipPlaceholder = 'Relationship'
     RelationshipRequired = 'Relationship is required'
 
