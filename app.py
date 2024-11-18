@@ -6,9 +6,10 @@ from flask_login import LoginManager, current_user, login_user, logout_user, log
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from models import db, Family, Member, User, Event, Relationship, Link
-from forms import RegisterForm, LoginForm, EditProfileForm, CreateFamilyForm,AddMemberForm, AddMemberSpouseForm, AddMemberChildForm, updateMemberForm, AddEventForm, ResetPasswordRequestForm, ResetPasswordForm
+from forms import RegisterForm, LoginForm, EditProfileForm, CreateFamilyForm, MemberForm, AddEventForm, ResetPasswordRequestForm, ResetPasswordForm
 from datetime import datetime
 from itsdangerous import URLSafeSerializer
+from constants import RelationshipConstants
 
 # for loging
 import logging
@@ -326,7 +327,7 @@ def edit_profile():
 @login_required
 def create_family():
     form = CreateFamilyForm()
-    memberForm = AddMemberForm()
+    memberForm = MemberForm()
     if form.validate_on_submit() and memberForm.validate_on_submit():
         family_name = form.name.data
         new_family = Family(name=family_name, user_id=current_user.user_id)
@@ -377,7 +378,7 @@ def add_root(family_id, memberForm={}):
 @app.route('/member/<member_id>/spouse', methods=['GET', 'POST'])
 @login_required
 def add_spouse(member_id):
-    form = AddMemberSpouseForm()
+    form = MemberForm(add_relative_mode=RelationshipConstants.Spouse)
     member1 = Member.query.filter_by(member_id=member_id).first()
     family_id = member1.family_id
     title = f'Adding spouse of {member1.first_name} {member1.last_name}'
@@ -402,7 +403,7 @@ def add_spouse(member_id):
 @app.route('/member/<member_id>/<spouse_id>/child', methods=['GET', 'POST'])
 @login_required
 def add_child(member_id, spouse_id):
-    form = AddMemberChildForm()
+    form = MemberForm(add_member_mode=RelationshipConstants.Child)
     father = ''
     mother = ''
     member1 = Member.query.filter_by(member_id=member_id).first()
@@ -479,7 +480,7 @@ def member_profile(member_id):
 @app.route('/update_member/<member_id>', methods=['GET', 'POST'])
 @login_required
 def update_member(member_id):
-    form = updateMemberForm()
+    form = MemberForm()
     member = Member.query.filter_by(member_id=member_id).first()
 
     form.gender.data = member.gender
@@ -494,7 +495,7 @@ def update_member(member_id):
         db.session.commit()
         flash(f'{member.first_name} changes have been Updated.', 'success')
         return redirect(url_for('member_profile', member_id=member.member_id))
-    return render_template('update_member.html', title=f'update {member.first_name} information ',
+    return render_template('update_member.html', title=f'Update {member.first_name} information ',
                            form=form, member=member)
 
 # delete member
