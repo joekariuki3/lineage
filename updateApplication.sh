@@ -7,4 +7,4 @@ echo "Pulling latest changes from branch $BRANCH_NAME in repository $REPOSITORY_
 
 cd $REPOSITORY_NAME
 git pull origin $BRANCH_NAME
-cp -rv ./* ../
+cp -rvf ./* ../
