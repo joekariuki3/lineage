@@ -10,6 +10,7 @@ from forms import RegisterForm, LoginForm, EditProfileForm, CreateFamilyForm, Me
 from datetime import datetime
 from itsdangerous import URLSafeSerializer
 from constants import RelationshipConstants
+from service import saveUser
 
 # for loging
 import logging
@@ -168,13 +169,11 @@ def register():
          return redirect(url_for('index'))
     form = RegisterForm()
     if form.validate_on_submit():
-        user = User(name=form.name.data, email=form.email.data)
-        user.set_password(form.password.data)
-        db.session.add(user)
-        db.session.commit()
-        sendEmailVerificationLink(user)
-        flash('Registration was a success Login Now', 'success')
-        return redirect(url_for('login'))
+        status, message = saveUser(name=form.name.data, email=form.email.data, password=form.password.data)
+        # sendEmailVerificationLink(user)
+        if status == 201:
+            flash(message[0], message[1])
+            return redirect(url_for('login'))
     return render_template('register.html', title='Register', form=form)
 
 def sendEmailVerificationLink(user):
