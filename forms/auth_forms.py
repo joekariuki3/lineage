@@ -3,7 +3,7 @@ from wtforms import StringField, PasswordField, BooleanField, SubmitField, Email
 from wtforms.validators import DataRequired, EqualTo, Email, ValidationError
 from models import User
 from constants import NameConstants, EmailConstants, PasswordConstants
-
+from service import checkUserExists
 class RegisterForm(FlaskForm):
     """form for a user to create an account"""
     name = StringField('Name', validators=[DataRequired(message=NameConstants.NameRequired)], render_kw={"placeholder": NameConstants.NamePlaceholder})
@@ -15,8 +15,7 @@ class RegisterForm(FlaskForm):
     def validate_email(self, email):
         """method to check if a user with passed email exists
         if yes prompt a user to choose a different email"""
-        user = User.query.filter_by(email=email.data).first()
-        if user is not None:
+        if checkUserExists(email=email.data):
             raise ValidationError('Please use a different email address.')
 
 class LoginForm(FlaskForm):
