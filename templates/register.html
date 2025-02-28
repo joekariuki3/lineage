@@ -1,82 +1,93 @@
 {% extends "base.html" %}
 
 {% block content %}
-<section class="center-section">
-    <div class="content-section  container col-md-4 mt-auto mb-auto">
+<section class="flex justify-center items-center min-h-0 py-4 bg-gray-100">
+    <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-sm">
         <form action="" method="post" novalidate>
             {{ form.hidden_tag() }}
-            <fieldset class="form-group">
-                <legend class="mb-4">
-                    <h1>{{title}}</h1>
-                </legend>
-                <div class="form-group mt-4">
-                    {{ form.name.label(class="form-control-lable")}}
-                    <!-- if errors -->
-                    {% if form.name.errors%}
-                    {{ form.name(class="form-control form-control-lg is-invalid") }}
-                    <div class="invalid-feedback">
+            <fieldset>
+                <legend class="text-center text-xl font-bold mb-6">{{ title }}</legend>
+
+                <!-- Name Field -->
+                <div class="mb-4">
+                    {{ form.name.label(class="block text-gray-700 font-medium") }}
+                    {% if form.name.errors %}
+                    {{ form.name(class="border border-red-500 block w-full p-2 mt-1 rounded-md shadow-sm focus:ring
+                    focus:border-blue-500") }}
+                    <div class="text-red-500 text-sm mt-1">
                         {% for error in form.name.errors %}
                         <span>{{ error }}</span>
                         {% endfor %}
                     </div>
                     {% else %}
-                    {{ form.name(class="form-control form-control-lg") }}
+                    {{ form.name(class="border border-gray-300 block w-full p-2 mt-1 rounded-md shadow-sm focus:ring
+                    focus:border-blue-500") }}
                     {% endif %}
-
                 </div>
-                <div class="form-group mt-4">
-                    {{ form.email.label(class="form-control-lable")}}
 
-                    <!-- if errors -->
-                    {% if form.email.errors%}
-                    {{ form.email(class="form-control form-control-lg is-invalid") }}
-                    <div class="invalid-feedback">
+                <!-- Email Field -->
+                <div class="mb-4">
+                    {{ form.email.label(class="block text-gray-700 font-medium") }}
+                    {% if form.email.errors %}
+                    {{ form.email(class="border border-red-500 block w-full p-2 mt-1 rounded-md shadow-sm focus:ring
+                    focus:border-blue-500") }}
+                    <div class="text-red-500 text-sm mt-1">
                         {% for error in form.email.errors %}
                         <span>{{ error }}</span>
                         {% endfor %}
                     </div>
                     {% else %}
-                    {{ form.email(class="form-control form-control-lg") }}
+                    {{ form.email(class="border border-gray-300 block w-full p-2 mt-1 rounded-md shadow-sm focus:ring
+                    focus:border-blue-500") }}
                     {% endif %}
                 </div>
-                <div class="form-group mt-4">
-                    {{ form.password.label(class="form-control-lable")}}
 
-                    <!-- if errors -->
-                    {% if form.password.errors%}
-                    {{ form.password(class="form-control form-control-lg is-invalid") }}
-                    <div class="invalid-feedback">
+                <!-- Password Field -->
+                <div class="mb-4">
+                    {{ form.password.label(class="block text-gray-700 font-medium") }}
+                    {% if form.password.errors %}
+                    {{ form.password(class="border border-red-500 block w-full p-2 mt-1 rounded-md shadow-sm focus:ring
+                    focus:border-blue-500") }}
+                    <div class="text-red-500 text-sm mt-1">
                         {% for error in form.password.errors %}
                         <span>{{ error }}</span>
                         {% endfor %}
                     </div>
                     {% else %}
-                    {{ form.password(class="form-control form-control-lg") }}
+                    {{ form.password(class="border border-gray-300 block w-full p-2 mt-1 rounded-md shadow-sm focus:ring
+                    focus:border-blue-500") }}
                     {% endif %}
                 </div>
-                <div class="form-group mt-4">
-                    {{ form.confirm_password.label(class="form-control-lable")}}
-                    <!-- if errors -->
-                    {% if form.confirm_password.errors%}
-                    {{ form.confirm_password(class="form-control form-control-lg is-invalid") }}
-                    <div class="invalid-feedback">
+
+                <!-- Confirm Password Field -->
+                <div class="mb-4">
+                    {{ form.confirm_password.label(class="block text-gray-700 font-medium") }}
+                    {% if form.confirm_password.errors %}
+                    {{ form.confirm_password(class="border border-red-500 block w-full p-2 mt-1 rounded-md shadow-sm
+                    focus:ring focus:border-blue-500") }}
+                    <div class="text-red-500 text-sm mt-1">
                         {% for error in form.confirm_password.errors %}
                         <span>{{ error }}</span>
                         {% endfor %}
                     </div>
                     {% else %}
-                    {{ form.confirm_password(class="form-control form-control-lg") }}
+                    {{ form.confirm_password(class="border border-gray-300 block w-full p-2 mt-1 rounded-md shadow-sm
+                    focus:ring focus:border-blue-500") }}
                     {% endif %}
                 </div>
-                <br>
-                <div class="form-group  mb-2 d-flex justify-content-center">
-                    {{ form.submit(class="btn btn-lg btn-primary button") }}
+
+                <!-- Submit Button -->
+                <div class="mt-6">
+                    {{ form.submit(class="w-full bg-blue-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-600
+                    transition-colors duration-300") }}
                 </div>
             </fieldset>
         </form>
-        <div class=" border-top mb-4 text-center">
-            <small class="text-muted ">
-                Already Have An Account? <a class="ml-2" href="{{url_for('login')}}">Login</a>
+
+        <div class="mt-6 border-t pt-4 text-center">
+            <small class="text-gray-600">
+                Already Have An Account? <a class="text-blue-500 hover:underline"
+                    href="{{ url_for('login') }}">Login</a>
             </small>
         </div>
     </div>
