@@ -28,7 +28,7 @@ app = Flask(__name__)
 
 # for login authentication
 login = LoginManager(app)
-login.login_view = 'login'
+login.login_view = 'auth/login'
 
 # Set the secret key using an environment variable
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
@@ -103,7 +103,7 @@ def reset_password_request():
             send_password_reset_email(user)
         flash('Check your email for the instructions to reset your password', 'info')
         return redirect(url_for('login'))
-    return render_template('reset_password_request.html',
+    return render_template('auth/reset_password_request.html',
                            title='Reset Password', form=form)
 
 # send reset password link to user
@@ -132,7 +132,7 @@ def reset_password(token):
         db.session.commit()
         flash('Your password has been reset.', 'success')
         return redirect(url_for('login'))
-    return render_template('reset_password.html', title="New password", form=form)
+    return render_template('auth/reset_password.html', title="New password", form=form)
 
 # Home
 # if a member has a link containing <family_id> 1st route
@@ -174,7 +174,7 @@ def register():
         if status == 201:
             flash(message[0], message[1])
             return redirect(url_for('login'))
-    return render_template('register.html', title='Register', form=form)
+    return render_template('auth/register.html', title='Register', form=form)
 
 def sendEmailVerificationLink(user):
         # get url
@@ -231,7 +231,7 @@ def login():
         if not next_page:# if there is a query string in the url requires login 1st then go to the next_page
             next_page = url_for('index')
         return redirect(next_page)
-    return render_template('login.html', title='Login', form=form)
+    return render_template('auth/login.html', title='Login', form=form)
 
 # login a guest user
 @app.route('/guest')
