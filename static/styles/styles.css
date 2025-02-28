@@ -22,7 +22,7 @@ svg {
 svg.svg-home {
   width: 7rem;
   height: 7rem;
-  margin-right: 0;
+  margin: auto;
 }
 .sidebar-top {
   display: flex;
