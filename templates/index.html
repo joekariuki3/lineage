@@ -3,163 +3,86 @@
 {% block content %}
 
 <!-- Hero Section -->
-<section id="home" class="mt-4 mb-4">
-    <div class="container d-flex align-items-center hero">
-        <div class="hero-words">
-            <h1 class="mt-4 fw-bold">Lineage</h1>
-            <h3 class="mt-4">Family Tree App</h3>
-            <p class="lead">A simple way to connect with your family members and explore your family tree.</p>
-            {% if families and families | length == 1 %}
-            <a href="{{url_for('index', family_id=families[0].family_id)}}"
-                class="btn btn-lg btn-outline-primary mt-3">View {{families[0].name}}</a>
-            {% else %}
-            {% if current_user.is_authenticated %}
-            <a href="{{url_for('index')}}" class="btn btn-lg btn-outline-primary mt-3">View Family</a>
-            {% else%}
-            <a href="{{url_for('register')}}" class="btn btn-lg btn-outline-primary mt-3">Register to add Family</a>
-            <a href="{{url_for('login')}} " class="btn btn-lg btn-primary mt-3">Login to
-                view Family
-            </a>
-            {% endif%}
-            {% endif%}
+<section id="home" class="mt-8 mb-8">
+    <div class="container mx-auto flex flex-col lg:flex-row items-center justify-between">
+        <!-- Hero Text Section -->
+        <div class="lg:w-1/2 text-center lg:text-left">
+            <h1 class="text-4xl font-bold mt-4">Lineage</h1>
+            <h3 class="text-2xl mt-4">Family Tree App</h3>
+            <p class="text-lg mt-4">A simple way to connect with your family members and explore your family tree.</p>
+            <!-- Conditional Button Rendering -->
+            <div class="mt-6">
+                {% if families and families | length == 1 %}
+                <a href="{{url_for('index', family_id=families[0].family_id)}}"
+                    class="inline-block mt-4 px-6 py-2 border-2 border-blue-500 text-blue-500 font-semibold rounded-lg hover:bg-blue-500 hover:text-white transition duration-300">View
+                    {{families[0].name}}</a>
+                {% else %}
+                {% if current_user.is_authenticated %}
+                <a href="{{url_for('index')}}"
+                    class="inline-block mt-4 px-6 py-2 border-2 border-blue-500 text-blue-500 font-semibold rounded-lg hover:bg-blue-500 hover:text-white transition duration-300">View
+                    Family</a>
+                {% else %}
+                <a href="{{url_for('register')}}"
+                    class="inline-block mt-4 px-6 py-2 border-2 border-blue-500 text-blue-500 font-semibold rounded-lg hover:bg-blue-500 hover:text-white transition duration-300">Register
+                    to add Family</a>
+                <a href="{{url_for('login')}}"
+                    class="inline-block mt-4 px-6 py-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 transition duration-300">Login
+                    to view Family</a>
+                {% endif %}
+                {% endif %}
+            </div>
         </div>
-        <div class="hero-img">
+        <!-- Hero Image Section -->
+        <div class="lg:w-1/2 mt-8 lg:mt-0">
             <img src="https://cdn.dribbble.com/users/1750119/screenshots/20498529/media/a25d67701ad3212631e9a13d5447e3a6.png?resize=768x576&vertical=center"
-                alt="Family Tree App Cover Image" class="img-fluid">
+                alt="Family Tree App Cover Image" class="w-full max-w-lg mx-auto lg:mx-0 rounded-lg shadow-lg">
         </div>
     </div>
 </section>
 
 <!-- Features Section -->
-<section id="features" class="bg-light text-center py-5">
-    <div class="container">
-        <h2 class="mb-4 fw-bold">Key Features</h2>
-        <div class="row">
-            <div class="col-md-4">
-                <svg class="svg-home" fill="#000000" viewBox="-3.2 -3.2 38.40 38.40" id="icon"
-                    xmlns="http://www.w3.org/2000/svg" transform="rotate(0)">
-                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" stroke="#CCCCCC"
-                        stroke-width="0.064"></g>
-                    <g id="SVGRepo_iconCarrier">
-                        <defs>
-                            <style>
-                                .cls-1 {
-                                    fill: none;
-                                }
-                            </style>
-                        </defs>
-                        <title>tree-view--alt</title>
-                        <path
-                            d="M23,9h6a2,2,0,0,0,2-2V3a2,2,0,0,0-2-2H23a2,2,0,0,0-2,2V4H11V3A2,2,0,0,0,9,1H3A2,2,0,0,0,1,3V7A2,2,0,0,0,3,9H9a2,2,0,0,0,2-2V6h4V26a2.0023,2.0023,0,0,0,2,2h4v1a2,2,0,0,0,2,2h6a2,2,0,0,0,2-2V25a2,2,0,0,0-2-2H23a2,2,0,0,0-2,2v1H17V17h4v1a2,2,0,0,0,2,2h6a2,2,0,0,0,2-2V14a2,2,0,0,0-2-2H23a2,2,0,0,0-2,2v1H17V6h4V7A2,2,0,0,0,23,9Zm0-6h6V7H23ZM9,7H3V3H9ZM23,25h6v4H23Zm0-11h6v4H23Z"
-                            transform="translate(0 0.0049)"></path>
-                        <rect id="_Transparent_Rectangle_" data-name="<Transparent Rectangle>" class="cls-1" width="32"
-                            height="32"></rect>
-                    </g>
-                </svg>
-                <h3>Family Tree View</h3>
-                <p>Explore and visualize your family tree in an interactive and dynamic way.</p>
+<section id="features" class="bg-gray-100 text-center py-10">
+    <div class="container mx-auto">
+        <h2 class="text-3xl font-bold mb-8 text-gray-900">Key Features</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="feature-item">
+                {% include "icons/treeSvg.html" %}
+                <h3 class="text-xl font-semibold mt-4 text-gray-800">Family Tree View</h3>
+                <p class="mt-2 p-1 text-gray-600">Explore and visualize your family tree in an interactive and dynamic
+                    way.
+                </p>
             </div>
-            <div class="col-md-4">
-                <svg class="svg-home" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                    <g id="SVGRepo_iconCarrier">
-                        <path fill-rule="evenodd" clip-rule="evenodd"
-                            d="M7 2C7.55228 2 8 2.44772 8 3V5C8 5.55228 7.55228 6 7 6C6.44772 6 6 5.55228 6 5V3C6 2.44772 6.44772 2 7 2Z"
-                            fill="#4296FF"></path>
-                        <path fill-rule="evenodd" clip-rule="evenodd"
-                            d="M17 2C17.5523 2 18 2.44772 18 3V5C18 5.55228 17.5523 6 17 6C16.4477 6 16 5.55228 16 5V3C16 2.44772 16.4477 2 17 2Z"
-                            fill="#4296FF"></path>
-                        <path fill-rule="evenodd" clip-rule="evenodd"
-                            d="M7 13C7 12.4477 7.44772 12 8 12H16C16.5523 12 17 12.4477 17 13C17 13.5523 16.5523 14 16 14H8C7.44772 14 7 13.5523 7 13Z"
-                            fill="#4296FF"></path>
-                        <path fill-rule="evenodd" clip-rule="evenodd"
-                            d="M7 17C7 16.4477 7.44772 16 8 16H12C12.5523 16 13 16.4477 13 17C13 17.5523 12.5523 18 12 18H8C7.44772 18 7 17.5523 7 17Z"
-                            fill="#4296FF"></path>
-                        <path fill-rule="evenodd" clip-rule="evenodd"
-                            d="M7 4C4.23858 4 2 6.23858 2 9V17C2 19.7614 4.23858 22 7 22H17C19.7614 22 22 19.7614 22 17V9C22 6.23858 19.7614 4 17 4H7ZM19.8293 8C19.4175 6.83481 18.3062 6 17 6H7C5.69378 6 4.58254 6.83481 4.17071 8H19.8293ZM4 10H20V17C20 18.6569 18.6569 20 17 20H7C5.34315 20 4 18.6569 4 17V10Z"
-                            fill="#152C70"></path>
-                    </g>
-                </svg>
-                <h3>Event Planning</h3>
-                <p>Plan and organize family events with ease, keeping everyone informed and involved.</p>
+            <div class="feature-item">
+                {% include "icons/eventSvg.html" %}
+                <h3 class="text-xl font-semibold mt-4 text-gray-800">Event Planning</h3>
+                <p class="mt-2 p-1 text-gray-600">Plan and organize family events with ease, keeping everyone informed
+                    and
+                    involved.</p>
             </div>
-            <div class="col-md-4">
-                <svg class="svg-home" viewBox="0 0 1024 1024" class="icon" version="1.1"
-                    xmlns="http://www.w3.org/2000/svg" fill="#000000">
-                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                    <g id="SVGRepo_iconCarrier">
-                        <path
-                            d="M242 280.3c-12.9 0-19.2-10.1-23.8-17.4-4.3-6.9-6.5-9.9-10.2-9.9s-5.9 3-10.2 9.9c-4.6 7.3-10.9 17.4-23.8 17.4s-19.2-10.1-23.8-17.4c-4.3-6.9-6.5-9.9-10.2-9.9s-5.9 3-10.2 9.9c-4.6 7.3-10.9 17.4-23.8 17.4s-19.2-10.1-23.8-17.4C77.9 256 75.7 253 72 253c-4.4 0-8-3.6-8-8s3.6-8 8-8c12.9 0 19.2 10.1 23.8 17.4 4.3 6.9 6.5 9.9 10.2 9.9s5.9-3 10.2-9.9C120.7 247 127 237 140 237s19.2 10.1 23.8 17.4c4.3 6.9 6.5 9.9 10.2 9.9 3.7 0 5.9-3 10.2-9.9C188.8 247 195 237 208 237s19.2 10.1 23.8 17.4c4.3 6.9 6.5 9.9 10.2 9.9 4.4 0 8 3.6 8 8s-3.6 8-8 8zM263.9 230.3c-13.8 0-20.7-9.8-25.7-17-5.1-7.3-7.7-10.2-12.7-10.2s-7.5 3-12.7 10.2c-5.1 7.2-12 17-25.7 17-13.8 0-20.7-9.8-25.7-17-5.1-7.3-7.7-10.2-12.7-10.2s-7.5 3-12.7 10.2c-5.1 7.2-12 17-25.7 17s-20.7-9.8-25.7-17c-5.1-7.3-7.7-10.2-12.7-10.2-4.4 0-8-3.6-8-8s3.6-8 8-8c13.8 0 20.7 9.8 25.7 17 5.1 7.3 7.7 10.2 12.7 10.2s7.5-3 12.7-10.2c5.1-7.2 12-17 25.7-17s20.7 9.8 25.7 17c5.1 7.3 7.7 10.2 12.7 10.2 5 0 7.5-3 12.7-10.2 5.1-7.2 12-17 25.7-17s20.7 9.8 25.7 17c5.1 7.3 7.7 10.2 12.7 10.2 4.4 0 8 3.6 8 8s-3.6 8-8 8z"
-                            fill="#9A2D2F"></path>
-                        <path d="M352 104.7m-32 0a32 32 0 1 0 64 0 32 32 0 1 0-64 0Z" fill="#FFEB4D"></path>
-                        <path
-                            d="M352 144.7c-22.1 0-40-17.9-40-40s17.9-40 40-40 40 17.9 40 40-17.9 40-40 40z m0-64c-13.2 0-24 10.8-24 24s10.8 24 24 24 24-10.8 24-24-10.8-24-24-24z"
-                            fill="#9A2D2F"></path>
-                        <path d="M368.9 234.7h320v204h-320z" fill="#C2F2FF"></path>
-                        <path d="M547.4 287.2L410.2 438.7h246.1z" fill="#FFACC2"></path>
-                        <path d="M623.9 484.7h-255l150.4-166z" fill="#DAE5FF"></path>
-                        <path d="M590.1 347.1l-40.2-9.9-52 5.2 49.5-54.6z" fill="#FFFFFF"></path>
-                        <path d="M477.8 364.5l22.8 16.7 18.6-14 41.3 16.9-41.2-65.3z" fill="#FFFFFF"></path>
-                        <path
-                            d="M439.9 311.7c-13.2 0-24-10.8-24-24s10.8-24 24-24 24 10.8 24 24-10.7 24-24 24z m0-32c-4.4 0-8 3.6-8 8s3.6 8 8 8 8-3.6 8-8-3.6-8-8-8z"
-                            fill="#9A2D2F"></path>
-                        <path d="M439.9 287.7m-16 0a16 16 0 1 0 32 0 16 16 0 1 0-32 0Z" fill="#FFEB4D"></path>
-                        <path
-                            d="M800.9 950.7h-576c-17.6 0-32-14.4-32-32v-448c0-17.6 14.4-32 32-32h576c17.6 0 32 14.4 32 32v448c0 17.6-14.4 32-32 32z"
-                            fill="#FFACC2"></path>
-                        <path d="M800.9 950.7h-576c-17.6 0-32-14.4-32-32v-96h640v96c0 17.6-14.4 32-32 32z"
-                            fill="#FFEB4D"></path>
-                        <path d="M512.9 695.7m-193 0a193 193 0 1 0 386 0 193 193 0 1 0-386 0Z" fill="#DAE5FF"></path>
-                        <path d="M512.9 695.7m-144 0a144 144 0 1 0 288 0 144 144 0 1 0-288 0Z" fill="#FFFFFF"></path>
-                        <path d="M311.9 539.7h-58c-8.8 0-16-7.2-16-16s7.2-16 16-16h58c8.8 0 16 7.2 16 16s-7.2 16-16 16z"
-                            fill="#FFFFFF"></path>
-                        <path d="M516.3 695.5m-48 0a48 48 0 1 0 96 0 48 48 0 1 0-96 0Z" fill="#FFC0F0"></path>
-                        <path
-                            d="M512.9 847.7c83.8 0 152-68.2 152-152s-68.2-152-152-152-152 68.2-152 152 68.2 152 152 152z m0-288c75 0 136 61 136 136s-61 136-136 136-136-61-136-136 61-136 136-136zM311.9 499.7h-58c-13.2 0-24 10.8-24 24s10.8 24 24 24h58c13.2 0 24-10.8 24-24 0-13.3-10.7-24-24-24z m0 32h-58c-4.4 0-8-3.6-8-8s3.6-8 8-8h58c4.4 0 8 3.6 8 8s-3.6 8-8 8z"
-                            fill="#9A2D2F"></path>
-                        <path
-                            d="M516.3 751.5c30.9 0 56-25.1 56-56s-25.1-56-56-56-56 25.1-56 56 25.1 56 56 56z m0-96c22.1 0 40 17.9 40 40s-17.9 40-40 40-40-17.9-40-40 17.9-40 40-40z"
-                            fill="#9A2D2F"></path>
-                        <path
-                            d="M951 686.3c-5 0-7.5-3-12.7-10.2-5.1-7.2-12-17-25.7-17s-20.7 9.8-25.7 17c-5.1 7.3-7.7 10.2-12.7 10.2-5 0-7.5-3-12.7-10.2-4.4-6.2-10.2-14.5-20.6-16.5v-33c2.3 1.6 4.5 4.4 7.5 8.7 5.1 7.2 12 17 25.7 17s20.7-9.8 25.7-17c5.1-7.3 7.7-10.2 12.7-10.2s7.5 3 12.7 10.2c5.1 7.2 12 17 25.7 17 4.4 0 8-3.6 8-8s-3.6-8-8-8c-5 0-7.5-3-12.7-10.2-5.1-7.2-12-17-25.7-17s-20.7 9.8-25.7 17c-5.1 7.3-7.7 10.2-12.7 10.2-5 0-7.5-3-12.7-10.2-4.4-6.2-10.2-14.5-20.6-16.5V470.7c0-22.1-17.9-40-40-40h-104v-196c0-4.4-3.6-8-8-8h-320c-4.4 0-8 3.6-8 8v196h-136c-22.1 0-40 17.9-40 40v448c0 9 3 17.3 8 24h-91.6c-4.4 0-8 3.6-8 8s3.6 8 8 8h824c4.4 0 8-3.6 8-8s-3.6-8-8-8h-92.4c5-6.7 8-15 8-24V676.5c2.3 1.6 4.5 4.4 7.5 8.7 5.1 7.2 12 17 25.7 17s20.7-9.8 25.7-17c5.1-7.3 7.7-10.2 12.7-10.2s7.5 3 12.7 10.2c5.1 7.2 12 17 25.7 17 4.4 0 8-3.6 8-8s-3.4-7.9-7.8-7.9zM376.9 242.7h304v188h-20.6L553.9 282.5c-1.4-2-3.6-3.2-6-3.3-2.4-0.1-4.8 0.8-6.4 2.6L406.6 430.7h-29.7v-188z m162.4 122.7l1.2 1.8-18.2-7.4c-2.6-1.1-5.6-0.7-7.8 1l-13.8 10.4-10.8-7.9 12-13.3 16.4-18.1 9.8 15.5 11.2 18z m-10-45.8l17.4-19.2 24.2 33.6-19.1-4.7c-0.6-0.2-1.3-0.2-1.9-0.2h-0.8l-12.9 1.3-6.9-10.8z m-33.4 68c2.8 2.1 6.7 2.1 9.5-0.1l14.9-11.3 34.7 14.2 25.3 40.2H428.6l50.2-55.5 17.1 12.5z m71.5-7.6c0-0.1-0.1-0.2-0.1-0.2l-14.7-23.2-6.9-11 3.6-0.4 36.4 9 54.9 76.4h-41.3L567.4 380z m257.5 538.7c0 13.2-10.7 24-24 24h-576c-13.2 0-24-10.8-24-24v-88h163.2c36.8 40.5 89.9 66 148.8 66s112-25.5 148.8-66h163.2v88z m-497-223c0-102 83-185 185-185s185 83 185 185-83 185-185 185-185-83-185-185z m497 119H674.8c24.6-33.3 39.1-74.5 39.1-119 0-110.8-90.2-201-201-201s-201 90.2-201 201c0 44.5 14.5 85.7 39.1 119H200.9v-344c0-13.2 10.8-24 24-24h576c13.2 0 24 10.8 24 24v344z"
-                            fill="#9A2D2F"></path>
-                        <path
-                            d="M200.9 565.1c5.8-1.4 10.9-3.1 15-5.4 11.2-6.3 16.7-13.3 19.8-20.4-3.6-4.2-5.8-9.7-5.8-15.6 0-12.1 9.1-22.2 20.8-23.8 8.4-7.9 24.1-14.3 55.2-18 58.1-6.9 69.4-24.8 70.8-35.3H224.9c-13.2 0-24 10.8-24 24v94.5z"
-                            fill="#FFFFFF"></path>
-                    </g>
-                </svg>
-                <h3>Photo Memories</h3>
-                <p>Collect and share precious family moments through a centralized photo gallery.</p>
+            <div class="feature-item">
+                {% include "icons/photoSvg.html" %}
+                <h3 class="text-xl font-semibold mt-4 text-gray-800">Photo Memories</h3>
+                <p class="mt-2 p-1 text-gray-600">Collect and share precious family moments through a centralized photo
+                    gallery.</p>
             </div>
         </div>
     </div>
 </section>
 
 <!-- About Section -->
-<section id="about" class="text-center py-5">
-    <div class="container">
-        <h2 class="mb-4 fw-bold">About Us</h2>
-        <p class="lead">Our Family Tree App was inspired by the desire to strengthen family connections and preserve
-            our unique family histories.</p>
-        <div class="row mt-4">
-            <div class="col-md-6 offset-md-3 ">
-                <a href="https://github.com/joekariuki3/lineage" target="_blank"
-                    class="btn btn-outline-info btn-lg btn-block text-dark">
-                    <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="none">
-                        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                        <g id="SVGRepo_iconCarrier">
-                            <path fill="#161514" fill-rule="evenodd"
-                                d="M8 1C4.133 1 1 4.13 1 7.993c0 3.09 2.006 5.71 4.787 6.635.35.064.478-.152.478-.337 0-.166-.006-.606-.01-1.19-1.947.423-2.357-.937-2.357-.937-.319-.808-.778-1.023-.778-1.023-.635-.434.048-.425.048-.425.703.05 1.073.72 1.073.72.624 1.07 1.638.76 2.037.582.063-.452.244-.76.444-.935-1.554-.176-3.188-.776-3.188-3.456 0-.763.273-1.388.72-1.876-.072-.177-.312-.888.07-1.85 0 0 .586-.189 1.924.716A6.711 6.711 0 018 4.381c.595.003 1.194.08 1.753.236 1.336-.905 1.923-.717 1.923-.717.382.963.142 1.674.07 1.85.448.49.72 1.114.72 1.877 0 2.686-1.638 3.278-3.197 3.45.251.216.475.643.475 1.296 0 .934-.009 1.688-.009 1.918 0 .187.127.404.482.336A6.996 6.996 0 0015 7.993 6.997 6.997 0 008 1z"
-                                clip-rule="evenodd"></path>
-                        </g>
-                    </svg>
-                    GitHub Repository
-                </a>
-            </div>
+<section id="about" class="text-center py-10 bg-white">
+    <div class="container mx-auto">
+        <h2 class="text-3xl font-bold mb-6 text-gray-900">About Us</h2>
+        <p class="text-lg text-gray-700 max-w-2xl mx-auto">
+            Our Family Tree App was inspired by the desire to strengthen family connections and preserve our unique
+            family histories.
+        </p>
+        <div class="mt-8">
+            <a href="https://github.com/joekariuki3/lineage" target="_blank"
+                class="inline-flex items-center justify-center px-6 py-3 border border-blue-500 text-blue-500 text-lg font-semibold rounded-lg hover:bg-blue-500 hover:text-white transition-colors duration-300 ease-in-out">
+                {% include "icons/githubSvg.html" %}
+                <span class="ml-2">GitHub Repository</span>
+            </a>
         </div>
     </div>
 </section>
