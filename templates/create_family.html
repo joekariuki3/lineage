@@ -1,130 +1,152 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="content-section col-md-6 m-auto container">
-    <form action="" method="post" novalidate class="mb-4">
+<div class="container mx-auto max-w-2xl p-6">
+    <form action="" method="post" novalidate>
         {{ form.hidden_tag() }}
-        <fieldset class="form-group">
-            <legend class="border-bottom mb-4 mt-4">
-                <h3 class="fw-bold text-center">{{title}}</h3>
-            </legend>
-            <div class="form-group mt-4">
-                {{ form.name.label(class="form-control-lable")}}
 
-                <!-- if errors -->
-                {% if form.name.errors%}
-                {{ form.name(class="form-control form-control-lg is-invalid") }}
-                <div class="invalid-feedback">
-                    {% for error in form.name.errors %}
-                    <span>{{ error }}</span>
-                    {% endfor %}
+        <!-- Form Title -->
+        <div class="mb-8 text-center">
+            <h3 class="text-2xl font-bold text-gray-700">{{ title }}</h3>
+        </div>
+
+        <!-- Main Form Fields -->
+        <fieldset class="mb-6">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <!-- Form Name -->
+                <div class="mb-4">
+                    {{ form.name.label(class="block text-sm font-medium text-gray-700") }}
+                    {% if form.name.errors %}
+                    {{ form.name(class="mt-1 block w-full rounded-md border-red-500 shadow-sm focus:border-indigo-500
+                    focus:ring-indigo-500 sm:text-sm") }}
+                    <p class="mt-2 text-sm text-red-600">
+                        {% for error in form.name.errors %}
+                        {{ error }}
+                        {% endfor %}
+                    </p>
+                    {% else %}
+                    {{ form.name(class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500
+                    focus:ring-indigo-500 sm:text-sm") }}
+                    {% endif %}
                 </div>
-                {% else %}
-                {{ form.name(class="form-control form-control-lg") }}
-                {% endif %}
-            </div>
-            <!-- root member  start -->
-            <legend class="border-bottom mb-4 mt-4">
-                <h3 class="fw-bold text-center">Add Root Member</h3>
-            </legend>
-            <div class="form-group mt-4">
-                {{ memberForm.first_name.label(class="form-control-lable")}}
-
-                <!-- if errors -->
-                {% if memberForm.first_name.errors%}
-                {{ memberForm.first_name(class="form-control form-control-lg is-invalid") }}
-                <div class="invalid-feedback">
-                    {% for error in memberForm.first_name.errors %}
-                    <span>{{ error }}</span>
-                    {% endfor %}
-                </div>
-                {% else %}
-                {{ memberForm.first_name(class="form-control form-control-lg") }}
-                {% endif %}
-            </div>
-            <div class="form-group mt-4">
-                {{ memberForm.last_name.label(class="form-control-lable")}}
-
-                <!-- if errors -->
-                {% if memberForm.last_name.errors%}
-                {{ memberForm.last_name(class="form-control form-control-lg is-invalid") }}
-                <div class="invalid-feedback">
-                    {% for error in memberForm.last_name.errors %}
-                    <span>{{ error }}</span>
-                    {% endfor %}
-                </div>
-                {% else %}
-                {{ memberForm.last_name(class="form-control form-control-lg") }}
-                {% endif %}
-            </div>
-            <div class="form-group mt-4">
-                {{ memberForm.gender.label(class="form-control-lable")}}
-
-                <!-- if errors -->
-                {% if memberForm.gender.errors%}
-                {{ memberForm.gender(class="form-control form-control-lg is-invalid") }}
-                <div class="invalid-feedback">
-                    {% for error in memberForm.gender.errors %}
-                    <span>{{ error }}</span>
-                    {% endfor %}
-                </div>
-                {% else %}
-                {{ memberForm.gender(class="form-control form-control-lg") }}
-                {% endif %}
-            </div>
-            <div class="form-group mt-4">
-                {{ memberForm.birthdate.label(class="form-control-lable")}}
-
-                <!-- if errors -->
-                {% if memberForm.birthdate.errors%}
-                {{ memberForm.birthdate(class="form-control form-control-lg is-invalid") }}
-                <div class="invalid-feedback">
-                    {% for error in memberForm.birthdate.errors %}
-                    <span>{{ error }}</span>
-                    {% endfor %}
-                </div>
-                {% else %}
-                {{ memberForm.birthdate(class="form-control form-control-lg") }}
-                {% endif %}
-            </div>
-            <div class="form-group mt-4 alive">
-                {{ memberForm.alive.label(class="form-control-lable")}}
-
-                <!-- if errors -->
-                {% if memberForm.alive.errors%}
-                {{ memberForm.alive(class="form-control form-control-lg is-invalid d-flex list-unstyled
-                justify-content-around") }}
-                <div class="invalid-feedback">
-                    {% for error in memberForm.alive.errors %}
-                    <span>{{ error }}</span>
-                    {% endfor %}
-                </div>
-                {% else %}
-                {{ memberForm.alive(class="form-control form-control-lg d-flex list-unstyled justify-content-around") }}
-                {% endif %}
-            </div>
-            <div class="form-group mt-4 deathdate hide">
-                {{ memberForm.deathdate.label(class="form-control-lable")}}
-
-                <!-- if errors -->
-                {% if memberForm.deathdate.errors%}
-                {{ memberForm.deathdate(class="form-control form-control-lg is-invalid") }}
-                <div class="invalid-feedback">
-                    {% for error in memberForm.deathdate.errors %}
-                    <span>{{ error }}</span>
-                    {% endfor %}
-                </div>
-                {% else %}
-                {{ memberForm.deathdate(class="form-control form-control-lg") }}
-                {% endif %}
-            </div>
-
-            <!-- root member end -->
-
-            <div class="form-group mt-4 mb-2 d-flex justify-content-center">
-                {{ form.submit(class="btn btn-lg btn-primary button") }}
             </div>
         </fieldset>
+
+        <!-- Root Member Section -->
+        <div class="bg-white shadow-sm rounded-lg p-6 mb-6">
+            <h4 class="text-lg font-semibold text-gray-700 text-center mb-4">Add Root Member</h4>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <!-- First Name -->
+                <div>
+                    {{ memberForm.first_name.label(class="block text-sm font-medium text-gray-700") }}
+                    {% if memberForm.first_name.errors %}
+                    {{ memberForm.first_name(class="mt-1 block w-full rounded-md border-red-500 shadow-sm
+                    focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm") }}
+                    <p class="mt-2 text-sm text-red-600">
+                        {% for error in memberForm.first_name.errors %}
+                        {{ error }}
+                        {% endfor %}
+                    </p>
+                    {% else %}
+                    {{ memberForm.first_name(class="mt-1 block w-full rounded-md border-gray-300 shadow-sm
+                    focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm") }}
+                    {% endif %}
+                </div>
+
+                <!-- Last Name -->
+                <div>
+                    {{ memberForm.last_name.label(class="block text-sm font-medium text-gray-700") }}
+                    {% if memberForm.last_name.errors %}
+                    {{ memberForm.last_name(class="mt-1 block w-full rounded-md border-red-500 shadow-sm
+                    focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm") }}
+                    <p class="mt-2 text-sm text-red-600">
+                        {% for error in memberForm.last_name.errors %}
+                        {{ error }}
+                        {% endfor %}
+                    </p>
+                    {% else %}
+                    {{ memberForm.last_name(class="mt-1 block w-full rounded-md border-gray-300 shadow-sm
+                    focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm") }}
+                    {% endif %}
+                </div>
+
+                <!-- Gender -->
+                <div>
+                    {{ memberForm.gender.label(class="block text-sm font-medium text-gray-700") }}
+                    {% if memberForm.gender.errors %}
+                    {{ memberForm.gender(class="mt-1 block w-full rounded-md border-red-500 shadow-sm
+                    focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm") }}
+                    <p class="mt-2 text-sm text-red-600">
+                        {% for error in memberForm.gender.errors %}
+                        {{ error }}
+                        {% endfor %}
+                    </p>
+                    {% else %}
+                    {{ memberForm.gender(class="mt-1 block w-full rounded-md border-gray-300 shadow-sm
+                    focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm") }}
+                    {% endif %}
+                </div>
+
+                <!-- Birthdate -->
+                <div>
+                    {{ memberForm.birthdate.label(class="block text-sm font-medium text-gray-700") }}
+                    {% if memberForm.birthdate.errors %}
+                    {{ memberForm.birthdate(class="mt-1 block w-full rounded-md border-red-500 shadow-sm
+                    focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm") }}
+                    <p class="mt-2 text-sm text-red-600">
+                        {% for error in memberForm.birthdate.errors %}
+                        {{ error }}
+                        {% endfor %}
+                    </p>
+                    {% else %}
+                    {{ memberForm.birthdate(class="mt-1 block w-full rounded-md border-gray-300 shadow-sm
+                    focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm") }}
+                    {% endif %}
+                </div>
+
+                <!-- Alive Checkbox -->
+                <div class="alive">
+                    {{ memberForm.alive.label(class="block text-sm font-medium text-gray-700") }}
+                    {% if memberForm.alive.errors %}
+                    {{ memberForm.alive(class="mt-1 block w-full rounded-md border-red-500 shadow-sm
+                    focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm") }}
+                    <p class="mt-2 text-sm text-red-600">
+                        {% for error in memberForm.alive.errors %}
+                        {{ error }}
+                        {% endfor %}
+                    </p>
+                    {% else %}
+                    {{ memberForm.alive(class="flex justify-around mt-1 block w-full rounded-md border-gray-300
+                    shadow-sm
+                    focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm") }}
+                    {% endif %}
+                </div>
+
+                <!-- Conditional Deathdate -->
+                <div class="deathdate hide">
+                    {{ memberForm.deathdate.label(class="block text-sm font-medium text-gray-700") }}
+                    {% if memberForm.deathdate.errors %}
+                    {{ memberForm.deathdate(class="mt-1 block w-full rounded-md border-red-500 shadow-sm
+                    focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm") }}
+                    <p class="mt-2 text-sm text-red-600">
+                        {% for error in memberForm.deathdate.errors %}
+                        {{ error }}
+                        {% endfor %}
+                    </p>
+                    {% else %}
+                    {{ memberForm.deathdate(class="mt-1 block w-full rounded-md border-gray-300 shadow-sm
+                    focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm") }}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="mt-6 text-center">
+            {{ form.submit(class="px-6 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none
+            focus:ring-2 focus:ring-indigo-500") }}
+        </div>
     </form>
 </div>
 {% endblock %}
