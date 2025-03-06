@@ -28,7 +28,8 @@ app = Flask(__name__)
 
 # for login authentication
 login = LoginManager(app)
-login.login_view = 'auth/login'
+login.login_view = 'login'
+login.login_message_category = 'danger'
 
 # Set the secret key using an environment variable
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
