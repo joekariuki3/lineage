@@ -174,22 +174,10 @@
     </nav>
 
     <main>
-        <div>
-            {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-            {% for category, message in messages %}
-            <div class="container">
-                <div class="alert alert-{{category}} alert-dismissible mt-4 col-md-4 m-auto " role="alert">
-                    {{ message }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            </div>
-            {% endfor %}
-            {% endif %}
-            {% endwith %}
+        {% include "notification.html"%}
 
-            {% block content %} {% endblock %}
-        </div>
+        {% block content %}
+        {% endblock %}
     </main>
 
     <!-- tailwind flowbite js -->
