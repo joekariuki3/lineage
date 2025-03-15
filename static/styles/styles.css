@@ -6,8 +6,8 @@
   /* font-family: "Roboto", sans-serif; */
 }
 
-.sidebar {
-  margin: 0.5rem 0;
+.tab-active {
+  border-bottom: 2px solid #1d4ed8; /* Blue underline for active tab */
 }
 
 .hero-img img {
@@ -24,15 +24,6 @@ svg.svg-home {
   height: 7rem;
   margin: auto;
 }
-.sidebar-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.dropdown-item:hover {
-  background-color: rgb(227, 227, 227);
-  font-weight: bold;
-}
 .center-section {
   height: 80vh;
   display: flex;
@@ -41,13 +32,6 @@ svg.svg-home {
 #show-big {
   display: block;
   margin-right: 2rem;
-}
-.hide {
-  display: none;
-}
-.button {
-  padding-left: 2.5rem;
-  padding-right: 2.5rem;
 }
 .key {
   display: flex;
