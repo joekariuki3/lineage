@@ -4,17 +4,29 @@
 
 <section class="h-screen">
   {% if families and families | length > 1 %}
-  <div class="dropdown select-family mt-4">
-    <h3 class="text-center">{{current_user.name}} you are managing {{families | length }} Families</h3>
-    <div class="btn-group mt-4">
-      <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown"
-        data-bs-display="static" aria-expanded="false">
+  <div class="text-center mt-8">
+    <!-- User Info -->
+    <h3 class="text-xl font-semibold text-gray-800 mb-4">{{ current_user.name }}, you are managing {{ families | length
+      }} Families</h3>
+
+    <!-- Dropdown Button Group -->
+    <div class="relative inline-block">
+      <button type="button"
+        class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg shadow hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50 transition"
+        id="dropdownButton" aria-expanded="false" data-bs-toggle="dropdown" data-bs-display="static">
         Select one to display
       </button>
-      <ul class="dropdown-menu dropdown-menu-lg-end">
+
+      <!-- Dropdown Menu -->
+      <ul class="absolute mt-2 w-56 bg-white border border-gray-200 rounded-lg shadow-lg z-10 dropdown-menu hidden"
+        aria-labelledby="dropdownButton">
         {% for family in families %}
-        <li><a class="dropdown-item" href="{{url_for('index', family_id=family.family_id)}}"
-            type="button">{{family.name}}</a></li>
+        <li>
+          <a href="{{ url_for('index', family_id=family.family_id) }}"
+            class="block px-4 py-2 text-gray-700 hover:bg-gray-100 transition">
+            {{ family.name }}
+          </a>
+        </li>
         {% endfor %}
       </ul>
     </div>
@@ -22,8 +34,6 @@
   {% elif families and families | length == 1 %}
   <!-- start key  -->
   <div class="key">
-
-
     <div class="main__key" style="display: flex; align-items: center; display: flex; margin-bottom: 40px;">
 
       <div class="key" style="
@@ -171,4 +181,21 @@
 
   {% endif %}
 </section>
+
+<script>
+  // Toggle dropdown visibility
+  const dropdownButton = document.getElementById('dropdownButton');
+  const dropdownMenu = dropdownButton.nextElementSibling;
+
+  dropdownButton.addEventListener('click', () => {
+    dropdownMenu.classList.toggle('hidden');
+  });
+
+  // Close the dropdown when clicking outside
+  document.addEventListener('click', (e) => {
+    if (!dropdownButton.contains(e.target) && !dropdownMenu.contains(e.target)) {
+      dropdownMenu.classList.add('hidden');
+    }
+  });
+</script>
 {% endblock %}
