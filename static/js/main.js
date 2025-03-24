@@ -117,9 +117,9 @@ function getChildren(event) {
 $(".alive li input").on("change", function () {
   if ($(this).val() === "False") {
     // remove hide class to show deathdate meaning person is not alive
-    $(".deathdate").removeClass("hide");
+    $(".deathdate").removeClass("hidden");
   } else {
-    $(".deathdate").addClass("hide");
+    $(".deathdate").addClass("hidden");
   }
 });
 
