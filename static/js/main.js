@@ -117,34 +117,30 @@ function getChildren(event) {
 $(".alive li input").on("change", function () {
   if ($(this).val() === "False") {
     // remove hide class to show deathdate meaning person is not alive
-    $(".deathdate").removeClass("hide");
+    $(".deathdate").removeClass("hidden");
   } else {
-    $(".deathdate").addClass("hide");
+    $(".deathdate").addClass("hidden");
   }
 });
 
-// let copyText = document.querySelector(".copy-text");
-// console.log(copyText);
-// copyText.querySelector("button").addEventListener("click", function () {
-//   let input = copyText.querySelector("input.text");
-//   input.select();
-//   document.execCommand("copy");
-//   copyText.classList.add("active");
-//   window.getSelection().removeAllRanges();
-//   setTimeout(function () {
-//     copyText.classList.remove("active");
-//   }, 2500);
-// });
+// Function to copy a family link
+function copyLink(linkId) {
+  const copyText = document.getElementById("link_" + linkId);
+  const copyButton = document.getElementById("copyBtn_" + linkId);
 
-function copyLink(id) {
-  console.log(id);
-  let copyText = document.querySelector(`.copy-text${id}`);
-  let input = copyText.querySelector(`input.text`);
-  input.select();
+  // Select the link text
+  copyText.select();
   document.execCommand("copy");
-  copyText.classList.add("active");
-  window.getSelection().removeAllRanges();
+
+  // Change the button text to "Copied!"
+  copyButton.innerHTML = '<i class="fa fa-check"></i> Copied!';
+  copyButton.classList.add("bg-green-600");
+  copyButton.classList.remove("bg-blue-600");
+
+  // Revert back to the original text after 2 seconds
   setTimeout(function () {
-    copyText.classList.remove("active");
-  }, 2500);
+    copyButton.innerHTML = '<i class="fa fa-clone"></i> Copy Link';
+    copyButton.classList.add("bg-blue-600");
+    copyButton.classList.remove("bg-green-600");
+  }, 2000);
 }
