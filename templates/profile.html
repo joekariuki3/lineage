@@ -1,132 +1,145 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
-<section class="vh-100">
-    <div class="container mt-5">
-        <div class="row d-flex justify-content-center align-items-center h-100">
-            <div class="col col-lg-7 mb-4 mb-lg-0">
-                <div class="card mb-3" style="border-radius: .5rem;">
-                    <div class="row g-0">
-                        <div class="col-md-4 gradient-custom text-center p-2"
-                            style="border-top-left-radius: .5rem; border-bottom-left-radius: .5rem;">
-                            <img src="https://static.vecteezy.com/system/resources/thumbnails/020/765/399/small/default-profile-account-unknown-icon-black-silhouette-free-vector.jpg"
-                                alt="Avatar" class="img-fluid my-5"
-                                style="width: 80px; margin: 0 0 1rem 0 !important;" />
-                            <h4>{{ current_user.name}}</h4>
-                            <p>Admin</p>
-                            <div class="col-12 mb-3">
-                                <h5>Email</h5>
-                                <p class="text-muted">
-                                    {{current_user.email}}
-                                    {% if not current_user.emailVerify %}
-                                    <a href="{{url_for('verifyEmail', user_id=current_user.user_id)}}"
-                                        class="link-success">Verify Email</a>
-                                    {% endif %}
-                                </p>
-                            </div>
-                            {% if current_user.is_authenticated%}
-                            <div class="d-flex justify-content-center">
-                                <a href="{{url_for('edit_profile')}}">update {{ current_user.name}} details</a>
-                            </div>
-                            {% endif %}
-                        </div>
-                        <div class="col-md-8">
-                            <div class="card-body p-4 text-center">
-                                <div class="row pt-1">
-                                </div>
-
-                                {% if current_user.families and current_user.families | length > 1 %}
-                                <h5>You have {{current_user.families | length}} Families</h5>
-                                {% else %}
-                                <h5>Your Family</h5>
-                                {% endif%}
-                                <hr class="mt-0 mb-4">
-                                <div class="row pt-1">
-                                    <div class="col-12 mb-3">
-                                        <h4>info</h4>
-                                        {% if current_user.families%}
-                                        {% for family in current_user.families%}
-                                        <p class="text-muted">
-                                            {{family.name}} |
-                                            {% if family.links | length < 1%} <a
-                                                href="{{url_for('create_link', family_id=family.family_id)}}"
-                                                class="link-dark">Create Link</a> |
-                                                {% endif%}
-                                                <a href="#" class="link-danger" data-toggle="modal"
-                                                    data-target="#deleteModal{{family.family_id}}">Delete</a>
-                                        </p>
-
-                                        <!-- modal start -->
-                                        <div class="modal fade" id="deleteModal{{family.family_id}}" tabindex="-1"
-                                            role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
-                                            <div class="modal-dialog" role="document">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title" id="deleteModalLabel">Delete
-                                                            {{family.name}} Family</h5>
-                                                        <button type="button" class="btn-close" data-dismiss="modal"
-                                                            aria-label="Close"></button>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <p>Are you sure you want to DELETE {{family.name}} Family ?
-                                                        </p>
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-primary"
-                                                            data-dismiss="modal">No Close</button>
-                                                        <a href="{{url_for('delete_family', id=family.family_id)}}"
-                                                            class="btn btn-danger">Yes Delete</a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!-- modal end -->
-                                        {% endfor %}
-                                        {% endif%}
-                                    </div>
-                                    <div class="col-12 ">
-                                        {% if current_user.families%}
-                                        <details>
-                                            <summary class="mb-2">Link to share with members</summary>
-                                            {% for family in current_user.families%}
-                                            {% if family.links%}
-                                            <span class="text-muted">{{family.name}}</span>
-                                            <div class="d-flex align-items-center">
-                                                <div class="p-1">
-                                                    <a href="{{url_for('delete_link', link_id=family.links[0].link_id)}}"
-                                                        class="link-danger">Delete</a>
-
-                                                </div>
-                                                <div class="copy-text{{family.links[0].link_id}} copy-text">
-                                                    {% if url_root%}
-                                                    <input type="text" class="text"
-                                                        value="{{url_root}}{{family.links[0].link}}" readonly>
-                                                    {% endif%}
-                                                    <button id="{{family.links[0].link_id}}" type="button"
-                                                        onclick="copyLink(this.id)">
-                                                        <i class="fa fa-clone"></i>
-                                                    </button>
-                                                </div>
-
-                                            </div>
-                                            <hr>
-                                            {% endif%}
-                                            {% endfor %}
-                                        </details>
-
-                                        {% endif%}
-
-                                    </div>
-                                </div>
-                                <div class="col-12 mb-3">
-                                </div>
-                            </div>
-                        </div>
+<section class="min-h-screen flex items-center justify-center bg-gray-100">
+    <div class="container mx-auto px-4">
+        <!-- Profile Card -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+            <div class="flex justify-between items-center sm:flex-row flex-col">
+                <!-- Profile Picture and Info -->
+                <div class="flex items-center space-x-4">
+                    <img src="https://static.vecteezy.com/system/resources/thumbnails/020/765/399/small/default-profile-account-unknown-icon-black-silhouette-free-vector.jpg"
+                        alt="Avatar" class="w-24 h-24 rounded-full object-cover shadow">
+                    <div>
+                        <h2 class="text-2xl font-bold text-gray-800">{{ current_user.name }}</h2>
+                        <p class="text-gray-500">{{ current_user.email }}</p>
                     </div>
                 </div>
+
+                <!-- Edit & Settings -->
+                <div class="space-x-2 sm:mt-0 mt-4">
+                    <a href="{{ url_for('edit_profile') }}"
+                        class="px-4 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-500">
+                        <i class="fa fa-pencil"></i> Edit Profile
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cards for Profile Info and Family Management -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- Profile Info Card -->
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <h3 class="text-xl font-semibold text-gray-800 mb-4">Profile Details</h3>
+                <p class="text-gray-600 mb-2">Full Name: <strong>{{ current_user.name }}</strong></p>
+                <p class="text-gray-600 mb-2">Email: <strong>{{ current_user.email }}</strong></p>
+            </div>
+
+            <!-- Family Management Card -->
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <h3 class="text-xl font-semibold text-gray-800 mb-4">Family Management</h3>
+                <p class="text-gray-600 mb-4">You currently have <strong>{{ current_user.families | length }}</strong>
+                    families listed.</p>
+
+                {% if current_user.families %}
+                <ul class="space-y-4">
+                    {% for family in current_user.families %}
+                    <li class="bg-gray-50 p-4 rounded-lg shadow flex justify-between items-center">
+                        <span class="text-gray-700">{{ family.name }}</span>
+                        <div class="space-x-2">
+                            <a href="#" class="pointer-events-none text-gray-400 cursor-not-allowed">View</a>
+                            <a href="#" class="pointer-events-none text-gray-400 cursor-not-allowed">Edit</a>
+                            <button class="text-red-600 hover:underline cursor-pointer hover:opacity-80"
+                                onclick="showDeleteConfirmation('{{family.family_id}}','{{family.name}}')">
+                                Delete
+                            </button>
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p class="text-gray-500">No family records found. <a href="{{ url_for('create_family') }}"
+                        class="text-blue-600 underline">Add your first family</a>.</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Shareable Links Section -->
+        <div class="mt-8 mb-2 rounded-lg shadow-lg p-6">
+            <h3 class="text-xl font-semibold text-gray-800 mb-4">Shareable Links</h3>
+            {% if current_user.families %}
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {% for family in current_user.families %}
+                {% if family.links %}
+                <div class="bg-gray-50 p-4 rounded-lg shadow">
+                    <h4 class="text-gray-700 font-semibold">{{ family.name }}'s Link</h4>
+                    <input type="text" id="link_{{ family.links[0].link_id }}"
+                        class="w-full mt-2 p-2 border border-gray-300 rounded-lg"
+                        value="{{ url_root }}{{ family.links[0].link }}" readonly>
+                    <button id="copyBtn_{{ family.links[0].link_id }}"
+                        onclick="copyLink('{{ family.links[0].link_id }}')"
+                        class="mt-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-500 focus:outline-none transition">
+                        <i class="fa fa-clone"></i> Copy Link
+                    </button>
+                    <!-- delete link -->
+                    <a href="{{ url_for('delete_link', link_id=family.links[0].link_id) }}"
+                        class="mt-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-500">
+                        <i class="fa fa-trash"></i> Delete Link
+                    </a>
+                </div>
+                {% else %}
+                <div class="bg-gray-50 p-4 rounded-lg shadow">
+                    <h4 class="text-gray-700 font-semibold">{{ family.name }}'s Link</h4>
+                    <p class="text-gray-500 mb-2">No shareable link available for this family.</p>
+                    <a href="{{ url_for('create_link', family_id=family.family_id) }}"
+                        class="mt-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-500">
+                        <i class="fa fa-link"></i> Create Link
+                    </a>
+                </div>
+                {% endif %}
+                {% endfor %}
+            </div>
+            {% else %}
+            <p class="text-gray-500">No shareable links available.</p>
+            {% endif %}
+        </div>
+    </div>
+    <!-- Delete Confirmation Section modal -->
+    <div id="deleteConfirmation"
+        class="hidden fixed inset-0 bg-gray-500/50 transition-opacity flex items-center justify-center z-50">
+        <div class="bg-white rounded-lg shadow-lg p-6 max-w-md text-center">
+            <h4 class="text-lg font-semibold text-gray-800 mb-4">Confirm Deletion</h4>
+            <p class="text-gray-600">Are you sure you want to DELETE <span class="family-name font-semibold"></span>?
+                All
+                related
+                members will also be deleted.</p>
+            <div class="mt-6 flex justify-center space-x-4">
+                <button class="bg-gray-600 text-white py-2 px-4 rounded-lg hover:bg-gray-700 transition"
+                    onclick="hideDeleteConfirmation()">No, Cancel</button>
+                <a href="" class="bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700 transition">Yes,
+                    Delete</a>
             </div>
         </div>
     </div>
 </section>
+
+<script>
+    function copyLink(linkId) {
+        var copyText = document.getElementById('link_' + linkId);
+        copyText.select();
+        document.execCommand('copy');
+        alert("Link copied: " + copyText.value);
+    }
+
+    function showDeleteConfirmation(familyId, familyName) {
+        const deleteModel = document.getElementById('deleteConfirmation').classList.remove('hidden');
+        var deleteLink = document.getElementById('deleteConfirmation').querySelector('a');
+        deleteLink.href = `/family/delete/${familyId}`;
+        document.getElementById('deleteConfirmation').querySelector('.family-name').textContent = familyName;
+    }
+
+    function hideDeleteConfirmation() {
+        document.getElementById('deleteConfirmation').classList.add('hidden');
+    }
+</script>
 {% endblock %}
