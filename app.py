@@ -436,7 +436,7 @@ def add_child(member_id, spouse_id):
 
 # member profile
 @app.route('/member/<member_id>', methods=['GET'])
-# @login_required
+@login_required
 def member_profile(member_id):
     member = Member.query.filter_by(member_id=member_id).first()
     family_id = member.family_id
@@ -517,7 +517,7 @@ def delete_member(member_id):
 # API call
 # return spouse(s)
 @app.route('/member/spouses', methods=['POST', 'GET'])
-# @login_required
+@login_required
 def get_spouse():
     data = request.get_json()
     if not data:
@@ -629,7 +629,7 @@ def add_event():
 
 # get All events
 @app.route('/event/<family_id>', methods=['POST', 'GET'])
-# @login_required
+@login_required
 def get_events(family_id):
     currentTime = datetime.now()
     upcomingEvents = Event.query.order_by(Event.event_date.asc()).filter_by(family_id=family_id).filter(Event.event_date>=currentTime ).all()
