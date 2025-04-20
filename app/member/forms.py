@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, SelectField, DateField, RadioField, validators
 from wtforms.validators import DataRequired
-from constants import MemberConstants, GenderConstants, RelationshipConstants
+from app.utils.constants import MemberConstants, GenderConstants, RelationshipConstants
 
 class MemberForm(FlaskForm):
     """form to add a family member"""
