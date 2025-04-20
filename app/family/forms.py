@@ -2,7 +2,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, validators
 from wtforms.validators import DataRequired
-from constants import FamilyConstants
+from app.utils.constants import FamilyConstants
 
 class CreateFamilyForm(FlaskForm):
     """form to create a family"""
