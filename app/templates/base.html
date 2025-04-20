@@ -62,7 +62,7 @@
     <!-- nav bar -->
     <nav class="bg-white border-gray-200">
         <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-            <a href="{{url_for('home')}}" class="flex items-center space-x-3 rtl:space-x-reverse">
+            <a href="{{url_for('main.index')}}" class="flex items-center space-x-3 rtl:space-x-reverse">
                 <span class="self-center text-2xl font-semibold whitespace-nowrap">Lineage</span>
             </a>
             <button data-collapse-toggle="navbar-dropdown" type="button"
@@ -89,11 +89,11 @@
                             class="z-10 hidden font-normal bg-white divide-y divide-gray-100 rounded-lg shadow-sm w-44">
                             <ul class="py-2 text-sm text-gray-700" aria-labelledby="dropdownLargeButton">
                                 <li>
-                                    <a href="{{ url_for('index') }}"
+                                    <a href="{{ url_for('family.index') }}"
                                         class="block px-4 py-2 hover:bg-gray-100">Family-tree</a>
                                 </li>
                                 <li>
-                                    <a href="{{ url_for('create_family') }}"
+                                    <a href="{{ url_for('family.create_family') }}"
                                         class="block px-4 py-2 hover:bg-gray-100">Add Family</a>
                                 </li>
                             </ul>
@@ -108,7 +108,8 @@
                             class="z-10 hidden font-normal bg-white divide-y divide-gray-100 rounded-lg shadow-sm w-44">
                             <ul class="py-2 text-sm text-gray-700" aria-labelledby="dropdownLargeButton">
                                 <li>
-                                    <a href="{{ url_for('add_event')}}" class="block px-4 py-2 hover:bg-gray-100">Add
+                                    <a href="{{ url_for('event.add_event')}}"
+                                        class="block px-4 py-2 hover:bg-gray-100">Add
                                         Event</a>
                                 </li>
                                 <li aria-labelledby="dropdownNavbarLink">
@@ -123,7 +124,7 @@
                                             {% if current_user.families %}
                                             {% for family in current_user.families%}
                                             <li>
-                                                <a href="{{url_for('get_events', family_id =family.family_id)}}"
+                                                <a href="{{url_for('event.get_events', family_id =family.family_id)}}"
                                                     class="block px-4 py-2 hover:bg-gray-100">{{family.name}} Event</a>
                                             </li>
                                             {% endfor %}
@@ -143,12 +144,12 @@
                             class="z-10 hidden font-normal bg-white divide-y divide-gray-100 rounded-lg shadow-sm w-44">
                             <ul class="py-2 text-sm text-gray-700" aria-labelledby="dropdownLargeButton">
                                 <li>
-                                    <a href="{{ url_for('user_profile')}}"
+                                    <a href="{{ url_for('user.user_profile')}}"
                                         class="block px-4 py-2 hover:bg-gray-100">Profile</a>
                                 </li>
                             </ul>
                             <div class="py-1">
-                                <a href="{{ url_for('logout')}}"
+                                <a href="{{ url_for('auth.logout')}}"
                                     class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Log
                                     out</a>
                             </div>
@@ -156,15 +157,15 @@
                     </li>
                     {% else %}
                     <li>
-                        <a href="{{ url_for('guest') }}"
+                        <a href="{{ url_for('auth.guest') }}"
                             class="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 ">Guest</a>
                     </li>
                     <li>
-                        <a href="{{ url_for('login') }}"
+                        <a href="{{ url_for('auth.login') }}"
                             class="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 ">Login</a>
                     </li>
                     <li>
-                        <a href="{{ url_for('register') }}"
+                        <a href="{{ url_for('auth.register') }}"
                             class="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0">Register</a>
                     </li>
                     {% endif %}

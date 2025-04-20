@@ -20,7 +20,7 @@
     <!-- Action Buttons -->
     {% if current_user.is_authenticated %}
     <div class="max-w-4xl mx-auto mt-6 flex justify-center space-x-4">
-        <a href="{{ url_for('update_member', member_id=member.member_id) }}"
+        <a href="{{ url_for('member.update_member', member_id=member.member_id) }}"
             class="bg-indigo-600 text-white py-2 px-4 rounded-lg hover:bg-indigo-700 transition">Edit Details</a>
         <button class="bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700 transition"
             onclick="showDeleteConfirmation()">Delete {{ member.first_name }}</button>
@@ -82,7 +82,7 @@
             <ul class="mt-3 space-y-2">
                 {% for sibling in siblings %}
                 <li class="text-gray-600">{{ sibling.first_name }} {{ sibling.last_name }} |
-                    <a href="{{ url_for('member_profile', member_id=sibling.member_id) }}"
+                    <a href="{{ url_for('member.member_profile', member_id=sibling.member_id) }}"
                         class="text-indigo-600">More...</a>
                 </li>
                 {% endfor %}
@@ -97,7 +97,7 @@
             <ul class="mt-3 space-y-2">
                 {% for spouse in spouses %}
                 <li class="text-gray-600">{{ spouse.first_name }} {{ spouse.last_name }} |
-                    <a href="{{ url_for('member_profile', member_id=spouse.member_id) }}"
+                    <a href="{{ url_for('member.member_profile', member_id=spouse.member_id) }}"
                         class="text-indigo-600">More...</a>
                 </li>
                 {% endfor %}
@@ -112,7 +112,7 @@
             <ul class="mt-3 space-y-2">
                 {% for child in children %}
                 <li class="text-gray-600">{{ child.first_name }} {{ child.last_name }} |
-                    <a href="{{ url_for('member_profile', member_id=child.member_id) }}"
+                    <a href="{{ url_for('member.member_profile', member_id=child.member_id) }}"
                         class="text-indigo-600">More...</a>
                 </li>
                 {% endfor %}
@@ -131,7 +131,7 @@
             <div class="mt-6 flex justify-center space-x-4">
                 <button class="bg-gray-600 text-white py-2 px-4 rounded-lg hover:bg-gray-700 transition"
                     onclick="hideDeleteConfirmation()">No, Cancel</button>
-                <a href="{{ url_for('delete_member', member_id=member.member_id) }}"
+                <a href="{{ url_for('member.delete_member', member_id=member.member_id) }}"
                     class="bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700 transition">Yes, Delete</a>
             </div>
         </div>
