@@ -1,4 +1,5 @@
-from models import db, User
+from app.extensions import db
+from app.models import User
 from typing import Tuple
 
 def saveUser(name: str, email: str, password: str) -> Tuple[int, Tuple[str, str]]:
