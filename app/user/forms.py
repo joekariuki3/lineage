@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, EmailField, validators
 from wtforms.validators import DataRequired, Email
-from constants import NameConstants, EmailConstants
+from app.utils.constants import NameConstants, EmailConstants
 
 
 class EditProfileForm(FlaskForm):
