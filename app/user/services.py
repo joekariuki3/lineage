@@ -79,7 +79,8 @@ def update_user(user: User, **kwargs) -> Tuple[int, str, str]:
         for key, value in kwargs.items():
             if key == "password":
                 user.set_password(value)
-                print(f"Password updated for user {user.name}")
+            elif key == "emailVerify":
+                user.emailVerify = value
             else:
                 setattr(user, key, value)
         db.session.commit()
