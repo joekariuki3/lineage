@@ -15,6 +15,12 @@ class User(db.Model, UserMixin):
     emailVerify = db.Column(db.Boolean, default=False)
     families = db.relationship('Family', back_populates='users')
 
+    def __init__(self, name, email, password):
+        """Initialize a User instance with name, email, and password."""
+        self.name = name
+        self.email = email
+        self.set_password(password)
+
     def set_password(self, user_password):
         """change password from string to hash value to store to database"""
         self.password = generate_password_hash(user_password)
