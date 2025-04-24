@@ -32,10 +32,10 @@ def sendEmailVerificationLink(user):
         send_email('[Lineage] Verify Email',
                sender=app.config['ADMINS'],
                recipients=[user.email],
-               text_body=render_template('email/verifyEmail.txt',
+               text_body=render_template('email/verify_email.txt',
                                          link=f'{url_root}{token}',
                                          user=user),
-               html_body=render_template('email/verifyEmail.html',
+               html_body=render_template('email/verify_email.html',
                                          link=f'{url_root}verify_email/{token}',
                                          user=user))
         flash(f'Verify your email. Link has been sent to {user.email}', 'success')
