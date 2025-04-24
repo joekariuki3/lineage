@@ -4,26 +4,32 @@ from typing import Tuple, Union, Optional
 
 def create_user(name: str, email: str, password: str) -> User:
     """
-    Creates a new user in the database.
+    Creates a new user instance with the given name, email address, and password.
 
     Args:
         name (str): The name of the user.
         email (str): The email address of the user.
-        password (str): The password for the user.
+        password (str): The password of the user.
+
     Returns:
-        User: The created user object.
-    Raises:
-        Exception: If there is an error creating the user.
+        User: The user instance created.
     """
     try:
-        user = User(name=name, email=email)
-        user.set_password(password)
-        return user
+        return User(name=name, email=email, password=password)
     except Exception as e:
-        raise Exception(f"Error creating user: {str(e)}")
+        print(f"Error creating user: {str(e)}")
+        return None
 
 def save_user(user: User) -> Tuple[int, str, str]:
+    """
+    Saves the given user instance to the database.
 
+    Args:
+        user (User): The user instance to save.
+
+    Returns:
+        Tuple[int, str, str]: A tuple containing the HTTP status code, a message, and a category.
+    """
     if check_user_exists(user.email):
         return 409, "User already exists, try logging in", "error"
     try:
