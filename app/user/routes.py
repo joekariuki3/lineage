@@ -3,6 +3,7 @@ from flask import render_template, request, redirect, url_for, flash, current_ap
 from flask_login import login_required, current_user
 from app.extensions import db
 from .forms import EditProfileForm
+from .services import update_user, get_user
 
 
 @bp.route('/user/profile')
@@ -16,11 +17,15 @@ def user_profile():
 def edit_profile():
     form = EditProfileForm()
     if form.validate_on_submit():
-        current_user.name = form.name.data
-        current_user.email = form.email.data
-        db.session.commit()
-        flash('Your changes have been saved.', 'success')
+        code, message, category = update_user(current_user, name=form.name.data, email=form.email.data)
+
+        if code != 200:
+            flash(message, category)
+            return render_template('edit_profile.html', title='Edit Profile', form=form)
+
+        flash(message, category)
         return redirect(url_for('user.user_profile'))
+
     elif request.method == 'GET':
         form.name.data = current_user.name
         form.email.data = current_user.email
@@ -30,21 +35,29 @@ def edit_profile():
 
 @bp.route('/user/verify_email/<user_id>')
 @login_required
-def verifyEmail(user_id):
-    user = User.query.filter_by(user_id=user_id).first()
+def verify_email(user_id):
+    user = get_user(id=user_id)
+    if not user:
+        flash('User not found', 'error')
+        return redirect(url_for('user.user_profile'))
+
     sendEmailVerificationLink(user)
     return redirect(url_for('user.user_profile'))
 
 @bp.route('/verify_email/<token>')
-def UpdateVerifyEmail(token):
-    try:
-        data = auth_s.loads(token)
-        user_id = data["user_id"]
-        if user_id:
-            user = User.query.filter_by(user_id=user_id).first()
-            user.emailVerify = True
-            db.session.commit()
-            flash('Email verified', 'success')
-    except Exception as e:
-        pass
+def update_verify_email(token):
+    data = auth_s.loads(token)
+    user_id = data["user_id"]
+
+    if user_id:
+        user = get_user(id=user_id)
+        if not user:
+            flash('User not found', 'error')
+            return redirect(url_for('auth.login'))
+
+        code, message, category = update_user(user, emailVerify=True)
+        if code != 200:
+            flash(message, category)
+            return redirect(url_for('auth.login'))
+        flash(message, category)
     return redirect(url_for('auth.login'))
