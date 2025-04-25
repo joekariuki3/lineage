@@ -15,3 +15,10 @@ class Event(db.Model):
 
     # Relationships
     family = db.relationship('Family', back_populates='events')
+
+    def __init__(self, event_date, event_name, family_id, event_location = None, event_description = None):
+        self.event_date = event_date
+        self.event_name = event_name
+        self.family_id = family_id
+        self.location = event_location
+        self.description = event_description
