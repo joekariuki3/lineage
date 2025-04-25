@@ -5,28 +5,35 @@ from datetime import datetime
 from app.models.event import Event
 from .forms import AddEventForm
 from app.extensions import db
+from .services import create_event
 
 @bp.route('/event/', methods=['POST', 'GET'])
 @login_required
 def add_event():
+    families = [family for family in current_user.families]
+    if len(families) < 1:
+        flash('At least one family is required to add an event', 'warning')
+        return redirect(url_for('family.index'))
+
     form = AddEventForm()
     if form.validate_on_submit():
-        date = form.date.data
-        name = form.name.data
-        location = form.location.data
-        description = form.description.data
-        # get family id
-        family_id = request.form.get('family')
-        newEvent = Event(event_date=date,
-                     event_name=name,
-                     location=location,
-                     description=description,
-                     family_id=family_id)
-        db.session.add(newEvent)
-        db.session.commit()
-        flash(f'{newEvent.event_name} added Successfully', 'success')
-        return(redirect(url_for('event.get_events', family_id=newEvent.family_id)))
-    return render_template('add_event.html', title='Add Event', form=form)
+        data, status = create_event(
+            event_date=form.date.data,
+            event_name=form.name.data,
+            family_id=request.form.get('family'),
+            event_location=form.location.data,
+            event_description=form.description.data
+            )
+
+        event, message, category = data.get('data'), data.get('message'), data.get('category')
+
+        if status != 201:
+            flash(message, category)
+            return render_template('add_event.html', title='Add Event', form=form)
+
+        flash(message, category)
+        return(redirect(url_for('event.get_events', family_id=event.family_id)))
+    return render_template('add_event.html', title='Add Event', form=form, families=families)
 
 @bp.route('/event/<family_id>', methods=['POST', 'GET'])
 @login_required
