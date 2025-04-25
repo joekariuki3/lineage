@@ -5,7 +5,7 @@ from datetime import datetime
 from app.models.event import Event
 from .forms import AddEventForm
 from app.extensions import db
-from .services import create_event
+from .services import create_event, get_upcoming_events, get_past_events
 
 @bp.route('/event/', methods=['POST', 'GET'])
 @login_required
@@ -38,10 +38,21 @@ def add_event():
 @bp.route('/event/<family_id>', methods=['POST', 'GET'])
 @login_required
 def get_events(family_id):
-    currentTime = datetime.now()
-    upcomingEvents = Event.query.order_by(Event.event_date.asc()).filter_by(family_id=family_id).filter(Event.event_date>=currentTime ).all()
-    pastEvents = Event.query.order_by(Event.event_date.asc()).filter_by(family_id=family_id).filter(Event.event_date<=currentTime ).all()
-    return render_template('events.html', upcomingEvents=upcomingEvents, pastEvents=pastEvents)
+    data, status = get_upcoming_events(family_id)
+    upcoming_events, message, category = data.get('data', []), data.get('message'), data.get('category')
+    if status != 200:
+        flash(message, category)
+    elif not upcoming_events:
+        flash(message, category)
+
+    data, status = get_past_events(family_id)
+    past_events, message, category = data.get('data', []), data.get('message'), data.get('category')
+    if status != 200:
+        flash(message, category)
+    elif not past_events:
+        flash(message, category)
+
+    return render_template('events.html', upcomingEvents=upcoming_events, pastEvents=past_events)
 
 @bp.route('/delete/event/<event_id>')
 @login_required
