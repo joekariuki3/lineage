@@ -46,15 +46,17 @@ def get_upcoming_events(family_id: int):
         Tuple[dict, int]: A service response containing the list of upcoming events and a status code.
     """
     try:
-        currentTime = datetime.now()
-        events = db.session.query(Event).order_by(Event.event_date.asc()).filter_by(family_id=family_id).filter(Event.event_date>=currentTime ).all()
+        current_time = datetime.now()
+        events = db.session.query(Event).order_by(Event.event_date.asc()).filter_by(family_id=family_id).filter(Event.event_date>=current_time ).all()
+        if not events:
+            return service_response(200, "No upcoming events found", "warning", [])
         return service_response(200, "Upcoming events retrieved successfully", "success", events)
     except Exception as e:
         return service_response(500, "Error retrieving upcoming events", "danger", None)
 
 def get_past_events(family_id: int):
     """
-    Retrieves past events for a specific family.
+    Retrieves past events for a specific family, ordered by the most recent events first.
 
     Args:
         family_id (int): The ID of the family.
@@ -63,8 +65,10 @@ def get_past_events(family_id: int):
         Tuple[dict, int]: A service response containing the list of past events and a status code.
     """
     try:
-        currentTime = datetime.now()
-        events = db.session.query(Event).order_by(Event.event_date.asc()).filter_by(family_id=family_id).filter(Event.event_date<=currentTime ).all()
+        current_time = datetime.now()
+        events = db.session.query(Event).order_by(Event.event_date.desc()).filter_by(family_id=family_id).filter(Event.event_date<=current_time).all()
+        if not events:
+            return service_response(200, "No past events found", "warning", [])
         return service_response(200, "Past events retrieved successfully", "success", events)
     except Exception as e:
         return service_response(500, "Error retrieving past events", "danger", None)
