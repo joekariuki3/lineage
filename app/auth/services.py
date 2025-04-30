@@ -2,7 +2,7 @@ from app.models.user import User
 from app.extensions import db
 from config import Config
 from app.user.services import create_user, save_user, get_user
-from typing import Union, Tuple
+from typing import Union, Tuple, Optional
 from flask_login import login_user, logout_user, current_user
 
 class AuthService:
@@ -12,6 +12,8 @@ class AuthService:
         user = get_user(email=email)
         if user and user.check_password(password):
             login_user(user)
+
+            AuthService.set_current_family_id()
             return user
         return 403, 'Invalid username or password', 'danger'
 
@@ -34,3 +36,13 @@ class AuthService:
     def get_guest_info():
         """Get guest user information."""
         return Config.GUEST_NAME,Config.GUEST_EMAIL,Config.GUEST_PASSWORD
+
+    @staticmethod
+    def set_current_family_id(current_family_id: Optional[int] = None) -> None:
+        """Set the current family ID for the current user."""
+        if current_user.is_authenticated:
+            families_length = len(current_user.families)
+            if families_length == 1:
+                setattr(current_user, 'current_family_id', current_user.families[0].family_id)
+            elif families_length > 1 and current_family_id:
+                setattr(current_user, 'current_family_id', current_family_id)
