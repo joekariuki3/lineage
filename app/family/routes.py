@@ -1,4 +1,4 @@
-from flask import render_template, redirect, url_for, flash, request
+from flask import render_template, redirect, url_for, flash, request, session
 from flask_login import current_user, login_required
 from . import bp
 from app.models import Family, Link
@@ -17,7 +17,11 @@ def index(family_id=0):
     families = []
     if not family_id == 0:
         AuthService.set_current_family_id(family_id)
-        families = Family.query.filter_by(family_id=current_user.current_family_id).all()
+        current_family_id = session.get("current_family_id")
+        if current_family_id is not None:
+            families = Family.query.filter_by(family_id=current_family_id).all()
+        else:
+            families = []
     elif current_user.is_authenticated:
         families = Family.query.filter_by(user_id=current_user.user_id).all()
     return render_template('family.html', families=families)
