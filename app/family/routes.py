@@ -8,6 +8,7 @@ from app.member.forms import MemberForm
 from config import Config
 from app.member.routes import add_root
 from app.utils import auth_s
+from app.auth.services import AuthService
 
 
 @bp.route('/family/<family_id>')
@@ -15,7 +16,8 @@ from app.utils import auth_s
 def index(family_id=0):
     families = []
     if not family_id == 0:
-        families = Family.query.filter_by(family_id=family_id).all()
+        AuthService.set_current_family_id(family_id)
+        families = Family.query.filter_by(family_id=current_user.current_family_id).all()
     elif current_user.is_authenticated:
         families = Family.query.filter_by(user_id=current_user.user_id).all()
     return render_template('family.html', families=families)
