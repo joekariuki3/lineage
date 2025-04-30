@@ -17,6 +17,7 @@ class User(db.Model, UserMixin):
 
     def __init__(self, name, email, password):
         """Initialize a User instance with name, email, and password."""
+        self.current_family_id = None
         self.name = name
         self.email = email
         self.set_password(password)
