@@ -134,3 +134,29 @@ def delete_an_event(event_id: int) -> Tuple[dict, int]:
     except Exception as e:
         db.session.rollback()
         return service_response(500, f"Error deleting event {str(e)}", "danger", None)
+
+def update_event(event: Event,event_date: str, event_name: str, event_location: str, event_description: str) -> Tuple[dict, int]:
+    """
+    Updates an event in the database.
+
+    Args:
+        event (Event): The event to update.
+        event_date (str): The date of the event.
+        event_name (str): The name of the event.
+        event_location (str): The location of the event.
+        event_description (str): A description of the event.
+
+    Returns:
+        Tuple[dict, int]: A service response containing the updated event instance and a status code.
+    """
+    try:
+        event.event_date = event_date
+        event.event_name = event_name
+        event.event_location = event_location
+        event.event_description = event_description
+
+        db.session.commit()
+        return service_response(200, "Event updated successfully", "success", event)
+    except Exception as e:
+        db.session.rollback()
+        return service_response(500, f"Error updating event", "danger", None)
