@@ -5,7 +5,7 @@ from datetime import datetime
 from app.models.event import Event
 from .forms import AddEventForm
 from app.extensions import db
-from .services import create_event, get_upcoming_events, get_past_events
+from .services import create_event, get_upcoming_events, get_past_events, delete_an_event
 
 @bp.route('/event/', methods=['POST', 'GET'])
 @login_required
@@ -57,15 +57,18 @@ def get_events(family_id):
 @bp.route('/delete/event/<event_id>')
 @login_required
 def delete_event(event_id):
-    event = Event.query.get_or_404(event_id)
-    user_ids = [family.family_id for family in current_user.families]
-    if event.family_id in user_ids:
-        db.session.delete(event)
-        db.session.commit()
-        flash(f'{event.event_name} Deleted successfully', 'info')
-        return redirect(url_for('event.get_events', family_id=event.family_id))
-    flash('You dont have permission to delete this event', 'warning')
-    return redirect(url_for('event.get_events', family_id=event.family_id))
+    data, status = delete_an_event(event_id)
+
+    event, message, category = data.get('data'), data.get('message'), data.get('category')
+
+    if status != 200:
+        flash(message, category)
+    elif not event:
+        flash(message, category)
+    else:
+        flash(message, category)
+
+    return redirect(url_for('event.get_events', family_id=current_user.current_family_id))
 
 @bp.route('/edit/event/<event_id>', methods=['GET', 'POST'])
 @login_required
