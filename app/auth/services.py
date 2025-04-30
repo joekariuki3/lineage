@@ -4,6 +4,7 @@ from config import Config
 from app.user.services import create_user, save_user, get_user
 from typing import Union, Tuple, Optional
 from flask_login import login_user, logout_user, current_user
+from flask import session
 
 class AuthService:
     @staticmethod
@@ -43,6 +44,6 @@ class AuthService:
         if current_user.is_authenticated:
             families_length = len(current_user.families)
             if families_length == 1:
-                setattr(current_user, 'current_family_id', current_user.families[0].family_id)
+                session['current_family_id'] = current_user.families[0].family_id
             elif families_length > 1 and current_family_id:
-                setattr(current_user, 'current_family_id', current_family_id)
+                session['current_family_id'] = current_family_id
