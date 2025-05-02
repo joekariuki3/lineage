@@ -59,17 +59,18 @@ def create_family():
 
     return render_template('create_family.html', title='Create Family', form=form, memberForm=memberForm)
 
-@bp.route('/family/delete/<id>')
+@bp.route('/family/delete/<family_id>')
 @login_required
-def delete_family(id):
-    family = Family.query.filter_by(family_id=id).first()
-    if current_user.user_id == family.user_id:
-        db.session.delete(family)
-        db.session.commit()
-        flash('Family deleted successful', 'success')
-        return redirect(url_for('user.user_profile'))
-    else:
+def delete_family(family_id):
+    is_family_owner = FamilyService.family_belongs_to_user(family_id=id, user_id=current_user.user_id)
+    if not is_family_owner:
         flash('You are not allowed to delete this family', 'info')
+        return redirect(url_for('user.user_profile'))
+
+    data, _ = FamilyService.delete_family(family_id=family_id)
+    message, category = data.get('message'), data.get('category')
+
+    flash(message, category)
     return redirect(url_for('user.user_profile'))
 
 @bp.route('/create_link/<family_id>', methods=['POST', 'GET'])
