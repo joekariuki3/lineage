@@ -9,6 +9,7 @@ from config import Config
 from app.member.routes import add_root
 from app.utils import auth_s
 from app.auth.services import AuthService
+from .services import FamilyService
 
 
 @bp.route('/family/<family_id>')
@@ -17,13 +18,26 @@ def index(family_id=0):
     families = []
     if not family_id == 0:
         AuthService.set_current_family_id(family_id)
+
         current_family_id = session.get("current_family_id")
         if current_family_id is not None:
-            families = Family.query.filter_by(family_id=current_family_id).all()
-        else:
-            families = []
+            data, status = FamilyService.get_family_by_id(current_family_id)
+            family, message, category = data.get('data'), data.get('message'), data.get('category')
+            if status != 200:
+                flash(message, category)
+            elif not family:
+                flash(message, category)
+            else:
+                families = [family]
+
     elif current_user.is_authenticated:
-        families = Family.query.filter_by(user_id=current_user.user_id).all()
+        data, status = FamilyService.get_user_families(current_user.user_id)
+        families, message, category = data.get('data'), data.get('message'), data.get('category')
+        if status != 200:
+            flash(message, category)
+        elif not families:
+            flash(message, category)
+
     return render_template('family.html', families=families)
 
 
