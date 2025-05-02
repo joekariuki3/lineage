@@ -46,15 +46,17 @@ def index(family_id=0):
 def create_family():
     form = CreateFamilyForm()
     memberForm = MemberForm()
+
     if form.validate_on_submit() and memberForm.validate_on_submit():
-        family_name = form.name.data
-        new_family = Family(name=family_name, user_id=current_user.user_id)
-        db.session.add(new_family)
-        db.session.commit()
-        flash(f'{new_family.name} added Successfully', 'success')
-        # add root member
-        add_root(new_family.family_id, memberForm)
+        data, status = FamilyService.create_family(form.name.data, current_user.user_id)
+        family, message, category = data.get('data'), data.get('message'), data.get('category')
+        if status != 201:
+            flash(message, category)
+            return redirect(url_for('family.index'))
+
+        add_root(family.family_id, memberForm) # To fix: use MemberService to add root member handler errors
         return redirect(url_for('family.index'))
+
     return render_template('create_family.html', title='Create Family', form=form, memberForm=memberForm)
 
 @bp.route('/family/delete/<id>')
