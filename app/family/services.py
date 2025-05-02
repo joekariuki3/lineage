@@ -47,3 +47,25 @@ class FamilyService:
         except Exception as e:
             # Todo: log the error
             return service_response(500, "Something went wrong", "error", None)
+
+    @staticmethod
+    def create_family(family_name: str, user_id: int) -> Tuple[dict, int]:
+        """
+        Creates a new family.
+
+        Args:
+            family_name (str): The name of the family.
+            user_id (int): The id of the user.
+
+        Returns:
+            Tuple[dict, int]: A tuple containing a dictionary and HTTP status code.
+        """
+        try:
+            new_family = Family(name=family_name, user_id=user_id)
+            db.session.add(new_family)
+            db.session.commit()
+            return service_response(201, "Family created successfully", "success", new_family)
+        except Exception as e:
+            db.session.rollback()
+            # Todo: log the error
+            return service_response(500, "Something went wrong", "error", None)
