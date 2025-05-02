@@ -10,6 +10,7 @@ from app.member.routes import add_root
 from app.utils import auth_s
 from app.auth.services import AuthService
 from .services import FamilyService
+from app.link.services import LinkService
 
 
 @bp.route('/family/<family_id>')
@@ -76,26 +77,30 @@ def delete_family(family_id):
 @bp.route('/create_link/<family_id>', methods=['POST', 'GET'])
 @login_required
 def create_link(family_id):
-    links = Link.query.filter_by(family_id=family_id).all()
-    url_root = request.url_root
-    if len(links) < 1:
-        # create new link
-        token = auth_s.dumps({"family_id": family_id})
-        newLink = Link(link=token, family_id=family_id)
-        db.session.add(newLink)
-        db.session.commit()
-        flash(f'Link created', 'success')
-        return render_template('profile.html', title='User_Profile', url_root=url_root)
-    flash('You already have a link. Delete the current one to create a new one', 'warning')
-    return render_template('profile.html', title='User_Profile', url_root=url_root)
+    data, status = FamilyService.get_family_by_id(family_id)
+    family, message, category = data.get('data'), data.get('message'), data.get('category')
+    if status != 200:
+        flash(message, category)
+        return redirect(url_for('user.user_profile'))
+    elif not family:
+        flash(message, category)
+        return redirect(url_for('user.user_profile'))
+
+    if not FamilyService.family_belongs_to_user(family_id=family_id, user_id=current_user.user_id):
+        flash('You are not allowed to create a link for this family', 'info')
+        return redirect(url_for('user.user_profile'))
+
+    data, status = LinkService.create_link(family)
+    message, category = data.get('message'), data.get('category')
+    flash(message, category)
+    return redirect(url_for('user.user_profile'))
+
 
 @bp.route('/delete_link/<link_id>')
 @login_required
 def delete_link(link_id):
-    link = Link.query.filter_by(link_id=link_id).first()
-    if link:
-        db.session.delete(link)
-        db.session.commit()
-        flash('Link deleted', 'success')
-        return redirect(url_for('user.user_profile'))
+    data, _ = LinkService.delete_link(link_id=link_id)
+    message, category = data.get('message'), data.get('category')
+
+    flash(message, category)
     return redirect(url_for('user.user_profile'))
