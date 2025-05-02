@@ -69,3 +69,42 @@ class FamilyService:
             db.session.rollback()
             # Todo: log the error
             return service_response(500, "Something went wrong", "error", None)
+
+    @staticmethod
+    def family_belongs_to_user(family_id: int, user_id: int) -> bool:
+        """
+        Checks if a family belongs to a user.
+
+        Args:
+            family_id (int): The id of the family.
+            user_id (int): The id of the user.
+
+        Returns:
+            bool: True if the family belongs to the user, False otherwise.
+        """
+        family = db.session.query(Family).filter_by(family_id=family_id, user_id=user_id).first()
+        return family is not None
+
+    @staticmethod
+    def delete_family(family_id: int) -> Tuple[dict, int]:
+        """
+        Deletes a family.
+
+        Args:
+            family_id (int): The id of the family to delete.
+
+        Returns:
+            Tuple[dict, int]: A tuple containing a dictionary and HTTP status code.
+        """
+        try:
+            family = db.session.query(Family).filter_by(family_id=family_id).first()
+            if family:
+                db.session.delete(family)
+                db.session.commit()
+                return service_response(200, "Family deleted successfully", "success", None)
+            else:
+                return service_response(404, "Family not found", "warning", None)
+        except Exception as e:
+            db.session.rollback()
+            # Todo: log the error
+            return service_response(500, "Something went wrong", "error", None)
