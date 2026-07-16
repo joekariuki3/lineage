@@ -58,7 +58,7 @@
     {% endif %}
 </head>
 
-<body>
+<body class="flex flex-col min-h-screen">
     <!-- nav bar -->
     <nav class="bg-white border-gray-200">
         <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
@@ -174,7 +174,7 @@
         </div>
     </nav>
 
-    <main class="bg-gray-100 pt-4">
+    <main class="flex-grow bg-gray-100 pt-4">
         {% include "notification.html"%}
 
         {% block content %}
