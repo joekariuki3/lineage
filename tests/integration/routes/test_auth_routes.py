@@ -6,6 +6,7 @@ from app.auth.services import AuthService
 from app.user.services import UserService
 from app.services.service_base import service_response
 
+
 def test_register_get(client, test_user_1):
     """
     Tests the behavior of the registration page in two scenarios:
@@ -31,6 +32,7 @@ def test_register_get(client, test_user_1):
     assert response.status_code == HTTPStatus.OK
     assert b"Family Tree App" in response.data
 
+
 def test_register_post(app, client, session):
     """
     Test the registration process functionality for new users by simulating a POST request
@@ -47,12 +49,16 @@ def test_register_post(app, client, session):
 
     """
     # given
-    user_data = {"name":"New_user",
-                 "email":"newuser@mail.com",
-                 "password":"newPassword",
-                 "confirm_password":"newPassword"}
+    user_data = {
+        "name": "New_user",
+        "email": "newuser@mail.com",
+        "password": "newPassword",
+        "confirm_password": "newPassword",
+    }
     # when
-    response = client.post(url_for("auth.register"), data=user_data, follow_redirects=True)
+    response = client.post(
+        url_for("auth.register"), data=user_data, follow_redirects=True
+    )
 
     # then
     assert response.status_code == HTTPStatus.OK
@@ -64,7 +70,8 @@ def test_register_post(app, client, session):
         assert user is not None
         assert user.name == user_data["name"]
         assert user.email == user_data["email"]
-        assert user.check_password(user_data["password"]) == True
+        assert user.check_password(user_data["password"])
+
 
 def test_login_get(client, test_user_1):
     """
@@ -88,6 +95,7 @@ def test_login_get(client, test_user_1):
     assert response.status_code == HTTPStatus.OK
     assert b"Create Family" in response.data
 
+
 def test_login_post(client, test_user_1):
     """
     This function tests the login functionality of an application using a test client.
@@ -103,16 +111,22 @@ def test_login_post(client, test_user_1):
     not match the actual responses.
     """
     # test login with incorrect credentials.
-    invalid_user_data = {"email": "invalid_user@mail.com", "password": "invalidPassword"}
-    response = client.post(url_for("auth.login"), data=invalid_user_data, follow_redirects=True)
+    invalid_user_data = {
+        "email": "invalid_user@mail.com",
+        "password": "invalidPassword",
+    }
+    response = client.post(
+        url_for("auth.login"), data=invalid_user_data, follow_redirects=True
+    )
     assert response.status_code == HTTPStatus.OK
     assert b"Invalid username or password" in response.data
 
     # test login with correct credentials.
-    user_data = {"email":test_user_1.email, "password":"user1password"}
+    user_data = {"email": test_user_1.email, "password": "user1password"}
     response = client.post(url_for("auth.login"), data=user_data, follow_redirects=True)
     assert response.status_code == HTTPStatus.OK
     assert b"Create Family" in response.data
+
 
 def test_guest_no_guest_info(client, monkeypatch):
     """
@@ -135,10 +149,13 @@ def test_guest_no_guest_info(client, monkeypatch):
 
     response = client.get(url_for("auth.guest"), follow_redirects=True)
     assert response.status_code == HTTPStatus.OK
-    assert b"Guest name, email and password are required. Contact admin" in response.data
+    assert (
+        b"Guest name, email and password are required. Contact admin" in response.data
+    )
     assert b"Login" in response.data
 
     monkeypatch.undo()
+
 
 def test_guest(client, test_guest_user_1):
     """
@@ -170,6 +187,7 @@ def test_guest(client, test_guest_user_1):
     assert response.status_code == HTTPStatus.OK
     assert b"Create Family" in response.data
 
+
 def test_guest_incorrect_credentials(client, test_guest_user_1, monkeypatch):
     """
     Tests the behavior of the guest login functionality when incorrect credentials
@@ -188,6 +206,7 @@ def test_guest_incorrect_credentials(client, test_guest_user_1, monkeypatch):
         AssertionError: If the expected response status or content does not match
             the actual results.
     """
+
     def mock_get_guest_info(*args):
         return test_guest_user_1.name, test_guest_user_1.email, "InvalidPassword"
 
@@ -199,6 +218,7 @@ def test_guest_incorrect_credentials(client, test_guest_user_1, monkeypatch):
     assert b"Login" in response.data
 
     monkeypatch.undo()
+
 
 def test_logout(client, test_user_1):
     """
@@ -224,7 +244,8 @@ def test_logout(client, test_user_1):
 
     assert response.status_code == HTTPStatus.OK
     assert b"Login" in response.data
-    assert not b"Log out" in response.data
+    assert b"Log out" not in response.data
+
 
 def test_reset_password_request_get(client):
     """
@@ -249,6 +270,7 @@ def test_reset_password_request_get(client):
     assert response.status_code == HTTPStatus.OK
     assert b"Reset Password" in response.data
 
+
 def test_reset_password_request_get_authenticated(client, test_user_1):
     """
     Tests the reset password request page for an authenticated user.
@@ -264,11 +286,16 @@ def test_reset_password_request_get_authenticated(client, test_user_1):
         None
     """
     # log in the user
-    client.post(url_for("auth.login"), data={"email": test_user_1.email, "password": "user1password"}, follow_redirects=True)
+    client.post(
+        url_for("auth.login"),
+        data={"email": test_user_1.email, "password": "user1password"},
+        follow_redirects=True,
+    )
 
     response = client.get(url_for("auth.reset_password_request"), follow_redirects=True)
     assert response.status_code == HTTPStatus.OK
     assert b"Create Family" in response.data
+
 
 def test_reset_password_request_post(client, test_user_1):
     """
@@ -286,9 +313,16 @@ def test_reset_password_request_post(client, test_user_1):
         If the response status code is not 200 OK.
         If the success message is not found in the response data.
     """
-    response = client.post(url_for("auth.reset_password_request"), data={"email": test_user_1.email}, follow_redirects=True)
+    response = client.post(
+        url_for("auth.reset_password_request"),
+        data={"email": test_user_1.email},
+        follow_redirects=True,
+    )
     assert response.status_code == HTTPStatus.OK
-    assert b"Check your email for the instructions to reset your password" in response.data
+    assert (
+        b"Check your email for the instructions to reset your password" in response.data
+    )
+
 
 def test_reset_password_request_post_invalid_email(client):
     """
@@ -306,9 +340,16 @@ def test_reset_password_request_post_invalid_email(client):
         AssertionError: If the response does not fulfill the expected test
         conditions.
     """
-    response = client.post(url_for("auth.reset_password_request"), data={"email": "invalid@mail.com"}, follow_redirects=True)
+    response = client.post(
+        url_for("auth.reset_password_request"),
+        data={"email": "invalid@mail.com"},
+        follow_redirects=True,
+    )
     assert response.status_code == HTTPStatus.OK
-    assert b"Check your email for the instructions to reset your password" in response.data
+    assert (
+        b"Check your email for the instructions to reset your password" in response.data
+    )
+
 
 def test_reset_password_token_get_authenticated_user(client, test_user_1):
     """
@@ -328,10 +369,17 @@ def test_reset_password_token_get_authenticated_user(client, test_user_1):
         If the response status code does not match HTTPStatus.OK or if the expected
         response content is not found in the returned data.
     """
-    client.post(url_for("auth.login"), data={"email": test_user_1.email, "password": "user1password"}, follow_redirects=True)
-    response = client.get(url_for("auth.reset_password", token="test_token"), follow_redirects=True)
+    client.post(
+        url_for("auth.login"),
+        data={"email": test_user_1.email, "password": "user1password"},
+        follow_redirects=True,
+    )
+    response = client.get(
+        url_for("auth.reset_password", token="test_token"), follow_redirects=True
+    )
     assert response.status_code == HTTPStatus.OK
     assert b"Create Family" in response.data
+
 
 def test_reset_password_token_get_invalid_token(client, test_user_1):
     """
@@ -350,10 +398,13 @@ def test_reset_password_token_get_invalid_token(client, test_user_1):
         AssertionError: If the response status code or the response data does not
             meet the expected values.
     """
-    response = client.get(url_for("auth.reset_password", token="invalid_token"), follow_redirects=True)
+    response = client.get(
+        url_for("auth.reset_password", token="invalid_token"), follow_redirects=True
+    )
     assert response.status_code == HTTPStatus.OK
     assert b"Link expired. Request for a new link" in response.data
     assert b"Reset Password" in response.data
+
 
 def test_reset_password_token_get_valid_token(client, app, test_user_1):
     """
@@ -377,9 +428,12 @@ def test_reset_password_token_get_valid_token(client, app, test_user_1):
             the new password field.
     """
     token = test_user_1.get_reset_password_token(app.config["SECRET_KEY"])
-    response = client.get(url_for("auth.reset_password", token=token), follow_redirects=True)
+    response = client.get(
+        url_for("auth.reset_password", token=token), follow_redirects=True
+    )
     assert response.status_code == HTTPStatus.OK
     assert b"New password" in response.data
+
 
 def test_reset_password_token_post(client, app, test_user_1):
     """
@@ -400,12 +454,20 @@ def test_reset_password_token_post(client, app, test_user_1):
             update to the new provided password.
     """
     token = test_user_1.get_reset_password_token(app.config["SECRET_KEY"])
-    user_data_to_update = {"password": "newPassword123", "confirm_password": "newPassword123"}
-    response = client.post(url_for("auth.reset_password", token=token), data=user_data_to_update, follow_redirects=True)
+    user_data_to_update = {
+        "password": "newPassword123",
+        "confirm_password": "newPassword123",
+    }
+    response = client.post(
+        url_for("auth.reset_password", token=token),
+        data=user_data_to_update,
+        follow_redirects=True,
+    )
 
     assert response.status_code == HTTPStatus.OK
     assert b"User updated successfully" in response.data
     assert test_user_1.check_password("newPassword123")
+
 
 def test_reset_password_token_post_error(client, app, test_user_1, monkeypatch):
     """
@@ -421,17 +483,24 @@ def test_reset_password_token_post_error(client, app, test_user_1, monkeypatch):
         monkeypatch: pytest fixture used to replace or modify the behavior of external
             dependencies or objects during the test.
     """
+
     def mock_update_user(*args, **kwargs):
-        return service_response(500,
-                                "Something went wrong updating user information",
-                                "error",
-                                None)
+        return service_response(
+            500, "Something went wrong updating user information", "error", None
+        )
 
     monkeypatch.setattr(UserService, "update_user", mock_update_user)
 
     token = test_user_1.get_reset_password_token(app.config["SECRET_KEY"])
-    user_data_to_update = {"password": "newPassword123", "confirm_password": "newPassword123"}
-    response = client.post(url_for("auth.reset_password", token=token), data=user_data_to_update, follow_redirects=True)
+    user_data_to_update = {
+        "password": "newPassword123",
+        "confirm_password": "newPassword123",
+    }
+    response = client.post(
+        url_for("auth.reset_password", token=token),
+        data=user_data_to_update,
+        follow_redirects=True,
+    )
 
     assert response.status_code == HTTPStatus.OK
     assert not test_user_1.check_password("newPassword123")

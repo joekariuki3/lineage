@@ -1,59 +1,46 @@
-from typing import List, Optional
+from typing import Optional
 from sqlalchemy.orm import Mapped
-from . import  db
+from app.extensions import db
+
 
 class Family(db.Model):
     """
     Represents a family entity in the application with its relationships and attributes.
     Manages family structure and interactions with users, events, members, and links.
     """
+
     # Configuration
-    __tablename__ = 'families'
-    
+    __tablename__ = "families"
+
     # Field length constraints
     MAX_NAME_LENGTH: int = 50
-    
+
     # Primary key
     family_id: Mapped[int] = db.Column(
-        db.Integer, 
-        primary_key=True,
-        comment="Unique identifier for the family"
+        db.Integer, primary_key=True, comment="Unique identifier for the family"
     )
-    
+
     # Basic attributes
     name: Mapped[str] = db.Column(
-        db.String(MAX_NAME_LENGTH), 
-        nullable=False,
-        comment="Name of the family"
+        db.String(MAX_NAME_LENGTH), nullable=False, comment="Name of the family"
     )
-    
+
     # Foreign keys
     user_id: Mapped[Optional[int]] = db.Column(
-        db.Integer, 
-        db.ForeignKey('users.user_id'), 
+        db.Integer,
+        db.ForeignKey("users.user_id"),
         nullable=True,
-        comment="Optional reference to associated user"
+        comment="Optional reference to associated user",
     )
-    
+
     # Relationships with cascading behavior
-    users: Mapped[List["User"]] = db.relationship(
-        'User', 
-        back_populates='families'
+    users = db.relationship("User", back_populates="families")
+    events = db.relationship("Event", cascade="all,delete", back_populates="family")
+    members = db.relationship(
+        "Member", cascade="all,delete-orphan", back_populates="family"
     )
-    events: Mapped[List["Event"]] = db.relationship(
-        'Event', 
-        cascade="all,delete", 
-        back_populates='family'
-    )
-    members: Mapped[List["Member"]] = db.relationship(
-        'Member', 
-        cascade="all,delete-orphan", 
-        back_populates='family'
-    )
-    links: Mapped[List["Link"]] = db.relationship(
-        'Link', 
-        cascade="all,delete-orphan", 
-        back_populates='family'
+    links = db.relationship(
+        "Link", cascade="all,delete-orphan", back_populates="family"
     )
 
     def __init__(self, name: str, user_id: Optional[int] = None) -> None:
@@ -72,4 +59,6 @@ class Family(db.Model):
 
     def __repr__(self) -> str:
         """Return string representation of the family."""
-        return f"Family(id={self.family_id}, name='{self.name}', user_id={self.user_id})"
+        return (
+            f"Family(id={self.family_id}, name='{self.name}', user_id={self.user_id})"
+        )

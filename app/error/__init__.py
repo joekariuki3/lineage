@@ -1,5 +1,3 @@
-from flask import Blueprint
+from .routes import error_bp
 
-error_bp = Blueprint('error', __name__)
-
-from app.error import routes
+__all__ = ["error_bp"]

@@ -8,7 +8,7 @@ from app.utils.constants import Gender
 from typing import Union
 
 
-@pytest.fixture(scope='function')
+@pytest.fixture(scope="function")
 def app():
     """
     Fixture that provides an application instance for testing.
@@ -25,7 +25,8 @@ def app():
     with app.app_context():
         yield app
 
-@pytest.fixture(scope='function')
+
+@pytest.fixture(scope="function")
 def db(app):
     """
     This fixture sets up a database for use in tests. It initializes the database, creates all
@@ -57,7 +58,8 @@ def client(app):
     """
     return app.test_client()
 
-@pytest.fixture(scope='function')
+
+@pytest.fixture(scope="function")
 def session(db):
     """
     Fixture for providing a database session with transactional rollback.
@@ -78,12 +80,12 @@ def session(db):
     """
     connection = db.engine.connect()
     transaction = connection.begin()
-    options = dict(bind=connection)
     db.session.bind = connection
     yield db.session
     transaction.rollback()
     connection.close()
     db.session.remove()
+
 
 def clean_up(session, obj: Union[Family, User, Member, Link, Event], obj_id: int):
     """
@@ -102,6 +104,7 @@ def clean_up(session, obj: Union[Family, User, Member, Link, Event], obj_id: int
     if session.get(class_name, obj_id):
         session.delete(obj)
         session.commit()
+
 
 @pytest.fixture
 def test_family_1(session):
@@ -122,6 +125,7 @@ def test_family_1(session):
     yield family
     clean_up(session, family, family.family_id)
 
+
 @pytest.fixture
 def test_family_2(session):
     """
@@ -140,6 +144,7 @@ def test_family_2(session):
     session.commit()
     yield family
     clean_up(session, family, family.family_id)
+
 
 @pytest.fixture
 def test_guest_user_1(session, app):
@@ -161,14 +166,15 @@ def test_guest_user_1(session, app):
             The created guest user instance.
     """
     guest_user = User(
-        name=app.config['GUEST_NAME'],
-        email=app.config['GUEST_EMAIL'],
-        password=app.config['GUEST_PASSWORD']
+        name=app.config["GUEST_NAME"],
+        email=app.config["GUEST_EMAIL"],
+        password=app.config["GUEST_PASSWORD"],
     )
     session.add(guest_user)
     session.commit()
     yield guest_user
     clean_up(session, guest_user, guest_user.user_id)
+
 
 @pytest.fixture
 def test_user_1(session):
@@ -191,6 +197,7 @@ def test_user_1(session):
     yield user
     clean_up(session, user, user.user_id)
 
+
 @pytest.fixture
 def test_user_2(session):
     """
@@ -208,6 +215,7 @@ def test_user_2(session):
     session.commit()
     yield user
     clean_up(session, user, user.user_id)
+
 
 @pytest.fixture
 def test_event_1(session, test_family_1):
@@ -237,12 +245,13 @@ def test_event_1(session, test_family_1):
     event = Event(
         event_date=datetime(25, 4, 1),
         event_name="event_1",
-        family_id=test_family_1.family_id
+        family_id=test_family_1.family_id,
     )
     session.add(event)
     session.commit()
     yield event
     clean_up(session, event, event.event_id)
+
 
 @pytest.fixture
 def test_event_2(session, test_family_2):
@@ -272,12 +281,13 @@ def test_event_2(session, test_family_2):
     event = Event(
         event_date=datetime(24, 4, 1),
         event_name="event_2",
-        family_id=test_family_2.family_id
+        family_id=test_family_2.family_id,
     )
     session.add(event)
     session.commit()
     yield event
     clean_up(session, event, event.event_id)
+
 
 @pytest.fixture
 def test_link_1(session, test_family_1):
@@ -294,6 +304,7 @@ def test_link_1(session, test_family_1):
     session.commit()
     yield link
     clean_up(session, link, link.link_id)
+
 
 @pytest.fixture
 def test_member_1(session, test_family_1):
@@ -312,11 +323,17 @@ def test_member_1(session, test_family_1):
     Yields:
         Member: The created `Member` instance for temporary use in tests.
     """
-    member = Member(first_name="member", last_name="one", family_id=test_family_1.family_id, gender=Gender.MALE.value)
+    member = Member(
+        first_name="member",
+        last_name="one",
+        family_id=test_family_1.family_id,
+        gender=Gender.MALE.value,
+    )
     session.add(member)
     session.commit()
     yield member
     clean_up(session, member, member.member_id)
+
 
 @pytest.fixture
 def test_member_2(session, test_family_1):
@@ -333,11 +350,17 @@ def test_member_2(session, test_family_1):
     Yields:
         Member: An instance of the Member entity created for testing purposes.
     """
-    member = Member(first_name="member", last_name="two", family_id=test_family_1.family_id, gender=Gender.FEMALE.value)
+    member = Member(
+        first_name="member",
+        last_name="two",
+        family_id=test_family_1.family_id,
+        gender=Gender.FEMALE.value,
+    )
     session.add(member)
     session.commit()
     yield member
     clean_up(session, member, member.member_id)
+
 
 @pytest.fixture
 def test_member_3(session, test_family_1):
@@ -358,11 +381,17 @@ def test_member_3(session, test_family_1):
     Yields:
         Member: The `Member` object created for the test case.
     """
-    member = Member(first_name="member", last_name="three", family_id=test_family_1.family_id, gender=Gender.OTHER.value)
+    member = Member(
+        first_name="member",
+        last_name="three",
+        family_id=test_family_1.family_id,
+        gender=Gender.OTHER.value,
+    )
     session.add(member)
     session.commit()
     yield member
     clean_up(session, member, member.member_id)
+
 
 @pytest.fixture
 def test_user_and_family(test_user_1, test_family_1, session):
@@ -384,6 +413,7 @@ def test_user_and_family(test_user_1, test_family_1, session):
     session.commit()
     yield test_user_1, test_family_1
 
+
 @pytest.fixture
 def test_user_with_one_family(test_user_1, test_family_1, session):
     """
@@ -404,6 +434,7 @@ def test_user_with_one_family(test_user_1, test_family_1, session):
     test_family_1.user_id = test_user_1.user_id
     session.commit()
     yield test_user_1
+
 
 @pytest.fixture
 def test_user_with_two_families(test_user_1, test_family_1, test_family_2, session):
@@ -427,6 +458,7 @@ def test_user_with_two_families(test_user_1, test_family_1, test_family_2, sessi
     test_family_2.user_id = test_user_1.user_id
     session.commit()
     yield test_user_1
+
 
 @pytest.fixture
 def test_family_with_a_link(test_family_1, test_link_1, session):

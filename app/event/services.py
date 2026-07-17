@@ -57,7 +57,7 @@ class EventService:
             if not events:
                 return service_response(404, "No upcoming events found", "warning", None)
             return service_response(200, "Upcoming events retrieved successfully", "success", events)
-        except Exception as e:
+        except Exception:
             return service_response(500, "Error retrieving upcoming events", "danger", None)
 
     def get_past_events(self, family_id: int) -> Tuple[dict, int]:
@@ -76,7 +76,7 @@ class EventService:
             if not events:
                 return service_response(404, "No past events found", "warning", None)
             return service_response(200, "Past events retrieved successfully", "success", events)
-        except Exception as e:
+        except Exception:
             return service_response(500, "Error retrieving past events", "danger", None)
 
     def get_event(self, event_id: int) -> Tuple[dict, int]:
@@ -94,7 +94,7 @@ class EventService:
             if not event:
                 return service_response(404, "Event not found", "warning", None)
             return service_response(200, "Event retrieved successfully", "success", event)
-        except Exception as e:
+        except Exception:
             return service_response(500, "Error retrieving event", "danger", None)
 
     @staticmethod
@@ -135,9 +135,9 @@ class EventService:
             self.db.delete(event)
             self.db.commit()
             return service_response(200, "Event deleted successfully", "success", None)
-        except Exception as e:
+        except Exception:
             self.db.rollback()
-            return service_response(500, f"Error deleting event", "danger", None)
+            return service_response(500, "Error deleting event", "danger", None)
 
     def update_event(self, event: Event, event_date: datetime, event_name: str, location: str, description: str) -> Tuple[dict, int]:
         """
@@ -161,7 +161,7 @@ class EventService:
 
             self.db.commit()
             return service_response(200, "Event updated successfully", "success", event)
-        except Exception as e:
+        except Exception:
             self.db.rollback()
             self.db.refresh(event)  # Refresh from DB to discard in-memory changes
-            return service_response(500, f"Error updating event", "danger", None)
+            return service_response(500, "Error updating event", "danger", None)
