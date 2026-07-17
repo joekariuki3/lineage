@@ -1,115 +1,128 @@
-{% extends "base.html" %}
-
-{% block content %}
+{% extends "base.html" %} {% block content %}
 <div class="container mx-auto max-w-3xl p-4 sm:p-6 lg:p-8">
-    <form action="" method="post" novalidate>
-        {{ form.hidden_tag() }}
+  <form action="" method="post" novalidate>
+    {{ form.hidden_tag() }}
 
-        <div class="mb-8 text-center">
-            <h2 class="text-3xl font-extrabold text-gray-900">{{ title }}</h2>
-            <p class="mt-2 text-sm text-gray-600">Update the details of this family member.</p>
+    <div class="mb-8 text-center">
+      <h2 class="text-3xl font-extrabold text-gray-900">{{ title }}</h2>
+      <p class="mt-2 text-sm text-gray-600">
+        Update the details of this family member.
+      </p>
+    </div>
+
+    <fieldset
+      class="bg-white shadow-md rounded-lg p-6 mb-6 border border-gray-100"
+    >
+      <h4
+        class="text-lg font-semibold text-gray-800 mb-4 border-b border-gray-100 pb-3"
+      >
+        Member Details
+      </h4>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <!-- First Name -->
+        <div>
+          {{ form.first_name.label(class="block text-sm font-medium
+          text-gray-700 mb-1") }} {% if form.first_name.errors %} {{
+          form.first_name(class="block w-full mt-1 p-2 border border-red-500
+          rounded-md shadow-sm focus:ring-red-500 focus:border-red-500
+          sm:text-sm") }}
+          <p class="text-red-500 text-sm mt-2">
+            {% for error in form.first_name.errors %} {{ error }} {% endfor %}
+          </p>
+          {% else %} {{ form.first_name(class="block w-full mt-1 p-2 border
+          border-gray-300 rounded-md shadow-sm focus:ring-indigo-500
+          focus:border-indigo-500 sm:text-sm", value=member.first_name) }} {%
+          endif %}
         </div>
 
-        <fieldset class="bg-white shadow-md rounded-lg p-6 mb-6 border border-gray-100">
-            <h4 class="text-lg font-semibold text-gray-800 mb-4 border-b border-gray-100 pb-3">Member Details</h4>
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                <!-- First Name -->
-                <div>
-                    {{ form.first_name.label(class="block text-sm font-medium text-gray-700 mb-1") }}
-                    {% if form.first_name.errors %}
-                    {{ form.first_name(class="block w-full mt-1 p-2 border border-red-500 rounded-md shadow-sm focus:ring-red-500 focus:border-red-500 sm:text-sm") }}
-                    <p class="text-red-500 text-sm mt-2">
-                        {% for error in form.first_name.errors %}
-                        {{ error }}
-                        {% endfor %}
-                    </p>
-                    {% else %}
-                    {{ form.first_name(class="block w-full mt-1 p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm", value=member.first_name) }}
-                    {% endif %}
-                </div>
-
-                <!-- Last Name -->
-                <div>
-                    {{ form.last_name.label(class="block text-sm font-medium text-gray-700 mb-1") }}
-                    {% if form.last_name.errors %}
-                    {{ form.last_name(class="block w-full mt-1 p-2 border border-red-500 rounded-md shadow-sm focus:ring-red-500 focus:border-red-500 sm:text-sm") }}
-                    <p class="text-red-500 text-sm mt-2">
-                        {% for error in form.last_name.errors %}
-                        {{ error }}
-                        {% endfor %}
-                    </p>
-                    {% else %}
-                    {{ form.last_name(class="block w-full mt-1 p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm", value=member.last_name) }}
-                    {% endif %}
-                </div>
-
-                <!-- Gender -->
-                <div>
-                    {{ form.gender.label(class="block text-sm font-medium text-gray-700 mb-1") }}
-                    {% if form.gender.errors %}
-                    {{ form.gender(class="block w-full mt-1 p-2 border border-red-500 rounded-md shadow-sm focus:ring-red-500 focus:border-red-500 sm:text-sm") }}
-                    <p class="text-red-500 text-sm mt-2">
-                        {% for error in form.gender.errors %}
-                        {{ error }}
-                        {% endfor %}
-                    </p>
-                    {% else %}
-                    {{ form.gender(class="block w-full mt-1 p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm", value=member.gender) }}
-                    {% endif %}
-                </div>
-
-                <!-- Birthdate -->
-                <div>
-                    {{ form.birthdate.label(class="block text-sm font-medium text-gray-700 mb-1") }}
-                    {% if form.birthdate.errors %}
-                    {{ form.birthdate(class="block w-full mt-1 p-2 border border-red-500 rounded-md shadow-sm focus:ring-red-500 focus:border-red-500 sm:text-sm") }}
-                    <p class="text-red-500 text-sm mt-2">
-                        {% for error in form.birthdate.errors %}
-                        {{ error }}
-                        {% endfor %}
-                    </p>
-                    {% else %}
-                    {{ form.birthdate(class="block w-full mt-1 p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm", value=member.birthdate) }}
-                    {% endif %}
-                </div>
-
-                <!-- Alive -->
-                <div class="alive">
-                    {{ form.alive.label(class="block text-sm font-medium text-gray-700 mb-1") }}
-                    {% if form.alive.errors %}
-                    {{ form.alive(class="flex justify-around block w-full mt-1 p-2 border border-red-500 rounded-md shadow-sm focus:ring-red-500 focus:border-red-500 sm:text-sm") }}
-                    <p class="text-red-500 text-sm mt-2">
-                        {% for error in form.alive.errors %}
-                        {{ error }}
-                        {% endfor %}
-                    </p>
-                    {% else %}
-                    {{ form.alive(class="flex justify-around block w-full mt-1 p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm", value=member.alive) }}
-                    {% endif %}
-                </div>
-
-                <!-- Deathdate (if not alive) -->
-                <div class="deathdate {% if member.alive %}hidden{% endif %}">
-                    {{ form.deathdate.label(class="block text-sm font-medium text-gray-700 mb-1") }}
-                    {% if form.deathdate.errors %}
-                    {{ form.deathdate(class="block w-full mt-1 p-2 border border-red-500 rounded-md shadow-sm focus:ring-red-500 focus:border-red-500 sm:text-sm") }}
-                    <p class="text-red-500 text-sm mt-2">
-                        {% for error in form.deathdate.errors %}
-                        {{ error }}
-                        {% endfor %}
-                    </p>
-                    {% else %}
-                    {{ form.deathdate(class="block w-full mt-1 p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm", value=member.deathdate) }}
-                    {% endif %}
-                </div>
-            </div>
-        </fieldset>
-
-        <!-- Submit Button -->
-        <div class="mt-8 mb-4 text-center">
-            {{ form.submit(class="px-8 py-3 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors duration-200", value='Update Member') }}
+        <!-- Last Name -->
+        <div>
+          {{ form.last_name.label(class="block text-sm font-medium text-gray-700
+          mb-1") }} {% if form.last_name.errors %} {{
+          form.last_name(class="block w-full mt-1 p-2 border border-red-500
+          rounded-md shadow-sm focus:ring-red-500 focus:border-red-500
+          sm:text-sm") }}
+          <p class="text-red-500 text-sm mt-2">
+            {% for error in form.last_name.errors %} {{ error }} {% endfor %}
+          </p>
+          {% else %} {{ form.last_name(class="block w-full mt-1 p-2 border
+          border-gray-300 rounded-md shadow-sm focus:ring-indigo-500
+          focus:border-indigo-500 sm:text-sm", value=member.last_name) }} {%
+          endif %}
         </div>
-    </form>
+
+        <!-- Gender -->
+        <div>
+          {{ form.gender.label(class="block text-sm font-medium text-gray-700
+          mb-1") }} {% if form.gender.errors %} {{ form.gender(class="block
+          w-full mt-1 p-2 border border-red-500 rounded-md shadow-sm
+          focus:ring-red-500 focus:border-red-500 sm:text-sm") }}
+          <p class="text-red-500 text-sm mt-2">
+            {% for error in form.gender.errors %} {{ error }} {% endfor %}
+          </p>
+          {% else %} {{ form.gender(class="block w-full mt-1 p-2 border
+          border-gray-300 rounded-md shadow-sm focus:ring-indigo-500
+          focus:border-indigo-500 sm:text-sm", value=member.gender) }} {% endif
+          %}
+        </div>
+
+        <!-- Birthdate -->
+        <div>
+          {{ form.birthdate.label(class="block text-sm font-medium text-gray-700
+          mb-1") }} {% if form.birthdate.errors %} {{
+          form.birthdate(class="block w-full mt-1 p-2 border border-red-500
+          rounded-md shadow-sm focus:ring-red-500 focus:border-red-500
+          sm:text-sm") }}
+          <p class="text-red-500 text-sm mt-2">
+            {% for error in form.birthdate.errors %} {{ error }} {% endfor %}
+          </p>
+          {% else %} {{ form.birthdate(class="block w-full mt-1 p-2 border
+          border-gray-300 rounded-md shadow-sm focus:ring-indigo-500
+          focus:border-indigo-500 sm:text-sm", value=member.birthdate) }} {%
+          endif %}
+        </div>
+
+        <!-- Alive -->
+        <div class="alive">
+          {{ form.alive.label(class="block text-sm font-medium text-gray-700
+          mb-1") }} {% if form.alive.errors %} {{ form.alive(class="flex
+          justify-around block w-full mt-1 p-2 border border-red-500 rounded-md
+          shadow-sm focus:ring-red-500 focus:border-red-500 sm:text-sm") }}
+          <p class="text-red-500 text-sm mt-2">
+            {% for error in form.alive.errors %} {{ error }} {% endfor %}
+          </p>
+          {% else %} {{ form.alive(class="flex justify-around block w-full mt-1
+          p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500
+          focus:border-indigo-500 sm:text-sm", value=member.alive) }} {% endif
+          %}
+        </div>
+
+        <!-- Deathdate (if not alive) -->
+        <div class="deathdate {% if member.alive %}hidden{% endif %}">
+          {{ form.deathdate.label(class="block text-sm font-medium text-gray-700
+          mb-1") }} {% if form.deathdate.errors %} {{
+          form.deathdate(class="block w-full mt-1 p-2 border border-red-500
+          rounded-md shadow-sm focus:ring-red-500 focus:border-red-500
+          sm:text-sm") }}
+          <p class="text-red-500 text-sm mt-2">
+            {% for error in form.deathdate.errors %} {{ error }} {% endfor %}
+          </p>
+          {% else %} {{ form.deathdate(class="block w-full mt-1 p-2 border
+          border-gray-300 rounded-md shadow-sm focus:ring-indigo-500
+          focus:border-indigo-500 sm:text-sm", value=member.deathdate) }} {%
+          endif %}
+        </div>
+      </div>
+    </fieldset>
+
+    <!-- Submit Button -->
+    <div class="mt-8 mb-4 text-center">
+      {{ form.submit(class="px-8 py-3 bg-indigo-600 text-white font-semibold
+      rounded-lg shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2
+      focus:ring-indigo-500 focus:ring-offset-2 transition-colors duration-200",
+      value='Update Member') }}
+    </div>
+  </form>
 </div>
 {% endblock %}

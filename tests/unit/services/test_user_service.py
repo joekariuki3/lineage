@@ -1,6 +1,7 @@
 from app.user.services import UserService
 from http import HTTPStatus
 
+
 def test_check_user_exists_false(app):
     """
     This function is a test case to verify the behavior of the `check_user_exists`
@@ -20,7 +21,8 @@ def test_check_user_exists_false(app):
     """
     user_service = UserService()
 
-    assert not user_service.check_user_exists(email='newuser@mail.com')
+    assert not user_service.check_user_exists(email="newuser@mail.com")
+
 
 def test_check_user_exists_true(test_user_1):
     """
@@ -42,6 +44,7 @@ def test_check_user_exists_true(test_user_1):
 
     assert service.check_user_exists(email=test_user_1.email)
 
+
 def test_create_user(session):
     """
     Performs a test for user creation using the UserService.
@@ -59,11 +62,14 @@ def test_create_user(session):
     """
     service = UserService()
 
-    response, status = service.create_user(name="new_user", email="ner_user@mail.com", password="newUserPass")
+    response, status = service.create_user(
+        name="new_user", email="ner_user@mail.com", password="newUserPass"
+    )
 
     assert status == HTTPStatus.CREATED
-    assert response['message'] == 'User created successfully'
-    assert response['data'] is not None
+    assert response["message"] == "User created successfully"
+    assert response["data"] is not None
+
 
 def test_create_user_conflicting_email(test_user_1):
     """
@@ -85,11 +91,14 @@ def test_create_user_conflicting_email(test_user_1):
     """
     service = UserService()
 
-    response, status = service.create_user(name="new_user", email=test_user_1.email, password="newUserPass")
+    response, status = service.create_user(
+        name="new_user", email=test_user_1.email, password="newUserPass"
+    )
 
     assert status == HTTPStatus.CONFLICT
-    assert response['message'] == 'User already exists, try logging in'
-    assert response['data'] is None
+    assert response["message"] == "User already exists, try logging in"
+    assert response["data"] is None
+
 
 def test_create_user_error(session, monkeypatch):
     """
@@ -112,11 +121,14 @@ def test_create_user_error(session, monkeypatch):
     # mock the database add method to raise an exception during the user creation
     monkeypatch.setattr(service.db, "add", mock_add)
 
-    response, status = service.create_user(name="new_user_2", email="ner_user_2@mail.com", password="new2UserPass")
+    response, status = service.create_user(
+        name="new_user_2", email="ner_user_2@mail.com", password="new2UserPass"
+    )
 
     assert status == HTTPStatus.INTERNAL_SERVER_ERROR
-    assert response['message'] == 'Something went wrong creating user'
-    assert response['data'] is None
+    assert response["message"] == "Something went wrong creating user"
+    assert response["data"] is None
+
 
 def test_get_user_no_inputs(session):
     """
@@ -138,8 +150,9 @@ def test_get_user_no_inputs(session):
     service = UserService()
     response, status = service.get_user()
     assert status == HTTPStatus.BAD_REQUEST
-    assert response['message'] == 'Email or user_id is required'
-    assert response['data'] is None
+    assert response["message"] == "Email or user_id is required"
+    assert response["data"] is None
+
 
 def test_get_user_by_email(test_user_1):
     """
@@ -160,8 +173,9 @@ def test_get_user_by_email(test_user_1):
     response, status = service.get_user(email=test_user_1.email)
 
     assert status == HTTPStatus.OK
-    assert response['message'] == 'User found'
-    assert response['data'] == test_user_1
+    assert response["message"] == "User found"
+    assert response["data"] == test_user_1
+
 
 def test_get_user_by_id(test_user_1):
     """
@@ -182,8 +196,9 @@ def test_get_user_by_id(test_user_1):
     response, status = service.get_user(user_id=test_user_1.user_id)
 
     assert status == HTTPStatus.OK
-    assert response['message'] == 'User found'
-    assert response['data'] == test_user_1
+    assert response["message"] == "User found"
+    assert response["data"] == test_user_1
+
 
 def test_get_user_not_found(session):
     """
@@ -208,8 +223,9 @@ def test_get_user_not_found(session):
     response, status = service.get_user(email="hello@mail.com")
 
     assert status == HTTPStatus.NOT_FOUND
-    assert response['message'] == 'User not found'
-    assert response['data'] is None
+    assert response["message"] == "User not found"
+    assert response["data"] is None
+
 
 def test_get_user_error(test_user_1, monkeypatch):
     """
@@ -232,7 +248,8 @@ def test_get_user_error(test_user_1, monkeypatch):
     response, status = service.get_user(email=test_user_1.email)
 
     assert status == HTTPStatus.INTERNAL_SERVER_ERROR
-    assert response['message'] == 'Something went wrong retrieving user'
+    assert response["message"] == "Something went wrong retrieving user"
+
 
 def test_update_user(test_user_1):
     """
@@ -258,15 +275,16 @@ def test_update_user(test_user_1):
         user=test_user_1,
         first_name="new_name",
         password="new_password",
-        emailVerify=True
+        emailVerify=True,
     )
 
-    user = response['data']
+    user = response["data"]
     assert status == HTTPStatus.OK
     assert user.first_name == "new_name"
-    assert user.emailVerify == True
+    assert user.emailVerify
     assert user.check_password("new_password")
-    assert response['message'] == 'User updated successfully'
+    assert response["message"] == "User updated successfully"
+
 
 def test_update_user_error(test_user_1, monkeypatch):
     """
@@ -293,12 +311,12 @@ def test_update_user_error(test_user_1, monkeypatch):
         user=test_user_1,
         first_name="new_name",
         password="new_password",
-        emailVerify=True
+        emailVerify=True,
     )
 
     assert status == HTTPStatus.INTERNAL_SERVER_ERROR
-    assert response['message'] == 'Something went wrong updating user information'
-    assert response['data'] is None
+    assert response["message"] == "Something went wrong updating user information"
+    assert response["data"] is None
 
     # undo the monkeypatch to avoid affecting other tests
     monkeypatch.undo()

@@ -1,5 +1,3 @@
-from flask import Blueprint
+from .routes import family_bp
 
-family_bp = Blueprint('family', __name__)
-
-from app.family import routes
+__all__ = ["family_bp"]

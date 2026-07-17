@@ -1,9 +1,8 @@
-import pytest
 from sqlalchemy.exc import SQLAlchemyError
 from app.link.services import LinkService
-from app.models import Link, User, Family
+from app.models import Link, Family
 from http import HTTPStatus
-from flask_login import login_user, logout_user, current_user
+from flask_login import login_user
 
 
 def test_check_existing_link(test_link_1):

@@ -1,4 +1,3 @@
-import pytest
 from app.family.services import FamilyService
 from app.models import Family
 

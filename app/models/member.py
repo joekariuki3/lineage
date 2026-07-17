@@ -1,15 +1,15 @@
-from . import db
+from app.extensions import db
 from datetime import date
 from sqlalchemy.orm import Mapped
-from typing import Optional, List, Dict, Any
+from typing import Optional, Dict, Any
 from flask_login import current_user
 from app.utils.constants import Gender
 
 
-
 class Member(db.Model):
     """Represents a Member entity in the family tree database."""
-    __tablename__ = 'members'
+
+    __tablename__ = "members"
 
     # Personal Information
     member_id: Mapped[int] = db.Column(db.Integer, primary_key=True)
@@ -24,35 +24,52 @@ class Member(db.Model):
     root: Mapped[bool] = db.Column(db.Boolean, default=False)
 
     # Foreign Keys
-    mother: Mapped[Optional[int]] = db.Column(db.Integer, db.ForeignKey('members.member_id'), nullable=True)
-    father: Mapped[Optional[int]] = db.Column(db.Integer, db.ForeignKey('members.member_id'), nullable=True)
-    family_id: Mapped[int] = db.Column(db.Integer, db.ForeignKey('families.family_id'), nullable=False)
-    user_id: Mapped[Optional[int]] = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=True)
+    mother: Mapped[Optional[int]] = db.Column(
+        db.Integer, db.ForeignKey("members.member_id"), nullable=True
+    )
+    father: Mapped[Optional[int]] = db.Column(
+        db.Integer, db.ForeignKey("members.member_id"), nullable=True
+    )
+    family_id: Mapped[int] = db.Column(
+        db.Integer, db.ForeignKey("families.family_id"), nullable=False
+    )
+    user_id: Mapped[Optional[int]] = db.Column(
+        db.Integer, db.ForeignKey("users.user_id"), nullable=True
+    )
 
     # Relationship
-    family: Mapped["Family"] = db.relationship('Family', back_populates='members')
-    
+    family = db.relationship("Family", back_populates="members")
+
     # Relationship References
     # initiated_relationships
-    relationships1: Mapped[List["Relationship"]] = db.relationship(
-        'Relationship',
+    relationships1 = db.relationship(
+        "Relationship",
         foreign_keys="[Relationship.member_id_1]",
         cascade="all, delete-orphan",
-        back_populates='member1'
+        back_populates="member1",
     )
     # received_relationships
-    relationships2: Mapped[List["Relationship"]] = db.relationship(
-        'Relationship',
+    relationships2 = db.relationship(
+        "Relationship",
         foreign_keys="[Relationship.member_id_2]",
         cascade="all, delete-orphan",
-        back_populates='member2'
+        back_populates="member2",
     )
 
-    def __init__(self, first_name: str, last_name: str, family_id: int,
-                 gender: Gender, birthdate: date = None,
-                 deathdate: Optional[date] = None, alive: Optional[bool] = None,
-                 root: bool = False, mother: Optional[int] = None,
-                 father: Optional[int] = None, user_id: Optional[int] = None) -> None:
+    def __init__(
+        self,
+        first_name: str,
+        last_name: str,
+        family_id: int,
+        gender: Gender,
+        birthdate: date | None = None,
+        deathdate: Optional[date] = None,
+        alive: Optional[bool] = None,
+        root: bool = False,
+        mother: Optional[int] = None,
+        father: Optional[int] = None,
+        user_id: Optional[int] = None,
+    ) -> None:
         """Initialize a new Member instance.
 
         Args:
@@ -95,8 +112,14 @@ class Member(db.Model):
         end_date = self.deathdate if self.deathdate else date.today()
         if end_date < self.birthdate:
             raise ValueError("Death date cannot be before birth date")
-        return (end_date.year - self.birthdate.year -
-                ((end_date.month, end_date.day) < (self.birthdate.month, self.birthdate.day)))
+        return (
+            end_date.year
+            - self.birthdate.year
+            - (
+                (end_date.month, end_date.day)
+                < (self.birthdate.month, self.birthdate.day)
+            )
+        )
 
     def validate(self) -> None:
         """Validates the member data consistency."""
@@ -114,21 +137,27 @@ class Member(db.Model):
 
         # Validate parent-child relationship
         if self.father and self.mother and self.father == self.mother:
-            raise ValueError("Child Member cannot have the same Person as father and mother")
+            raise ValueError(
+                "Child Member cannot have the same Person as father and mother"
+            )
 
         if self.father and self.mother:
             father = db.session.get(Member, self.father)
             mother = db.session.get(Member, self.mother)
             if self.age > father.age:
-                raise ValueError(f"Child {self.full_name}, of Birth-date:{self.birthdate} and Age:{self.age} cannot be\n"
-                                 f"older than Father: {father.full_name}, of Birth-date:{father.birthdate}\n"
-                                 f"and Age:{father.age}")
+                raise ValueError(
+                    f"Child {self.full_name}, of Birth-date:{self.birthdate} and Age:{self.age} cannot be\n"
+                    f"older than Father: {father.full_name}, of Birth-date:{father.birthdate}\n"
+                    f"and Age:{father.age}"
+                )
             if self.age > mother.age:
-                raise ValueError(f"Child {self.full_name}, of Birth-date:{self.birthdate} and Age:{self.age} cannot be\n"
-                                 f"older than Mother: {mother.full_name}, of Birth-date:{mother.birthdate}\n"
-                                 f"and Age:{mother.age}")
+                raise ValueError(
+                    f"Child {self.full_name}, of Birth-date:{self.birthdate} and Age:{self.age} cannot be\n"
+                    f"older than Mother: {mother.full_name}, of Birth-date:{mother.birthdate}\n"
+                    f"and Age:{mother.age}"
+                )
 
-    def to_dict(self, access_level: str = 'family') -> Dict[str, Any]:
+    def to_dict(self, access_level: str = "family") -> Dict[str, Any]:
         """
         Converts the member instance to a dictionary representation based on access level.
 
@@ -143,36 +172,36 @@ class Member(db.Model):
         """
         # Basic information available to all authenticated users
         basic_data = {
-            'member_id': self.member_id,
-            'first_name': self.first_name,
-            'last_name': self.last_name,
-            'full_name': self.full_name,
+            "member_id": self.member_id,
+            "first_name": self.first_name,
+            "last_name": self.last_name,
+            "full_name": self.full_name,
         }
 
         # Check if the current user has family access
         has_family_access = current_user.is_authenticated and (
-                self.family_id in [family.family_id for family in current_user.families]
+            self.family_id in [family.family_id for family in current_user.families]
         )
 
         # Check if the current user is admin
         # is_admin = current_user.is_authenticated and current_user.is_admin
 
-        if access_level == 'basic':
+        if access_level == "basic":
             return basic_data
 
-        if access_level == 'family' and has_family_access:
+        if access_level == "family" and has_family_access:
             family_data = {
                 **basic_data,
-                'gender': self.gender,
-                'birthdate': self.birthdate,
-                'age': self.age,
-                'alive': self.alive,
-                'root': self.root,
-                'family_id': self.family_id,
+                "gender": self.gender,
+                "birthdate": self.birthdate,
+                "age": self.age,
+                "alive": self.alive,
+                "root": self.root,
+                "family_id": self.family_id,
             }
             # Only include death date if the person is deceased
             if not self.alive and self.deathdate:
-                family_data['deathdate'] = self.deathdate
+                family_data["deathdate"] = self.deathdate
             return family_data
         #
         # if access_level == 'admin' and is_admin:
