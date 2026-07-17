@@ -1,6 +1,7 @@
 ## Lineage Entity Relationship Diagram (ERD)
 
 **Entity Relationship Diagram (ERD)**
+
 ```mermaid
 erDiagram
     USERS ||--o{ MEMBERS : "claims/manages"
