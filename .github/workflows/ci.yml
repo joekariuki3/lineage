@@ -47,7 +47,7 @@ jobs:
           pip install bandit
 
       - name: Bandit security check
-        run: bandit -r . -x tests/
+        run: bandit -c pyproject.toml  -r .
 
   Safety-security-scan:
     name: Safety-Security-Scan
