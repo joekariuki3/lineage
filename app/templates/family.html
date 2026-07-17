@@ -1,29 +1,37 @@
-{% extends 'base.html' %}
+{% extends 'base.html' %} {% block content %}
 
-{% block content %}
-
-<section class="h-screen">
+<section class="container mx-auto px-4">
   {% if families and families | length > 1 %}
   <div class="text-center mt-8">
     <!-- User Info -->
-    <h3 class="text-xl font-semibold text-gray-800 mb-4">{{ current_user.name }}, you are managing {{ families | length
-      }} Families</h3>
+    <h3 class="text-xl font-semibold text-gray-800 mb-4">
+      {{ current_user.name }}, you are managing {{ families | length }} Families
+    </h3>
 
     <!-- Dropdown Button Group -->
     <div class="relative inline-block">
-      <button type="button"
+      <button
+        type="button"
         class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg shadow hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50 transition"
-        id="dropdownButton" aria-expanded="false" data-bs-toggle="dropdown" data-bs-display="static">
+        id="dropdownButton"
+        aria-expanded="false"
+        data-bs-toggle="dropdown"
+        data-bs-display="static"
+      >
         Select one to display
       </button>
 
       <!-- Dropdown Menu -->
-      <ul class="absolute mt-2 w-56 bg-white border border-gray-200 rounded-lg shadow-lg z-10 dropdown-menu hidden"
-        aria-labelledby="dropdownButton">
+      <ul
+        class="absolute mt-2 w-56 bg-white border border-gray-200 rounded-lg shadow-lg z-10 dropdown-menu hidden"
+        aria-labelledby="dropdownButton"
+      >
         {% for family in families %}
         <li>
-          <a href="{{ url_for('family.index', family_id=family.family_id) }}"
-            class="block px-4 py-2 text-gray-700 hover:bg-gray-100 transition">
+          <a
+            href="{{ url_for('family.index', family_id=family.family_id) }}"
+            class="block px-4 py-2 text-gray-700 hover:bg-gray-100 transition"
+          >
             {{ family.name }}
           </a>
         </li>
@@ -34,66 +42,97 @@
   {% elif families and families | length == 1 %}
   <!-- start key  -->
   <div class="key">
-    <div class="main__key" style="display: flex; align-items: center; display: flex; margin-bottom: 40px;">
-
-      <div class="key" style="
-            display: flex;
-            align-items: center;
-            margin-right: 15px;
-            display: flex;
-          ">
-        <div class="key__list key__active" style="
-              width: 15px;
-              height: 15px;
-              border-radius: 50%;
-              margin-right: 5px;
-              background: rgb(27, 154, 27);
-            "></div>
+    <div
+      class="main__key"
+      style="
+        display: flex;
+        align-items: center;
+        display: flex;
+        margin-bottom: 40px;
+      "
+    >
+      <div
+        class="key"
+        style="
+          display: flex;
+          align-items: center;
+          margin-right: 15px;
+          display: flex;
+        "
+      >
+        <div
+          class="key__list key__active"
+          style="
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            margin-right: 5px;
+            background: rgb(27, 154, 27);
+          "
+        ></div>
         Node
       </div>
-      <div class="key" style="
-            display: flex;
-            align-items: center;
-            margin-right: 15px;
-            display: flex;
-          ">
-        <div class="key__list key__deceased" style="
-              width: 15px;
-              height: 15px;
-              border-radius: 50%;
-              margin-right: 5px;
-              background: gray;
-            "></div>
+      <div
+        class="key"
+        style="
+          display: flex;
+          align-items: center;
+          margin-right: 15px;
+          display: flex;
+        "
+      >
+        <div
+          class="key__list key__deceased"
+          style="
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            margin-right: 5px;
+            background: gray;
+          "
+        ></div>
         Deceased
       </div>
-      <div class="key" style="
-            display: flex;
-            align-items: center;
-            margin-right: 15px;
-            display: flex;
-          ">
-        <div class="key__list key__wife" style="
-              width: 15px;
-              height: 15px;
-              border-radius: 50%;
-              margin-right: 5px;
-              background: #fc46aa;
-            "></div>
+      <div
+        class="key"
+        style="
+          display: flex;
+          align-items: center;
+          margin-right: 15px;
+          display: flex;
+        "
+      >
+        <div
+          class="key__list key__wife"
+          style="
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            margin-right: 5px;
+            background: #fc46aa;
+          "
+        ></div>
         Wife
       </div>
-      <div class="key" style="
-            display: flex;
-            align-items: center;
-            margin-right: 15px;
-            display: flex;
-          ">
-        <div class="key__list key__husband" style="
-              width: 15px;
-              height: 15px;
-              border-radius: 50%;
-              margin-right: 5px;
-              background: #279bc9;
-            "></div>
+      <div
+        class="key"
+        style="
+          display: flex;
+          align-items: center;
+          margin-right: 15px;
+          display: flex;
+        "
+      >
+        <div
+          class="key__list key__husband"
+          style="
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            margin-right: 5px;
+            background: #279bc9;
+          "
+        ></div>
         Husband
       </div>
     </div>
@@ -101,59 +140,76 @@
   <!-- end key  -->
   <div class="family-section">
     <h2>{{families[0].name}}</h2>
-    {% for member in families[0].members %}
-    {% if member.root %}
+    {% for member in families[0].members %} {% if member.root %}
     <ul class="tree">
       <li>
         <details>
           {% if member.alive %}
-          <summary class="member" member1_id="{{member.member_id}}" onclick="getSpouse(event)">
+          <summary
+            class="member"
+            member1_id="{{member.member_id}}"
+            onclick="getSpouse(event)"
+          >
             {% else%}
-            <summary class="member deceased" member1_id="{{member.member_id}}" onclick="getSpouse(event)">
-              {% endif%}
-              {{member.first_name}} {{member.last_name}}
+            <summary
+              class="member deceased"
+              member1_id="{{member.member_id}}"
+              onclick="getSpouse(event)"
+            >
+              {% endif%} {{member.first_name}} {{member.last_name}}
             </summary>
             <div class="member-buttons mt-1">
               {% if current_user.is_authenticated%}
-              <a href="{{url_for('member.add_spouse', member_id=member.member_id)}}" class="btn btn-light btn-sm">
+              <a
+                href="{{url_for('member.add_spouse', member_id=member.member_id)}}"
+                class="btn btn-light btn-sm"
+              >
                 + spouse
-              </a> |
-              {% endif%}
-              <a href="{{url_for('member.member_profile', member_id=member.member_id)}}"> More...</a>
+              </a>
+              | {% endif%}
+              <a
+                href="{{url_for('member.member_profile', member_id=member.member_id)}}"
+              >
+                More...</a
+              >
             </div>
             <div id="spouse_{{member.member_id}}"></div>
+          </summary>
         </details>
       </li>
     </ul>
-    {% endif %}
-    {% endfor %}
+    {% endif %} {% endfor %}
   </div>
   {% else %}
   <div class="key pt-4 flex justify-center">
-    <a href="{{ url_for('family.create_family') }}"
-      class="btn btn-outline-primary flex items-center space-x-2 p-2 rounded-md border border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white transition ease-in-out duration-150">
+    <a
+      href="{{ url_for('family.create_family') }}"
+      class="btn btn-outline-primary flex items-center space-x-2 p-2 rounded-md border border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white transition ease-in-out duration-150"
+    >
       {% include "icons/familySvg.html" %}
       <span>Create Family</span>
     </a>
   </div>
-
 
   {% endif %}
 </section>
 
 <script>
   // Toggle dropdown visibility
-  const dropdownButton = document.getElementById('dropdownButton');
+  const dropdownButton = document.getElementById("dropdownButton");
   const dropdownMenu = dropdownButton.nextElementSibling;
 
-  dropdownButton.addEventListener('click', () => {
-    dropdownMenu.classList.toggle('hidden');
+  dropdownButton.addEventListener("click", () => {
+    dropdownMenu.classList.toggle("hidden");
   });
 
   // Close the dropdown when clicking outside
-  document.addEventListener('click', (e) => {
-    if (!dropdownButton.contains(e.target) && !dropdownMenu.contains(e.target)) {
-      dropdownMenu.classList.add('hidden');
+  document.addEventListener("click", (e) => {
+    if (
+      !dropdownButton.contains(e.target) &&
+      !dropdownMenu.contains(e.target)
+    ) {
+      dropdownMenu.classList.add("hidden");
     }
   });
 </script>

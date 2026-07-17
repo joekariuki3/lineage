@@ -1,0 +1,43 @@
+name: CD for lineage develop to cPanel
+
+on:
+  workflow_run:
+    workflows:
+      - CI for lineage
+    types:
+      - completed
+    branches:
+      - develop
+
+jobs:
+  deploy-develop-cpanel:
+    runs-on: ubuntu-latest
+    if: github.event.workflow_run.conclusion == 'success'
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v6
+
+      - name: Checkout tested commit
+        if: github.event_name == 'workflow_run'
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+
+      - name: Trigger Passenger restart
+        run: |
+          mkdir -p ./tmp
+          printf 'restart: %s\n' "$(date -u +'%Y-%m-%dT%H:%M:%SZ')" > ./tmp/restart.txt
+
+      - name: Sync Files to cPanel
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: ./
+          server-dir: /${{secrets.DEVELOP_DIRECTORY_NAME }}/
+          exclude: |
+            **/__pycache__/**
+            **/*.pyc
+            .venv/**
+            ./tests/**

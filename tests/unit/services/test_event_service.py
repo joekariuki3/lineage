@@ -1,4 +1,3 @@
-import pytest
 from app.models import Event
 from app.event.services import EventService
 from datetime import datetime, timedelta

@@ -1,5 +1,3 @@
-from flask import Blueprint
+from .routes import member_bp
 
-member_bp = Blueprint('member', __name__)
-
-from app.member import routes
+__all__ = ["member_bp"]

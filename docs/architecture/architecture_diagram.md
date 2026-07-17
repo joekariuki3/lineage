@@ -1,6 +1,7 @@
 ## Lineage Architecture Diagram
 
 **Application Architecture Diagram**
+
 ```mermaid
 graph TD
     Client[Web Browser]

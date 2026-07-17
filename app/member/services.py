@@ -41,7 +41,7 @@ class MemberService:
             elif not MemberService.is_member_accessible_by_user(member):
                 return service_response(403, "You do not have permission to access this member", "danger", None)
             return service_response(200, "Member retrieved successfully", "success", member)
-        except Exception as e:
+        except Exception:
             # TODO: log error
             return service_response(500, "Error retrieving member", "danger", None)
 
@@ -174,7 +174,7 @@ class MemberService:
             if not siblings:
                 return service_response(404, "No siblings found", "warning", None)
             return service_response(200, "Siblings retrieved successfully", "success", siblings)
-        except Exception as e:
+        except Exception:
             # TODO: log error
             return service_response(500, "Error retrieving siblings", "danger", None)
 
@@ -206,7 +206,7 @@ class MemberService:
             if not children:
                 return service_response(404, "No children found", "warning", None)
             return service_response(200, "Children retrieved successfully", "success", children)
-        except Exception as e:
+        except Exception:
             # TODO: log error
             return service_response(500, "Error retrieving children", "danger", None)
 
@@ -246,7 +246,7 @@ class MemberService:
             if not spouses:
                 return service_response(404, "No spouses found", "warning", None)
             return service_response(200, "Spouses retrieved successfully", "success", spouses)
-        except Exception as e:
+        except Exception:
             # TODO: log error
             return service_response(500, "Error retrieving spouses", "danger", None)
 
@@ -272,7 +272,7 @@ class MemberService:
 
             db.session.commit()
             return service_response(200, "Member updated successfully", "success", member)
-        except Exception as e:
+        except Exception:
             self.db.rollback()
             # TODO: log error
             return service_response(500, "Error updating member", "danger", None)
@@ -296,7 +296,7 @@ class MemberService:
             self.db.delete(member)
             self.db.commit()
             return service_response(200, "Member deleted successfully", "success", None)
-        except Exception as e:
+        except Exception:
             self.db.rollback()
             # TODO: log error
             return service_response(500, "Error deleting member", "danger", None)

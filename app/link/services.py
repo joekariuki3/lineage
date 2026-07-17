@@ -47,7 +47,7 @@ class LinkService:
                 "success",
                 new_link
             )
-        except Exception as e:
+        except Exception:
             self.db.rollback()
             # Todo: log the error
             return service_response(
@@ -88,7 +88,7 @@ class LinkService:
             self.db.commit()
             return service_response(HTTPStatus.OK, "Link deleted successfully", "success", None)
             
-        except SQLAlchemyError as e:
+        except SQLAlchemyError:
             self.db.rollback()
             # logger.error(f"Database error while deleting link {link_id}: {str(e)}")
             return service_response(
@@ -97,7 +97,7 @@ class LinkService:
                 "danger",
                 None
             )
-        except Exception as e:
+        except Exception:
             self.db.rollback()
             # logger.error(f"Unexpected error while deleting link {link_id}: {str(e)}")
             return service_response(

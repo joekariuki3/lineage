@@ -15,3 +15,9 @@ __pycache__
 .idea/
 
 weekly_journal/*
+
+# safety scan reports
+.safety-project.ini
+
+# act workflow files
+act

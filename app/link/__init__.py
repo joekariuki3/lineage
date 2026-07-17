@@ -1,5 +1,3 @@
-from flask import Blueprint
+from .routes import link_bp
 
-link_bp = Blueprint('link', __name__)
-
-from app.link import  routes
+__all__ = ["link_bp"]

@@ -1,32 +1,55 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <!-- favicon -->
-    <link rel="apple-touch-icon" sizes="180x180"
-        href="{{ url_for('static', filename='images/favicon/apple-touch-icon.png') }}">
-    <link rel="icon" type="image/png" sizes="32x32"
-        href="{{ url_for('static', filename='images/favicon/favicon-32x32.png ') }}">
-    <link rel="icon" type="image/png" sizes="16x16"
-        href=" {{ url_for('static', filename='images/favicon/favicon-16x16.png') }}">
-    <link rel="manifest" href="{{ url_for('static', filename='images/favicon/site.webmanifest') }}">
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="{{ url_for('static', filename='images/favicon/apple-touch-icon.png') }}"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="{{ url_for('static', filename='images/favicon/favicon-32x32.png ') }}"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href=" {{ url_for('static', filename='images/favicon/favicon-16x16.png') }}"
+    />
+    <link
+      rel="manifest"
+      href="{{ url_for('static', filename='images/favicon/site.webmanifest') }}"
+    />
     <!-- bootstrap cdn -->
     <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous"> -->
     <!-- tailwing flowbite cdn -->
-    <link href="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.css" rel="stylesheet" />
-    <!-- google font -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700&family=Oswald:wght@200;300;400;500;600;700&family=Playfair+Display&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:wght@300;400&display=swap"
-        rel="stylesheet">
+      href="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.css"
+      rel="stylesheet"
+    />
+    <!-- google font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700&family=Oswald:wght@200;300;400;500;600;700&family=Playfair+Display&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:wght@300;400&display=swap"
+      rel="stylesheet"
+    />
     <!-- font awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
     <!-- my css (custom) -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles/styles.css') }}">
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='styles/styles.css') }}"
+    />
     <!-- bootstrap js -->
     <!-- <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
@@ -37,15 +60,21 @@
     <script defer src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 
     <!-- js for modal -->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-        crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
-        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-        crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
-        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-        crossorigin="anonymous"></script>
+    <script
+      src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+      integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
+      integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+      integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+      crossorigin="anonymous"
+    ></script>
 
     <!-- my js (custom) -->
     <script defer src="{{ url_for('static', filename='js/main.js') }}"></script>
@@ -56,129 +85,207 @@
     {% else %}
     <title>Lineage</title>
     {% endif %}
-</head>
+  </head>
 
-<body>
+  <body class="flex flex-col min-h-screen">
     <!-- nav bar -->
     <nav class="bg-white border-gray-200">
-        <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-            <a href="{{url_for('main.index')}}" class="flex items-center space-x-3 rtl:space-x-reverse">
-                <span class="self-center text-2xl font-semibold whitespace-nowrap">Lineage</span>
-            </a>
-            <button data-collapse-toggle="navbar-dropdown" type="button"
-                class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200"
-                aria-controls="navbar-dropdown" aria-expanded="false">
-                <span class="sr-only">Open main menu</span>
-                <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-                    viewBox="0 0 17 14">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M1 1h15M1 7h15M1 13h15" />
-                </svg>
-            </button>
-            <div class="hidden w-full md:block md:w-auto" id="navbar-dropdown">
+      <div
+        class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4"
+      >
+        <a
+          href="{{url_for('main.index')}}"
+          class="flex items-center space-x-3 rtl:space-x-reverse"
+        >
+          <span class="self-center text-2xl font-semibold whitespace-nowrap"
+            >Lineage</span
+          >
+        </a>
+        <button
+          data-collapse-toggle="navbar-dropdown"
+          type="button"
+          class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200"
+          aria-controls="navbar-dropdown"
+          aria-expanded="false"
+        >
+          <span class="sr-only">Open main menu</span>
+          <svg
+            class="w-5 h-5"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 17 14"
+          >
+            <path
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M1 1h15M1 7h15M1 13h15"
+            />
+          </svg>
+        </button>
+        <div class="hidden w-full md:block md:w-auto" id="navbar-dropdown">
+          <ul
+            class="flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white"
+          >
+            {% if current_user.is_authenticated %}
+            <li>
+              <button
+                id="dropdownNavbarLink"
+                data-dropdown-toggle="dropdownNavbarFamily"
+                class="flex items-center justify-between w-full py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 md:w-auto"
+              >
+                Family {% include "icons/dropDownSvg.html"%}
+              </button>
+              <!-- Dropdown menuFamily -->
+              <div
+                id="dropdownNavbarFamily"
+                class="z-10 hidden font-normal bg-white divide-y divide-gray-100 rounded-lg shadow-sm w-44"
+              >
                 <ul
-                    class="flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white">
-                    {% if current_user.is_authenticated %}
-                    <li>
-                        <button id="dropdownNavbarLink" data-dropdown-toggle="dropdownNavbarFamily"
-                            class="flex items-center justify-between w-full py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 md:w-auto">Family
-                            {% include "icons/dropDownSvg.html"%}
-                        </button>
-                        <!-- Dropdown menuFamily -->
-                        <div id="dropdownNavbarFamily"
-                            class="z-10 hidden font-normal bg-white divide-y divide-gray-100 rounded-lg shadow-sm w-44">
-                            <ul class="py-2 text-sm text-gray-700" aria-labelledby="dropdownLargeButton">
-                                <li>
-                                    <a href="{{ url_for('family.index') }}"
-                                        class="block px-4 py-2 hover:bg-gray-100">Family-tree</a>
-                                </li>
-                                <li>
-                                    <a href="{{ url_for('family.create_family') }}"
-                                        class="block px-4 py-2 hover:bg-gray-100">Add Family</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
-                    <li>
-                        <button id="dropdownNavbarLink" data-dropdown-toggle="dropdownNavbarEvent"
-                            class="flex items-center justify-between w-full py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 md:w-auto">Event
-                            {% include "icons/dropDownSvg.html"%}</button>
-                        <!-- Dropdown menuEvent -->
-                        <div id="dropdownNavbarEvent"
-                            class="z-10 hidden font-normal bg-white divide-y divide-gray-100 rounded-lg shadow-sm w-44">
-                            <ul class="py-2 text-sm text-gray-700" aria-labelledby="dropdownLargeButton">
-                                <li>
-                                    <a href="{{ url_for('event.add_event')}}"
-                                        class="block px-4 py-2 hover:bg-gray-100">Add
-                                        Event</a>
-                                </li>
-                                <li aria-labelledby="dropdownNavbarLink">
-                                    <button id="doubleDropdownButton" data-dropdown-toggle="DropdownFamilyEvents"
-                                        data-dropdown-placement="bottom-start" type="button"
-                                        class="flex items-center justify-between w-full px-4 py-2 hover:bg-gray-100">View
-                                        Events{% include "icons/dropDownSvg.html"%}</button>
-                                    <div id="DropdownFamilyEvents"
-                                        class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow-sm w-44">
-                                        <ul class="py-2 text-sm text-gray-700"
-                                            aria-labelledby="DropdownFamilyEventsButton">
-                                            {% if current_user.families %}
-                                            {% for family in current_user.families%}
-                                            <li>
-                                                <a href="{{url_for('event.get_events', family_id =family.family_id)}}"
-                                                    class="block px-4 py-2 hover:bg-gray-100">{{family.name}} Event</a>
-                                            </li>
-                                            {% endfor %}
-                                            {% endif%}
-                                        </ul>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
-                    <li>
-                        <button id="dropdownNavbarLink" data-dropdown-toggle="dropdownNavbar"
-                            class="flex items-center justify-between w-full py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 md:w-auto">{{current_user.name}}
-                            {% include "icons/userSvg.html"%}</button>
-                        <!-- Dropdown menu -->
-                        <div id="dropdownNavbar"
-                            class="z-10 hidden font-normal bg-white divide-y divide-gray-100 rounded-lg shadow-sm w-44">
-                            <ul class="py-2 text-sm text-gray-700" aria-labelledby="dropdownLargeButton">
-                                <li>
-                                    <a href="{{ url_for('user.user_profile')}}"
-                                        class="block px-4 py-2 hover:bg-gray-100">Profile</a>
-                                </li>
-                            </ul>
-                            <div class="py-1">
-                                <a href="{{ url_for('auth.logout')}}"
-                                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Log
-                                    out</a>
-                            </div>
-                        </div>
-                    </li>
-                    {% else %}
-                    <li>
-                        <a href="{{ url_for('auth.guest') }}"
-                            class="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 ">Guest</a>
-                    </li>
-                    <li>
-                        <a href="{{ url_for('auth.login') }}"
-                            class="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 ">Login</a>
-                    </li>
-                    <li>
-                        <a href="{{ url_for('auth.register') }}"
-                            class="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0">Register</a>
-                    </li>
-                    {% endif %}
+                  class="py-2 text-sm text-gray-700"
+                  aria-labelledby="dropdownLargeButton"
+                >
+                  <li>
+                    <a
+                      href="{{ url_for('family.index') }}"
+                      class="block px-4 py-2 hover:bg-gray-100"
+                      >Family-tree</a
+                    >
+                  </li>
+                  <li>
+                    <a
+                      href="{{ url_for('family.create_family') }}"
+                      class="block px-4 py-2 hover:bg-gray-100"
+                      >Add Family</a
+                    >
+                  </li>
                 </ul>
-            </div>
+              </div>
+            </li>
+            <li>
+              <button
+                id="dropdownNavbarLink"
+                data-dropdown-toggle="dropdownNavbarEvent"
+                class="flex items-center justify-between w-full py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 md:w-auto"
+              >
+                Event {% include "icons/dropDownSvg.html"%}
+              </button>
+              <!-- Dropdown menuEvent -->
+              <div
+                id="dropdownNavbarEvent"
+                class="z-10 hidden font-normal bg-white divide-y divide-gray-100 rounded-lg shadow-sm w-44"
+              >
+                <ul
+                  class="py-2 text-sm text-gray-700"
+                  aria-labelledby="dropdownLargeButton"
+                >
+                  <li>
+                    <a
+                      href="{{ url_for('event.add_event')}}"
+                      class="block px-4 py-2 hover:bg-gray-100"
+                      >Add Event</a
+                    >
+                  </li>
+                  <li aria-labelledby="dropdownNavbarLink">
+                    <button
+                      id="doubleDropdownButton"
+                      data-dropdown-toggle="DropdownFamilyEvents"
+                      data-dropdown-placement="bottom-start"
+                      type="button"
+                      class="flex items-center justify-between w-full px-4 py-2 hover:bg-gray-100"
+                    >
+                      View Events{% include "icons/dropDownSvg.html"%}
+                    </button>
+                    <div
+                      id="DropdownFamilyEvents"
+                      class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow-sm w-44"
+                    >
+                      <ul
+                        class="py-2 text-sm text-gray-700"
+                        aria-labelledby="DropdownFamilyEventsButton"
+                      >
+                        {% if current_user.families %} {% for family in
+                        current_user.families%}
+                        <li>
+                          <a
+                            href="{{url_for('event.get_events', family_id =family.family_id)}}"
+                            class="block px-4 py-2 hover:bg-gray-100"
+                            >{{family.name}} Event</a
+                          >
+                        </li>
+                        {% endfor %} {% endif%}
+                      </ul>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </li>
+            <li>
+              <button
+                id="dropdownNavbarLink"
+                data-dropdown-toggle="dropdownNavbar"
+                class="flex items-center justify-between w-full py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 md:w-auto"
+              >
+                {{current_user.name}} {% include "icons/userSvg.html"%}
+              </button>
+              <!-- Dropdown menu -->
+              <div
+                id="dropdownNavbar"
+                class="z-10 hidden font-normal bg-white divide-y divide-gray-100 rounded-lg shadow-sm w-44"
+              >
+                <ul
+                  class="py-2 text-sm text-gray-700"
+                  aria-labelledby="dropdownLargeButton"
+                >
+                  <li>
+                    <a
+                      href="{{ url_for('user.user_profile')}}"
+                      class="block px-4 py-2 hover:bg-gray-100"
+                      >Profile</a
+                    >
+                  </li>
+                </ul>
+                <div class="py-1">
+                  <a
+                    href="{{ url_for('auth.logout')}}"
+                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    >Log out</a
+                  >
+                </div>
+              </div>
+            </li>
+            {% else %}
+            <li>
+              <a
+                href="{{ url_for('auth.guest') }}"
+                class="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0"
+                >Guest</a
+              >
+            </li>
+            <li>
+              <a
+                href="{{ url_for('auth.login') }}"
+                class="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0"
+                >Login</a
+              >
+            </li>
+            <li>
+              <a
+                href="{{ url_for('auth.register') }}"
+                class="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0"
+                >Register</a
+              >
+            </li>
+            {% endif %}
+          </ul>
         </div>
+      </div>
     </nav>
 
-    <main class="bg-gray-100 pt-4">
-        {% include "notification.html"%}
-
-        {% block content %}
-        {% endblock %}
+    <main class="flex-grow bg-gray-100 pt-4">
+      {% include "notification.html"%} {% block content %} {% endblock %}
     </main>
 
     <!-- footer -->
@@ -186,6 +293,5 @@
 
     <!-- tailwind flowbite js -->
     <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
-</body>
-
+  </body>
 </html>

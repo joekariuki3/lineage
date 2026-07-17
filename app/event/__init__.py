@@ -1,5 +1,3 @@
-from flask import Blueprint
+from .routes import event_bp
 
-event_bp = Blueprint('event', __name__)
-
-from app.event import routes
+__all__ = ["event_bp"]

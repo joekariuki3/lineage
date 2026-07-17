@@ -1,14 +1,27 @@
-from . import member_bp
-from flask import render_template, redirect, url_for, flash, request, jsonify, make_response
+from flask import (
+    Blueprint,
+    render_template,
+    redirect,
+    url_for,
+    flash,
+    request,
+    jsonify,
+    make_response,
+)
 from flask_login import current_user, login_required
 from .forms import MemberForm
 from app.utils.constants import RelationType
 from .services import MemberService
 from app.relationship.services import RelationshipService
-from typing import  Dict, Tuple, Union, List
+from typing import Dict, Tuple, Union, List
 from app.models import Member
 
-def retrieve_member(member_id: int, call_type: Union[str, None] =None) -> Union[Member, None, Tuple[Dict, int]]:
+member_bp = Blueprint("member", __name__)
+
+
+def retrieve_member(
+    member_id: int, call_type: Union[str, None] = None
+) -> Union[Member, None, Tuple[Dict, int]]:
     """
     Retrieve a member's details based on the provided member ID.
 
@@ -35,10 +48,13 @@ def retrieve_member(member_id: int, call_type: Union[str, None] =None) -> Union[
     data, status = member_service.get_member(member_id)
     if call_type == "api":
         return data, status
-    member = data.get('data')
+    member = data.get("data")
     return member
 
-def retrieve_spouses(member_id: int, call_type: Union[str, None] = None) -> Union[List[Member], None, Tuple[Dict, int]]:
+
+def retrieve_spouses(
+    member_id: int, call_type: Union[str, None] = None
+) -> Union[List[Member], None, Tuple[Dict, int]]:
     """
     retrieves the spouses of a member based on the provided member ID. Depending on the provided
     call type or the success of the operation, returns either spouse data, a tuple containing
@@ -60,10 +76,13 @@ def retrieve_spouses(member_id: int, call_type: Union[str, None] = None) -> Unio
     data, status = member_service.get_member_spouses(member_id)
     if call_type == "api":
         return data, status
-    spouses = data.get('data')
+    spouses = data.get("data")
     return spouses
 
-def retrieve_children(member_id: int, call_type: Union[str, None] = None) -> Union[List[Member], None, Tuple[Dict, int]]:
+
+def retrieve_children(
+    member_id: int, call_type: Union[str, None] = None
+) -> Union[List[Member], None, Tuple[Dict, int]]:
     """
     Retrieve children for a given member ID with an optional API call type.
 
@@ -92,10 +111,13 @@ def retrieve_children(member_id: int, call_type: Union[str, None] = None) -> Uni
     data, status = member_service.get_member_children(member_id)
     if call_type == "api":
         return data, status
-    children = data.get('data')
+    children = data.get("data")
     return children
 
-def create_relationship(member_id: int, new_member_id: int, relationship_type: RelationType) -> Tuple[Dict, int]:
+
+def create_relationship(
+    member_id: int, new_member_id: int, relationship_type: RelationType
+) -> Tuple[Dict, int]:
     """
     Creates a relationship between two members using the specified relationship type.
 
@@ -113,12 +135,11 @@ def create_relationship(member_id: int, new_member_id: int, relationship_type: R
     """
     relationship_service = RelationshipService()
     return relationship_service.create_relationship(
-        member_id,
-        new_member_id,
-        relationship_type
+        member_id, new_member_id, relationship_type
     )
 
-@member_bp.route('/member/<member_id>/spouse', methods=['GET', 'POST'])
+
+@member_bp.route("/member/<member_id>/spouse", methods=["GET", "POST"])
 @login_required
 def add_spouse(member_id):
     form = MemberForm(add_relative_mode=RelationType.SPOUSE)
@@ -126,10 +147,10 @@ def add_spouse(member_id):
 
     member1 = retrieve_member(member_id)
     if not member1:
-        return redirect(url_for('family.index'))
+        return redirect(url_for("family.index"))
 
     family_id = member1.family_id
-    title = f'Adding spouse of {member1.first_name} {member1.last_name}'
+    title = f"Adding spouse of {member1.first_name} {member1.last_name}"
 
     if form.validate_on_submit():
         spouse_data = {
@@ -138,33 +159,41 @@ def add_spouse(member_id):
             "birthdate": form.birthdate.data,
             "gender": form.gender.data,
             "family_id": family_id,
-            "alive": eval(form.alive.data),
-            "deathdate": form.deathdate.data
+            "alive": bool(form.alive.data),
+            "deathdate": form.deathdate.data,
         }
         data, status = member_service.create_member(**spouse_data)
         if status != 201:
-            message, category = data.get('message'), data.get('category')
+            message, category = data.get("message"), data.get("category")
             flash(message, category)
-            return redirect(url_for('family.index'))
+            return redirect(url_for("family.index"))
 
-        new_member = data.get('data')
+        new_member = data.get("data")
 
         data, status = create_relationship(
-            member1.member_id,
-            new_member.member_id,
-            RelationType.SPOUSE
+            member1.member_id, new_member.member_id, RelationType.SPOUSE
         )
-        message, category = data.get('message'), data.get('category')
+        message, category = data.get("message"), data.get("category")
         if status != 201:
             flash(message, category)
-            return redirect(url_for('family.index'))
+            return redirect(url_for("family.index"))
 
-        flash(f'{new_member.first_name} added as spouse to {member1.first_name} {member1.last_name}', 'success')
-        return redirect(url_for('family.index'))
+        flash(
+            f"{new_member.first_name} added as spouse to {member1.first_name} {member1.last_name}",
+            "success",
+        )
+        return redirect(url_for("family.index"))
 
-    return render_template('add_member.html', title=title, form=form, families=current_user.families, member1=member1)
+    return render_template(
+        "add_member.html",
+        title=title,
+        form=form,
+        families=current_user.families,
+        member1=member1,
+    )
 
-@member_bp.route('/member/<member_id>/<spouse_id>/child', methods=['GET', 'POST'])
+
+@member_bp.route("/member/<member_id>/<spouse_id>/child", methods=["GET", "POST"])
 @login_required
 def add_child(member_id, spouse_id):
     form = MemberForm(add_relative_mode=RelationType.CHILD)
@@ -172,15 +201,15 @@ def add_child(member_id, spouse_id):
     mother_id: int
     member_service: MemberService = MemberService()
 
-    member1  = retrieve_member(member_id)
+    member1 = retrieve_member(member_id)
     if not member1:
-        return redirect(url_for('family.index'))
+        return redirect(url_for("family.index"))
 
     spouse = retrieve_member(spouse_id)
     if not spouse:
-        return redirect(url_for('family.index'))
+        return redirect(url_for("family.index"))
 
-    if member1.gender == 'Male':
+    if member1.gender == "Male":
         father_id = member1.member_id
         mother_id = spouse.member_id
     else:
@@ -196,58 +225,74 @@ def add_child(member_id, spouse_id):
             "birthdate": form.birthdate.data,
             "gender": form.gender.data,
             "family_id": family_id,
-            "alive": eval(form.alive.data),
+            "alive": bool(form.alive.data),
             "deathdate": form.deathdate.data,
             "father": father_id,
-            "mother": mother_id
+            "mother": mother_id,
         }
         data, status = member_service.create_member(**child_data)
 
         if status != 201:
-            message, category = data.get('message'), data.get('category')
+            message, category = data.get("message"), data.get("category")
             flash(message, category)
-            return redirect(url_for('family.index'))
+            return redirect(url_for("family.index"))
 
-        new_member = data.get('data')
+        new_member = data.get("data")
 
-        data, status = create_relationship(spouse.member_id, new_member.member_id, RelationType.CHILD)
+        data, status = create_relationship(
+            spouse.member_id, new_member.member_id, RelationType.CHILD
+        )
         if status != 201:
-            message, category = data.get('message'), data.get('category')
+            message, category = data.get("message"), data.get("category")
             flash(message, category)
-            return redirect(url_for('family.index'))
+            return redirect(url_for("family.index"))
 
-        flash(f'{new_member.first_name} {new_member.last_name} added as child to {member1.first_name} {member1.last_name} and {spouse.first_name} {spouse.last_name}', 'success')
-        return redirect(url_for('family.index'))
-    return render_template('add_member.html', title='Add child', form=form, families=current_user.families, member1=member1)
+        flash(
+            f"{new_member.first_name} {new_member.last_name} added as child to {member1.first_name} {member1.last_name} and {spouse.first_name} {spouse.last_name}",
+            "success",
+        )
+        return redirect(url_for("family.index"))
+    return render_template(
+        "add_member.html",
+        title="Add child",
+        form=form,
+        families=current_user.families,
+        member1=member1,
+    )
 
-@member_bp.route('/member/<member_id>', methods=['GET'])
+
+@member_bp.route("/member/<member_id>", methods=["GET"])
 @login_required
 def member_profile(member_id):
     member_service = MemberService()
 
     member = retrieve_member(member_id)
     if not member:
-        return redirect(url_for('family.index'))
+        return redirect(url_for("family.index"))
 
     mother = retrieve_member(member.mother)
     father = retrieve_member(member.father)
 
     data, _ = member_service.get_member_siblings(member_id)
-    siblings = data.get('data')
+    siblings = data.get("data")
     # TODO: include step siblings
 
     children = retrieve_children(member_id)
     spouses = retrieve_spouses(member_id)
 
-    return render_template('member_profile.html', title=f'{member.first_name} information ',
-                           member=member,
-                           father=father,
-                           mother=mother,
-                           siblings=siblings,
-                           spouses=spouses,
-                           children=children)
+    return render_template(
+        "member_profile.html",
+        title=f"{member.first_name} information ",
+        member=member,
+        father=father,
+        mother=mother,
+        siblings=siblings,
+        spouses=spouses,
+        children=children,
+    )
 
-@member_bp.route('/update_member/<member_id>', methods=['GET', 'POST'])
+
+@member_bp.route("/update_member/<member_id>", methods=["GET", "POST"])
 @login_required
 def update_member(member_id):
     member_service = MemberService()
@@ -255,7 +300,7 @@ def update_member(member_id):
 
     member = retrieve_member(member_id)
     if not member:
-        return redirect(url_for('family.index'))
+        return redirect(url_for("family.index"))
 
     if form.validate_on_submit():
         data, status = member_service.update_member(
@@ -265,30 +310,37 @@ def update_member(member_id):
             birthdate=form.birthdate.data,
             gender=form.gender.data,
             deathdate=form.deathdate.data,
-            alive=eval(form.alive.data),
-            )
-        message, category = data.get('message'), data.get('category')
+            alive=bool(form.alive.data),
+        )
+        message, category = data.get("message"), data.get("category")
         if status != 200:
             flash(message, category)
-            return redirect(url_for('member.update_member', member_id=member.member_id))
+            return redirect(url_for("member.update_member", member_id=member.member_id))
 
         flash(message, category)
-        return redirect(url_for('member.member_profile', member_id=member.member_id))
+        return redirect(url_for("member.member_profile", member_id=member.member_id))
 
-    return render_template('update_member.html', title=f'Update {member.first_name} information ', form=form, member=member)
+    return render_template(
+        "update_member.html",
+        title=f"Update {member.first_name} information ",
+        form=form,
+        member=member,
+    )
 
-@member_bp.route('/delete_member/<member_id>')
+
+@member_bp.route("/delete_member/<member_id>")
 @login_required
 def delete_member(member_id):
     member_service = MemberService()
 
     data, _ = member_service.delete_member(member_id)
-    message, category = data.get('message'), data.get('category')
+    message, category = data.get("message"), data.get("category")
     flash(message, category)
-    return redirect(url_for('family.index'))
+    return redirect(url_for("family.index"))
+
 
 # API call
-@member_bp.route('/member/spouses', methods=['POST', 'GET'])
+@member_bp.route("/member/spouses", methods=["POST", "GET"])
 @login_required
 def get_spouse():
     data = request.get_json()
@@ -300,19 +352,20 @@ def get_spouse():
     spouses_list = []
 
     data, status = retrieve_spouses(member_id=member_id, call_type="api")
-    spouses = data.get('data')
+    spouses = data.get("data")
     if spouses:
         for spouse in spouses:
             spouses_list.append(spouse.to_dict())
 
     if current_user.is_authenticated:
-        login = {'authenticated': True}
+        login = {"authenticated": True}
     else:
-        login = {'authenticated': False}
-    response =  make_response(jsonify(spouses_list, login), 200)
+        login = {"authenticated": False}
+    response = make_response(jsonify(spouses_list, login), 200)
     return response
 
-@member_bp.route('/member/children', methods=['POST', 'GET'])
+
+@member_bp.route("/member/children", methods=["POST", "GET"])
 @login_required
 def get_children():
     data = request.get_json()
@@ -324,16 +377,16 @@ def get_children():
     elif "spouse_id" not in data:
         return make_response(jsonify({"error": "Missing spouse_id"}), 400)
 
-    member_id = int(data['member1_id'])
-    spouse_id = int(data['spouse_id'])
+    member_id = int(data["member1_id"])
+    spouse_id = int(data["spouse_id"])
     parent_ids = [member_id, spouse_id]
 
     data, status = retrieve_children(member_id=member_id, call_type="api")
     if status != 200:
-        message, category = data.get('message'), data.get('category')
+        message, category = data.get("message"), data.get("category")
         return make_response(jsonify({category: message}), status)
 
-    children = data.get('data')
+    children = data.get("data")
     children_list = []
 
     if children:
@@ -342,13 +395,14 @@ def get_children():
                 children_list.append(child.to_dict())
 
     if current_user.is_authenticated:
-        login = {'authenticated': True}
+        login = {"authenticated": True}
     else:
-        login = {'authenticated': False}
-    response =  make_response(jsonify(children_list, login), 200)
+        login = {"authenticated": False}
+    response = make_response(jsonify(children_list, login), 200)
     return response
 
-@member_bp.route('/member/nuclear', methods=['POST', 'GET'])
+
+@member_bp.route("/member/nuclear", methods=["POST", "GET"])
 @login_required
 def get_nuclear():
     data = request.get_json()
@@ -356,15 +410,15 @@ def get_nuclear():
         return make_response(jsonify({"error": "Not a JSON"}), 400)
     elif "member1_id" not in data:
         return make_response(jsonify({"error": "Missing member1_id"}), 400)
-    member_id = int(data.get('member1_id'))
+    member_id = int(data.get("member1_id"))
     parent_ids = [member_id]
     nuclear_family = {"spouses": [], "children": []}
 
     data, status = retrieve_spouses(member_id=member_id, call_type="api")
     if status != 200:
-        message, category = data.get('message'), data.get('category')
+        message, category = data.get("message"), data.get("category")
         return make_response(jsonify({category: message}), status)
-    spouses = data.get('data')
+    spouses = data.get("data")
 
     if spouses:
         for spouse in spouses:
@@ -373,15 +427,15 @@ def get_nuclear():
 
     data, status = retrieve_children(member_id=member_id, call_type="api")
     if status != 200:
-        message, category = data.get('message'), data.get('category')
+        message, category = data.get("message"), data.get("category")
         return make_response(jsonify({category: message}), status)
 
-    children = data.get('data')
+    children = data.get("data")
 
     if children:
         for child in children:
             if child.father in parent_ids and child.mother in parent_ids:
                 nuclear_family["children"].append(child.to_dict())
 
-    response =  make_response(jsonify(nuclear_family), 200)
+    response = make_response(jsonify(nuclear_family), 200)
     return response

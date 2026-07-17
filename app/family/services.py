@@ -46,7 +46,7 @@ class FamilyService:
                 return service_response(200, "Families found", "success", families)
             else:
                 return service_response(404, "No families found", "warning", None)
-        except Exception as e:
+        except Exception:
             # Todo: log the error
             return service_response(500, "Error retrieving families", "error", None)
 
@@ -66,7 +66,7 @@ class FamilyService:
             self.db.add(new_family)
             self.db.commit()
             return service_response(201, "Family created successfully", "success", new_family)
-        except Exception as e:
+        except Exception:
             self.db.rollback()
             # Todo: log the error
             return service_response(500, "Error creating family", "error", None)
@@ -103,7 +103,7 @@ class FamilyService:
                 return service_response(200, "Family deleted successfully", "success", None)
             else:
                 return service_response(404, "Family not found", "warning", None)
-        except Exception as e:
+        except Exception:
             self.db.rollback()
             # Todo: log the error
             return service_response(500, "Error deleting family", "error", None)

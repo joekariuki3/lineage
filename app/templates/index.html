@@ -1,89 +1,110 @@
-{% extends "base.html" %}
-
-{% block content %}
+{% extends "base.html" %} {% block content %}
 
 <!-- Hero Section -->
 <section id="home" class="mt-8 mb-8">
-    <div class="container mx-auto flex flex-col lg:flex-row items-center justify-between">
-        <!-- Hero Text Section -->
-        <div class="lg:w-1/2 text-center lg:text-left">
-            <h1 class="text-4xl font-bold mt-4">Lineage</h1>
-            <h3 class="text-2xl mt-4">Family Tree App</h3>
-            <p class="text-lg mt-4">A simple way to connect with your family members and explore your family tree.</p>
-            <!-- Conditional Button Rendering -->
-            <div class="mt-6">
-                {% if families and families | length == 1 %}
-                <a href="{{url_for('family.index', family_id=families[0].family_id)}}"
-                    class="inline-block mt-4 px-6 py-2 border-2 border-blue-500 text-blue-500 font-semibold rounded-lg hover:bg-blue-500 hover:text-white transition duration-300">View
-                    {{families[0].name}}</a>
-                {% else %}
-                {% if current_user.is_authenticated %}
-                <a href="{{url_for('family.index')}}"
-                    class="inline-block mt-4 px-6 py-2 border-2 border-blue-500 text-blue-500 font-semibold rounded-lg hover:bg-blue-500 hover:text-white transition duration-300">View
-                    Family</a>
-                {% else %}
-                <a href="{{url_for('auth.register')}}"
-                    class="inline-block mt-4 px-6 py-2 border-2 border-blue-500 text-blue-500 font-semibold rounded-lg hover:bg-blue-500 hover:text-white transition duration-300">Register
-                    to add Family</a>
-                <a href="{{url_for('auth.login')}}"
-                    class="inline-block mt-4 px-6 py-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 transition duration-300">Login
-                    to view Family</a>
-                {% endif %}
-                {% endif %}
-            </div>
-        </div>
-        <!-- Hero Image Section -->
-        <div class="lg:w-1/2 mt-8 lg:mt-0">
-            <img src="https://cdn.dribbble.com/users/1750119/screenshots/20498529/media/a25d67701ad3212631e9a13d5447e3a6.png?resize=768x576&vertical=center"
-                alt="Family Tree App Cover Image" class="w-full max-w-lg mx-auto lg:mx-0 rounded-lg shadow-lg">
-        </div>
+  <div
+    class="container mx-auto flex flex-col lg:flex-row items-center justify-between"
+  >
+    <!-- Hero Text Section -->
+    <div class="lg:w-1/2 text-center lg:text-left">
+      <h1 class="text-4xl font-bold mt-4">Lineage</h1>
+      <h3 class="text-2xl mt-4">Family Tree App</h3>
+      <p class="text-lg mt-4">
+        A simple way to connect with your family members and explore your family
+        tree.
+      </p>
+      <!-- Conditional Button Rendering -->
+      <div class="mt-6">
+        {% if families and families | length == 1 %}
+        <a
+          href="{{url_for('family.index', family_id=families[0].family_id)}}"
+          class="inline-block mt-4 px-6 py-2 border-2 border-blue-500 text-blue-500 font-semibold rounded-lg hover:bg-blue-500 hover:text-white transition duration-300"
+          >View {{families[0].name}}</a
+        >
+        {% else %} {% if current_user.is_authenticated %}
+        <a
+          href="{{url_for('family.index')}}"
+          class="inline-block mt-4 px-6 py-2 border-2 border-blue-500 text-blue-500 font-semibold rounded-lg hover:bg-blue-500 hover:text-white transition duration-300"
+          >View Family</a
+        >
+        {% else %}
+        <a
+          href="{{url_for('auth.register')}}"
+          class="inline-block mt-4 px-6 py-2 border-2 border-blue-500 text-blue-500 font-semibold rounded-lg hover:bg-blue-500 hover:text-white transition duration-300"
+          >Register to add Family</a
+        >
+        <a
+          href="{{url_for('auth.login')}}"
+          class="inline-block mt-4 px-6 py-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 transition duration-300"
+          >Login to view Family</a
+        >
+        {% endif %} {% endif %}
+      </div>
     </div>
+    <!-- Hero Image Section -->
+    <div class="lg:w-1/2 mt-8 lg:mt-0">
+      <img
+        src="https://cdn.dribbble.com/users/1750119/screenshots/20498529/media/a25d67701ad3212631e9a13d5447e3a6.png?resize=768x576&vertical=center"
+        alt="Family Tree App Cover Image"
+        class="w-full max-w-lg mx-auto lg:mx-0 rounded-lg shadow-lg"
+      />
+    </div>
+  </div>
 </section>
 
 <!-- Features Section -->
 <section id="features" class="bg-gray-50 text-center py-10">
-    <div class="container mx-auto">
-        <h2 class="text-3xl font-bold mb-8 text-gray-900">Key Features</h2>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div class="feature-item">
-                {% include "icons/treeSvg.html" %}
-                <h3 class="text-xl font-semibold mt-4 text-gray-800">Family Tree View</h3>
-                <p class="mt-2 p-1 text-gray-600">Explore and visualize your family tree in an interactive and dynamic
-                    way.
-                </p>
-            </div>
-            <div class="feature-item">
-                {% include "icons/eventSvg.html" %}
-                <h3 class="text-xl font-semibold mt-4 text-gray-800">Event Planning</h3>
-                <p class="mt-2 p-1 text-gray-600">Plan and organize family events with ease, keeping everyone informed
-                    and
-                    involved.</p>
-            </div>
-            <div class="feature-item">
-                {% include "icons/photoSvg.html" %}
-                <h3 class="text-xl font-semibold mt-4 text-gray-800">Photo Memories</h3>
-                <p class="mt-2 p-1 text-gray-600">Collect and share precious family moments through a centralized photo
-                    gallery.</p>
-            </div>
-        </div>
+  <div class="container mx-auto">
+    <h2 class="text-3xl font-bold mb-8 text-gray-900">Key Features</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div class="feature-item">
+        {% include "icons/treeSvg.html" %}
+        <h3 class="text-xl font-semibold mt-4 text-gray-800">
+          Family Tree View
+        </h3>
+        <p class="mt-2 p-1 text-gray-600">
+          Explore and visualize your family tree in an interactive and dynamic
+          way.
+        </p>
+      </div>
+      <div class="feature-item">
+        {% include "icons/eventSvg.html" %}
+        <h3 class="text-xl font-semibold mt-4 text-gray-800">Event Planning</h3>
+        <p class="mt-2 p-1 text-gray-600">
+          Plan and organize family events with ease, keeping everyone informed
+          and involved.
+        </p>
+      </div>
+      <div class="feature-item">
+        {% include "icons/photoSvg.html" %}
+        <h3 class="text-xl font-semibold mt-4 text-gray-800">Photo Memories</h3>
+        <p class="mt-2 p-1 text-gray-600">
+          Collect and share precious family moments through a centralized photo
+          gallery.
+        </p>
+      </div>
     </div>
+  </div>
 </section>
 
 <!-- About Section -->
 <section id="about" class="text-center py-10 bg-white">
-    <div class="container mx-auto">
-        <h2 class="text-3xl font-bold mb-6 text-gray-900">About Us</h2>
-        <p class="text-lg text-gray-700 max-w-2xl mx-auto">
-            Our Family Tree App was inspired by the desire to strengthen family connections and preserve our unique
-            family histories.
-        </p>
-        <div class="mt-8">
-            <a href="https://github.com/joekariuki3/lineage" target="_blank"
-                class="inline-flex items-center justify-center px-6 py-3 border border-blue-500 text-blue-500 text-lg font-semibold rounded-lg hover:bg-blue-500 hover:text-white transition-colors duration-300 ease-in-out">
-                {% include "icons/githubSvg.html" %}
-                <span class="ml-2">GitHub Repository</span>
-            </a>
-        </div>
+  <div class="container mx-auto">
+    <h2 class="text-3xl font-bold mb-6 text-gray-900">About Us</h2>
+    <p class="text-lg text-gray-700 max-w-2xl mx-auto">
+      Our Family Tree App was inspired by the desire to strengthen family
+      connections and preserve our unique family histories.
+    </p>
+    <div class="mt-8">
+      <a
+        href="https://github.com/joekariuki3/lineage"
+        target="_blank"
+        class="inline-flex items-center justify-center px-6 py-3 border border-blue-500 text-blue-500 text-lg font-semibold rounded-lg hover:bg-blue-500 hover:text-white transition-colors duration-300 ease-in-out"
+      >
+        {% include "icons/githubSvg.html" %}
+        <span class="ml-2">GitHub Repository</span>
+      </a>
     </div>
+  </div>
 </section>
 {% endblock%}
