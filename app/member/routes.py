@@ -159,7 +159,7 @@ def add_spouse(member_id):
             "birthdate": form.birthdate.data,
             "gender": form.gender.data,
             "family_id": family_id,
-            "alive": eval(form.alive.data),
+            "alive": bool(form.alive.data),
             "deathdate": form.deathdate.data,
         }
         data, status = member_service.create_member(**spouse_data)
@@ -225,7 +225,7 @@ def add_child(member_id, spouse_id):
             "birthdate": form.birthdate.data,
             "gender": form.gender.data,
             "family_id": family_id,
-            "alive": eval(form.alive.data),
+            "alive": bool(form.alive.data),
             "deathdate": form.deathdate.data,
             "father": father_id,
             "mother": mother_id,
@@ -310,7 +310,7 @@ def update_member(member_id):
             birthdate=form.birthdate.data,
             gender=form.gender.data,
             deathdate=form.deathdate.data,
-            alive=eval(form.alive.data),
+            alive=bool(form.alive.data),
         )
         message, category = data.get("message"), data.get("category")
         if status != 200:

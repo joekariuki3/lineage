@@ -72,7 +72,7 @@ def create_family():
             "birthdate": member_form.data.get("birthdate"),
             "gender": member_form.data.get("gender"),
             "family_id": family.family_id,
-            "alive": eval(member_form.data.get("alive")),
+            "alive": bool(member_form.data.get("alive")),
             "deathdate": member_form.data.get("deathdate"),
             "root": True,
         }
