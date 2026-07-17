@@ -48,7 +48,7 @@ function getSpouse(event) {
                 </details>
               </li>
             </ul>
-            `
+            `,
           );
         });
       },
@@ -91,7 +91,7 @@ function getChildren(event) {
                   </summary>
                 </details>
               </li>
-            </ul>`
+            </ul>`,
           );
         }
         $.each(children, function (index, child) {
@@ -117,7 +117,7 @@ function getChildren(event) {
                   </details>
                 </li>
               </ul>
-            `
+            `,
           );
         });
       },

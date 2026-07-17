@@ -1,131 +1,167 @@
-{% extends 'base.html' %}
-
-{% block content %}
+{% extends 'base.html' %} {% block content %}
 <div class="container mx-auto p-6">
-    <!-- Tabs -->
-    <div class="">
-        <div class="flex space-x-4">
-            <button id="upcoming-tab" class="text-lg font-medium py-2 tab-active" onclick="showTab('upcoming')">Upcoming
-                Events</button>
-            <button id="past-tab" class="text-lg font-medium py-2" onclick="showTab('past')">Past Events</button>
-        </div>
+  <!-- Tabs -->
+  <div class="">
+    <div class="flex space-x-4">
+      <button
+        id="upcoming-tab"
+        class="text-lg font-medium py-2 tab-active"
+        onclick="showTab('upcoming')"
+      >
+        Upcoming Events
+      </button>
+      <button
+        id="past-tab"
+        class="text-lg font-medium py-2"
+        onclick="showTab('past')"
+      >
+        Past Events
+      </button>
     </div>
+  </div>
 
-    <!-- upcomingEvents Cards -->
-    <div id="upcoming-events" class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
-        {% if not upcomingEvents %}
-        <p class="text-center text-gray-500">No Upcoming Event at the moment.</p>
-        {% else %}
-        {% for event in upcomingEvents %}
-        <div class="bg-white rounded-lg shadow p-6">
-            <div class="flex justify-between items-start">
-                <div>
-                    <h3 class="text-xl font-semibold">{{ event.event_name }}</h3>
-                    <div class="flex">
-                        {% include "icons/locationSvg.html" %}
-                        <p class="text-gray-500">
-                            {{ event.location }}
-                        </p>
-                    </div>
-                </div>
-                <div class="relative">
-                    <button class="text-gray-500 hover:text-gray-700" onclick="toggleDropdown('dropdown-1')">
-                        &#x2026;
-                    </button>
-                    <div id="dropdown-1" class="absolute right-0 mt-2 w-32 bg-white border rounded-lg shadow-lg hidden">
-                        <a href="{{ url_for('event.edit_event', event_id=event.event_id)}}"
-                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Edit</a>
-                        <form action="{{ url_for('event.delete_event', event_id=event.event_id) }}" method="post" class="inline">
-                            <button type="submit" class="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100">
-                                Delete
-                            </button>
-                        </form>
-
-                    </div>
-                </div>
-            </div>
-            <div class="mt-4">
-                <div class="flex text-gray-600">
-                    {% include "icons/calendarSvg.html" %}
-                    <p>{{ event.event_date }}</p>
-                </div>
-                <p class="text-gray-500 mt-4">{{ event.description }}</p>
-            </div>
+  <!-- upcomingEvents Cards -->
+  <div id="upcoming-events" class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+    {% if not upcomingEvents %}
+    <p class="text-center text-gray-500">No Upcoming Event at the moment.</p>
+    {% else %} {% for event in upcomingEvents %}
+    <div class="bg-white rounded-lg shadow p-6">
+      <div class="flex justify-between items-start">
+        <div>
+          <h3 class="text-xl font-semibold">{{ event.event_name }}</h3>
+          <div class="flex">
+            {% include "icons/locationSvg.html" %}
+            <p class="text-gray-500">{{ event.location }}</p>
+          </div>
         </div>
-        {% endfor %}
-        {% endif %}
-    </div>
-
-    <!-- PastEvents cards -->
-    <div id="past-events" class="hidden grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
-        {% if not pastEvents %}
-        <p class="text-center text-gray-500">No Past Event at the moment</p>
-        {% else %}
-        {% for event in pastEvents %}
-        <div class="bg-white rounded-lg shadow p-6">
-            <div class="flex justify-between items-start">
-                <div>
-                    <h3 class="text-xl font-semibold">{{ event.event_name }}</h3>
-                    <div class="flex">
-
-                        {% include "icons/locationSvg.html" %}
-                        <p class="text-gray-500"> {{ event.location }}</p>
-                    </div>
-                </div>
-                <div class="relative">
-                    <button class="text-gray-500 hover:text-gray-700" onclick="toggleDropdown('dropdown-2')">
-                        &#x2026;
-                    </button>
-                    <div id="dropdown-2" class="absolute right-0 mt-2 w-32 bg-white border rounded-lg shadow-lg hidden">
-                        <a href="{{ url_for('event.edit_event', event_id=event.event_id)}}"
-                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Edit</a>
-                        <form action="{{ url_for('event.delete_event', event_id=event.event_id) }}" method="post" class="inline">
-                            <button type="submit" class="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100">
-                                Delete
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-            <div class="mt-4">
-                <div class="flex text-gray-600">
-                    {% include "icons/calendarSvg.html" %}
-                    <p>{{ event.event_date }}</p>
-                </div>
-                <p class="text-gray-500 mt-4">{{ event.description }}</p>
-            </div>
+        <div class="relative">
+          <button
+            class="text-gray-500 hover:text-gray-700"
+            onclick="toggleDropdown('dropdown-1')"
+          >
+            &#x2026;
+          </button>
+          <div
+            id="dropdown-1"
+            class="absolute right-0 mt-2 w-32 bg-white border rounded-lg shadow-lg hidden"
+          >
+            <a
+              href="{{ url_for('event.edit_event', event_id=event.event_id)}}"
+              class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+              >Edit</a
+            >
+            <form
+              action="{{ url_for('event.delete_event', event_id=event.event_id) }}"
+              method="post"
+              class="inline"
+            >
+              <button
+                type="submit"
+                class="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
+              >
+                Delete
+              </button>
+            </form>
+          </div>
         </div>
-        {% endfor %}
-        {% endif %}
+      </div>
+      <div class="mt-4">
+        <div class="flex text-gray-600">
+          {% include "icons/calendarSvg.html" %}
+          <p>{{ event.event_date }}</p>
+        </div>
+        <p class="text-gray-500 mt-4">{{ event.description }}</p>
+      </div>
     </div>
+    {% endfor %} {% endif %}
+  </div>
+
+  <!-- PastEvents cards -->
+  <div
+    id="past-events"
+    class="hidden grid grid-cols-1 md:grid-cols-3 gap-6 mt-8"
+  >
+    {% if not pastEvents %}
+    <p class="text-center text-gray-500">No Past Event at the moment</p>
+    {% else %} {% for event in pastEvents %}
+    <div class="bg-white rounded-lg shadow p-6">
+      <div class="flex justify-between items-start">
+        <div>
+          <h3 class="text-xl font-semibold">{{ event.event_name }}</h3>
+          <div class="flex">
+            {% include "icons/locationSvg.html" %}
+            <p class="text-gray-500">{{ event.location }}</p>
+          </div>
+        </div>
+        <div class="relative">
+          <button
+            class="text-gray-500 hover:text-gray-700"
+            onclick="toggleDropdown('dropdown-2')"
+          >
+            &#x2026;
+          </button>
+          <div
+            id="dropdown-2"
+            class="absolute right-0 mt-2 w-32 bg-white border rounded-lg shadow-lg hidden"
+          >
+            <a
+              href="{{ url_for('event.edit_event', event_id=event.event_id)}}"
+              class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+              >Edit</a
+            >
+            <form
+              action="{{ url_for('event.delete_event', event_id=event.event_id) }}"
+              method="post"
+              class="inline"
+            >
+              <button
+                type="submit"
+                class="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
+              >
+                Delete
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="mt-4">
+        <div class="flex text-gray-600">
+          {% include "icons/calendarSvg.html" %}
+          <p>{{ event.event_date }}</p>
+        </div>
+        <p class="text-gray-500 mt-4">{{ event.description }}</p>
+      </div>
+    </div>
+    {% endfor %} {% endif %}
+  </div>
 </div>
 
 <script>
-    // JavaScript to handle tab switching
-    function showTab(tabName) {
-        const upcomingEvents = document.getElementById('upcoming-events');
-        const pastEvents = document.getElementById('past-events');
-        const upcomingTab = document.getElementById('upcoming-tab');
-        const pastTab = document.getElementById('past-tab');
+  // JavaScript to handle tab switching
+  function showTab(tabName) {
+    const upcomingEvents = document.getElementById("upcoming-events");
+    const pastEvents = document.getElementById("past-events");
+    const upcomingTab = document.getElementById("upcoming-tab");
+    const pastTab = document.getElementById("past-tab");
 
-        if (tabName === 'upcoming') {
-            upcomingEvents.classList.remove('hidden');
-            pastEvents.classList.add('hidden');
-            upcomingTab.classList.add('tab-active');
-            pastTab.classList.remove('tab-active');
-        } else {
-            upcomingEvents.classList.add('hidden');
-            pastEvents.classList.remove('hidden');
-            pastTab.classList.add('tab-active');
-            upcomingTab.classList.remove('tab-active');
-        }
+    if (tabName === "upcoming") {
+      upcomingEvents.classList.remove("hidden");
+      pastEvents.classList.add("hidden");
+      upcomingTab.classList.add("tab-active");
+      pastTab.classList.remove("tab-active");
+    } else {
+      upcomingEvents.classList.add("hidden");
+      pastEvents.classList.remove("hidden");
+      pastTab.classList.add("tab-active");
+      upcomingTab.classList.remove("tab-active");
     }
+  }
 
-    // JavaScript to toggle the dropdown menu for each event card
-    function toggleDropdown(dropdownId) {
-        const dropdown = document.getElementById(dropdownId);
-        dropdown.classList.toggle('hidden');
-    }
+  // JavaScript to toggle the dropdown menu for each event card
+  function toggleDropdown(dropdownId) {
+    const dropdown = document.getElementById(dropdownId);
+    dropdown.classList.toggle("hidden");
+  }
 </script>
 
 {% endblock %}
