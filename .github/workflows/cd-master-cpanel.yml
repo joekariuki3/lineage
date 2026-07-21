@@ -44,5 +44,3 @@ jobs:
             .github/**
             docs/**
             .gitignore
-            
-            

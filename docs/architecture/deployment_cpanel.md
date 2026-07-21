@@ -4,9 +4,9 @@ This guide outlines the steps to deploy and update our Flask application on a cP
 
 ## 1. Initial cPanel Setup (Prerequisites)
 
-*Note: This is a critical step that must be done manually before automated deployment works.*
+_Note: This is a critical step that must be done manually before automated deployment works._
 
-1. **Database Setup**: 
+1. **Database Setup**:
    - Navigate to **MySQL Databases** (or PostgreSQL) in cPanel.
    - Create a new database and a database user.
    - Assign the user to the database with all privileges.
@@ -30,7 +30,7 @@ To allow GitHub Actions to upload files to our cPanel server, we need a dedicate
    - **Log In**: Enter a partial username (e.g., `joel`).
    - **Domain**: Select your site domain (e.g., `develop.lineage.joelmuhoho.com`). This makes your full username `joel@develop.lineage.joelmuhoho.com`.
    - **Password**: Enter a strong password.
-   - **Directory**: Set this exactly to the Application Root defined earlier (e.g., `develop.lineage.joelmuhoho.com`). *Important: Do not use `public_html` if your app is placed outside of it.*
+   - **Directory**: Set this exactly to the Application Root defined earlier (e.g., `develop.lineage.joelmuhoho.com`). _Important: Do not use `public_html` if your app is placed outside of it._
 3. Click **Create FTP Account**.
 4. Once created, scroll down to the new account and click **Configure FTP Client**. You will need these details for GitHub Actions:
    - **FTP Username**: `joel@develop.lineage.joelmuhoho.com`
@@ -42,6 +42,7 @@ To allow GitHub Actions to upload files to our cPanel server, we need a dedicate
 We use GitHub Actions to automatically deploy changes via FTP.
 
 here is an example of github actions cd-to-cpanel file.
+
 ```
 name: CD for lineage develop to cPanel
 
@@ -85,7 +86,7 @@ jobs:
             **/__pycache__/** # excludes all __pycache__ directories
             **/*.pyc # excludes all .pyc files
             .venv/** # excludes the virtual environment directory
-            **/tests/** # excludes the tests directory  
+            **/tests/** # excludes the tests directory
 
 ```
 
@@ -94,7 +95,7 @@ Add the following secrets to your GitHub repository (**Settings > Secrets and va
 - `FTP_SERVER`: `ftp.joelmuhoho.com`
 - `FTP_USERNAME`: `joel@develop.lineage.joelmuhoho.com`
 - `FTP_PASSWORD`: Your newly created FTP password.
-- `DIRECTORY_TO_DEPLOY_TO`: `/` *(Since the FTP account's root directory is already set to the application folder, we just deploy to `/`)*.
+- `DIRECTORY_TO_DEPLOY_TO`: `/` _(Since the FTP account's root directory is already set to the application folder, we just deploy to `/`)_.
 
 The GitHub Action workflow will sync the codebase to the FTP server and touch the `tmp/restart.txt` file, which signals Passenger to restart the Python application.
 
@@ -103,6 +104,7 @@ The GitHub Action workflow will sync the codebase to the FTP server and touch th
 When Passenger restarts, it loads `passenger_wsgi.py`. We have customized this file to automatically handle dependency installation and database migrations.
 
 ### Auto-Installing Dependencies
+
 If `requirements.txt` changes, the application automatically installs them using the virtual environment's Python executable (`sys.executable`):
 
 ```python
@@ -120,6 +122,7 @@ except Exception as e:
 ```
 
 ### Auto-Running Migrations
+
 Database migrations run automatically using Flask-Migrate before the app starts handling requests:
 
 ```python
