@@ -1,4 +1,4 @@
-name: CD for lineage develop to cPanel
+name: CD for lineage master to cPanel
 
 on:
   workflow_run:
