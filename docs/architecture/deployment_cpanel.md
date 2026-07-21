@@ -21,7 +21,29 @@ _Note: This is a critical step that must be done manually before automated deplo
    - **Environment Variables**: Add necessary secrets like `DATABASE_URL`, `SECRET_KEY`, etc.
    - Click **Create**. This will generate a virtual environment and a default `passenger_wsgi.py` file.
 
-## 2. FTP Deployment Configuration
+## 2. Clone Repository to cPanel
+
+Before GitHub Actions can sync files, the repository must already exist in the application root on the server. This is a one-time manual step done via the cPanel Terminal.
+
+1. In cPanel, navigate to **Advanced** > **Terminal** (or connect via SSH).
+2. Navigate to the directory where your Python App was created:
+   ```bash
+   cd ~/develop.lineage.joelmuhoho.com
+   ```
+3. Clone the repository into the current directory (the trailing `.` clones into the current folder without creating a sub-directory):
+   ```bash
+   git clone https://github.com/<your-org>/<your-repo>.git .
+   ```
+4. Checkout the correct branch (e.g., `develop`):
+   ```bash
+   git checkout develop
+   ```
+
+> **Note:** After this initial clone, all subsequent updates will be handled automatically by the GitHub Actions FTP sync — you do **not** need to `git pull` manually again.
+
+---
+
+## 3. FTP Deployment Configuration
 
 To allow GitHub Actions to upload files to our cPanel server, we need a dedicated FTP account.
 
