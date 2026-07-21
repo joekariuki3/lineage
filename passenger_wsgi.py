@@ -17,7 +17,7 @@ except Exception as e:
     sys.stderr.write(f"Failed to install requirements: {e}\n")
 
 
-application = create_app(config_class=ProductionConfig)
+application = create_app(config_class=ProductionConfig) # db creation is happeng in create_app
 
 # Run Database Migrations
 with application.app_context():
