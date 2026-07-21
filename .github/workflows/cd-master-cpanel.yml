@@ -7,10 +7,10 @@ on:
     types:
       - completed
     branches:
-      - develop
+      - master
 
 jobs:
-  deploy-develop-cpanel:
+  deploy-master-cpanel:
     runs-on: ubuntu-latest
     if: github.event.workflow_run.conclusion == 'success'
     steps:
@@ -32,10 +32,10 @@ jobs:
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.DEVELOP_FTP_USERNAME }}
-          password: ${{ secrets.DEVELOP_FTP_PASSWORD }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
           local-dir: ./
-          server-dir: /${{secrets.DEVELOP_DIRECTORY_NAME }}/
+          server-dir: /${{secrets.DIRECTORY_NAME }}/
           exclude: |
             **/__pycache__/**
             **/*.pyc
@@ -44,3 +44,5 @@ jobs:
             .github/**
             docs/**
             .gitignore
+            
+            
