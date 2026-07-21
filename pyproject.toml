@@ -1,3 +1,17 @@
+[project]
+name = "lineage"
+version = "0.1.0"
+authors = [
+  { name="Joel", email="[EMAIL_ADDRESS]" },
+]
+requires-python = "==3.12.*"
+dependencies = []
+
+
+
+[dependency-groups]
+dev = []
+
 # bandit options
 [tool.bandit]
 exclude_dirs = ["tests", ".venv"]
