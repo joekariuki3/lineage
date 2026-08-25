@@ -149,7 +149,9 @@
             member1_id="{{member.member_id}}"
             onclick="getSpouse(event)"
           >
-            <span class="member-name">{{member.first_name}} {{member.last_name}}</span>
+            <span class="member-name"
+              >{{member.first_name}} {{member.last_name}}</span
+            >
             <span class="member-actions" onclick="event.stopPropagation()">
               <div class="member-dropdown">
                 <button
@@ -159,8 +161,14 @@
                   title="Options"
                   aria-label="Options"
                 >
-                  <svg class="menu-dots-icon" viewBox="0 0 20 20" fill="currentColor">
-                    <path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z"></path>
+                  <svg
+                    class="menu-dots-icon"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z"
+                    ></path>
                   </svg>
                 </button>
                 <div class="member-dropdown-menu hidden">

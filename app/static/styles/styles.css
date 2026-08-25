@@ -207,7 +207,9 @@ label {
   background: #ffffff;
   border: 1px solid #e2e8f0;
   border-radius: 8px;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
+  box-shadow:
+    0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -4px rgba(0, 0, 0, 0.05);
   padding: 4px;
   z-index: 50;
   white-space: nowrap;
@@ -226,7 +228,9 @@ label {
   color: #334155;
   text-decoration: none;
   border-radius: 6px;
-  transition: background-color 0.15s ease, color 0.15s ease;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
   cursor: pointer;
 }
 
