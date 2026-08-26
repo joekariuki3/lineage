@@ -1,10 +1,12 @@
+from datetime import datetime
+
+import pytest
+
 from app.models.event import Event
 from app.models.family import Family
 from app.models.link import Link
 from app.models.member import Member
 from app.models.user import User
-from datetime import datetime
-import pytest
 from app.utils.constants import Gender
 
 

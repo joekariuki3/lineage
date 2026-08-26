@@ -1,8 +1,11 @@
-from app.models import Event
-from app.event.services import EventService
 from datetime import datetime, timedelta
-from flask_login import login_user
 from unittest.mock import Mock
+
+from flask_login import login_user
+
+from app.event.services import EventService
+from app.models import Event
+
 
 def test_create_event(test_family_1):
     """
@@ -95,7 +98,7 @@ def test_get_upcoming_events(test_user_and_family):
         If the expected conditions (such as correct status code or event details)
         are not met.
     """
-    user, family = test_user_and_family
+    _, family = test_user_and_family
     service = EventService()
 
     upcoming_date = (datetime.now() + timedelta(days=2))
@@ -119,7 +122,7 @@ def test_get_upcoming_events_not_found(test_user_and_family):
         AssertionError
         If the status code is not 404 or if the response message is incorrect.
     """
-    user, family = test_user_and_family
+    _, family = test_user_and_family
     service = EventService()
 
     response, status = service.get_upcoming_events(family.family_id)
@@ -143,7 +146,7 @@ def test_get_upcoming_events_error(test_user_and_family):
     Returns:
     None: Assertion methods are used to validate the function behavior.
     """
-    user, family = test_user_and_family
+    _, family = test_user_and_family
     service = EventService()
 
     response, status = service.get_upcoming_events(family) # pass a family object instead of family_id to raise database Exception
@@ -166,7 +169,7 @@ def test_get_past_events(test_user_and_family):
         if the success message in the response is incorrect, or if the event
         created with the name "Past Event" is not present in the returned event data.
     """
-    user, family = test_user_and_family
+    _, family = test_user_and_family
     service = EventService()
 
     past_date = (datetime.now() - timedelta(days=2))
@@ -190,7 +193,7 @@ def test_get_past_events_not_found(test_user_and_family):
         AssertionError
         If the status code is not 404 or if the response message is incorrect.
     """
-    user, family = test_user_and_family
+    _, family = test_user_and_family
     service = EventService()
 
     response, status = service.get_past_events(family.family_id)
@@ -209,7 +212,7 @@ def test_get_past_events_error(test_user_and_family):
         test_user_and_family (tuple): A tuple containing a test user and their family
         object.
     """
-    user, family = test_user_and_family
+    _, family = test_user_and_family
     service = EventService()
 
     response, status = service.get_past_events(family) # pass a family object instead of family_id to raise database Exception
@@ -365,7 +368,7 @@ def test_update_event(test_user_and_family):
         If the HTTP status code is not 200, the response message is incorrect,
         or the updated event data does not match the expected values.
     """
-    user, family = test_user_and_family
+    _, family = test_user_and_family
     service = EventService()
 
     response, status = service.create_event(

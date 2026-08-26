@@ -1,11 +1,13 @@
-from app.models import Link, Family, Event, Member
-from app.extensions import db
-from app.utils import auth_s
-from app.family.services import FamilyService
-from app.services.service_base import service_response
-from typing import Tuple, Union, Optional
 from http import HTTPStatus
+
 from sqlalchemy.exc import SQLAlchemyError
+
+from app.extensions import db
+from app.family.services import FamilyService
+from app.models import Event, Family, Link, Member
+from app.services.service_base import service_response
+from app.utils import auth_s
+
 
 class LinkService:
 
@@ -13,11 +15,11 @@ class LinkService:
         self.db = db_session or db.session
         self.family_service = FamilyService()
 
-    def _check_existing_link(self, family_id: int) -> Optional[Link]:
+    def _check_existing_link(self, family_id: int) -> Link | None:
         """Check if a link already exists for the given family."""
         return self.db.query(Link).filter_by(family_id=family_id).first()
 
-    def create_link(self, entity: Union[Family, Event, Member]) -> Tuple[dict, int]:
+    def create_link(self, entity: Family | Event | Member) -> tuple[dict, int]:
         """
         Creates a new link for an entity.
         Args:
@@ -57,7 +59,7 @@ class LinkService:
                 None
             )
 
-    def delete_link(self, link_id: int, family_id: int, user_id: int) -> Tuple[dict, int]:
+    def delete_link(self, link_id: int, family_id: int, user_id: int) -> tuple[dict, int]:
         try:
             family_response = self.family_service.get_family_by_id(family_id, user_id)
             family_data, family_status_code = family_response

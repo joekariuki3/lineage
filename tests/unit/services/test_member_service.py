@@ -1,9 +1,11 @@
-from app.member.services import MemberService
-from app.models import Relationship, Member, Family
-from app.utils.constants import RelationType
 from http import HTTPStatus
+
 from flask_login import login_user, logout_user
-from app.utils.constants import Gender
+
+from app.member.services import MemberService
+from app.models import Family, Member, Relationship
+from app.utils.constants import Gender, RelationType
+
 
 def test_get_member_unauthenticated(test_member_1):
     """

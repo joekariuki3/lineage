@@ -1,7 +1,10 @@
-from flask import url_for
 from http import HTTPStatus
+
+from flask import url_for
+
 from app.user.services import UserService
 from tests.utils import login_test_user_1
+
 
 def test_user_profile_unauthenticated_user(client):
     """

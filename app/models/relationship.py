@@ -1,7 +1,9 @@
-from app.extensions import db
 from sqlalchemy.orm import Mapped
-from .member import Member
+
+from app.extensions import db
 from app.utils.constants import RelationType
+
+from .member import Member
 
 
 class Relationship(db.Model):

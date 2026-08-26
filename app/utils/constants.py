@@ -1,5 +1,6 @@
 from enum import Enum
 
+
 class NameConstants:
     NamePlaceholder = 'Your Name'
     NameRequired = 'Name is required'

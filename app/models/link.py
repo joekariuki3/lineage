@@ -1,5 +1,6 @@
-from app.extensions import db
 from sqlalchemy.orm import Mapped
+
+from app.extensions import db
 
 
 class Link(db.Model):

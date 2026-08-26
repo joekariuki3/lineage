@@ -1,4 +1,5 @@
 from flask import url_for
+
 from tests.utils import login_test_user_1
 
 
@@ -80,7 +81,7 @@ def test_create_link_for_family_not_belonging_to_user(client, test_user_and_fami
         AssertionError: If the response status code is not 200 or if the error message
         "You do not have permission to access this family" is not found in the response.
     """
-    user, family = test_user_and_family
+    user, _ = test_user_and_family
     login_test_user_1(client, user)
     response = client.post(url_for("link.create_link"), data={"family_id": test_family_2.family_id}, follow_redirects=True)
     assert response.status_code == 200

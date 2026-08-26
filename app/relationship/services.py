@@ -1,7 +1,7 @@
-from app.models import Relationship, Member
+
 from app.extensions import db
+from app.models import Member, Relationship
 from app.services.service_base import service_response
-from typing import Tuple
 from app.utils.constants import RelationType
 
 
@@ -11,7 +11,7 @@ class RelationshipService:
     def __init__(self, db_session=None):
         self.db = db.session or db_session
 
-    def create_relationship(self, member_id_1: int, member_id_2: int, relationship_type: RelationType) -> Tuple[dict, int]:
+    def create_relationship(self, member_id_1: int, member_id_2: int, relationship_type: RelationType) -> tuple[dict, int]:
         try:
             member1 = self.db.get(Member, member_id_1)
             member2 = self.db.get(Member, member_id_2)
@@ -30,5 +30,5 @@ class RelationshipService:
         except Exception as e:
             self.db.rollback()
             # TODO: log error
-            print(f"Error creating relationship: {str(e)}")
+            print(f"Error creating relationship: {e!s}")
             return service_response(500, "Error creating relationship", "danger", None)

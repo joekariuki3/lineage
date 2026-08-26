@@ -1,11 +1,13 @@
-from flask import render_template, redirect, url_for, flash, request, current_app as app
-from flask_login import logout_user, current_user
-from .forms import LoginForm, RegisterForm, ResetPasswordRequestForm, ResetPasswordForm
-from .services import AuthService
+from flask import Blueprint, flash, redirect, render_template, request, url_for
+from flask import current_app as app
+from flask_login import current_user, logout_user
+
 from app.models import User
-from app.user.services import UserService
 from app.services.email_service import send_password_reset_email
-from flask import Blueprint
+from app.user.services import UserService
+
+from .forms import LoginForm, RegisterForm, ResetPasswordForm, ResetPasswordRequestForm
+from .services import AuthService
 
 auth_bp = Blueprint("auth", __name__)
 
@@ -93,7 +95,7 @@ def reset_password_request():
     if form.validate_on_submit():
         user_service = UserService()
 
-        data, status = user_service.get_user(email=form.email.data)
+        data, _ = user_service.get_user(email=form.email.data)
         user = data.get("data")
         if user:
             send_password_reset_email(user)

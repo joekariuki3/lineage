@@ -1,5 +1,7 @@
 from datetime import date
+
 import pytest
+
 from app.models.member import Member
 from app.models.relationship import Relationship, RelationType
 from app.utils.constants import Gender

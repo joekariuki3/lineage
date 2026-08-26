@@ -1,9 +1,11 @@
-from typing import Optional, Dict, Any
-from flask_login import UserMixin
-from werkzeug.security import generate_password_hash, check_password_hash
-import jwt
 from time import time
+from typing import Any, Optional
+
+import jwt
+from flask_login import UserMixin
 from sqlalchemy.orm import Mapped
+from werkzeug.security import check_password_hash, generate_password_hash
+
 from app.extensions import db
 
 
@@ -70,7 +72,7 @@ class User(db.Model, UserMixin):
         """
         return str(self.user_id)
 
-    def _create_reset_token_payload(self, expires_in: int) -> Dict[str, Any]:
+    def _create_reset_token_payload(self, expires_in: int) -> dict[str, Any]:
         """Create the payload for a password-reset token.
 
         Args:

@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template
+
 from app.extensions import db
 
 error_bp = Blueprint("error", __name__)

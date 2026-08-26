@@ -1,7 +1,9 @@
-from flask import Blueprint, flash, redirect, url_for, request
+from flask import Blueprint, flash, redirect, request, url_for
+from flask_login import current_user, login_required
+
 from app.family.services import FamilyService
+
 from .services import LinkService
-from flask_login import login_required, current_user
 
 link_bp = Blueprint("link", __name__)
 

@@ -1,8 +1,10 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, EmailField
-from wtforms.validators import DataRequired, EqualTo, Email, ValidationError
-from app.utils.constants import NameConstants, EmailConstants, PasswordConstants
+from wtforms import BooleanField, EmailField, PasswordField, StringField, SubmitField
+from wtforms.validators import DataRequired, Email, EqualTo, ValidationError
+
 from app.user.services import UserService
+from app.utils.constants import EmailConstants, NameConstants, PasswordConstants
+
 
 class RegisterForm(FlaskForm):
     """form for a user to create an account"""
