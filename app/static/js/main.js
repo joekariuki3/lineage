@@ -226,3 +226,11 @@ function copyLink(linkId) {
     copyButton.classList.remove("bg-green-600");
   }, 2000);
 }
+
+// On Error page, get Home button and redirect to home page
+const homeButton = document.getElementById("homeButton");
+if (homeButton) {
+  homeButton.addEventListener("click", function () {
+    window.location.href = "/";
+  });
+}
