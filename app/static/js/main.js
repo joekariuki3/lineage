@@ -200,10 +200,8 @@ function getChildren(event) {
         }
       },
       error: function (xhr, textStatus, errorThrown) {
-        console.log(xhr);
         console.log(xhr.status);
-        console.log(textStatus);
-        console.log(errorThrown);
+        console.log(xhr.responseJSON.warning);
       },
     });
   }

@@ -30,7 +30,8 @@ def test_get_member_unauthenticated(test_member_1):
     service = MemberService()
     response, status = service.get_member(test_member_1.member_id)
     assert status == HTTPStatus.UNAUTHORIZED
-    assert response['data'] is None
+    assert response["data"] is None
+
 
 def test_get_member_not_found(test_user_1):
     """
@@ -52,7 +53,8 @@ def test_get_member_not_found(test_user_1):
     response, status = service.get_member(9999)
 
     assert status == HTTPStatus.NOT_FOUND
-    assert response['data'] is None
+    assert response["data"] is None
+
 
 def test_get_member_forbidden(test_member_1, test_user_1):
     """
@@ -78,7 +80,8 @@ def test_get_member_forbidden(test_member_1, test_user_1):
     service = MemberService()
     response, status = service.get_member(test_member_1.member_id)
     assert status == HTTPStatus.FORBIDDEN
-    assert response['data'] is None
+    assert response["data"] is None
+
 
 def test_get_member_success(session, test_member_1, test_user_1):
     """
@@ -110,7 +113,8 @@ def test_get_member_success(session, test_member_1, test_user_1):
     response, status = service.get_member(test_member_1.member_id)
 
     assert status == HTTPStatus.OK
-    assert response['data'] == test_member_1
+    assert response["data"] == test_member_1
+
 
 def test_get_member_error(session, test_member_1, test_user_1, monkeypatch):
     """
@@ -146,9 +150,10 @@ def test_get_member_error(session, test_member_1, test_user_1, monkeypatch):
     response, status = service.get_member(test_member_1.member_id)
 
     assert status == HTTPStatus.INTERNAL_SERVER_ERROR
-    assert response['data'] is None
+    assert response["data"] is None
 
-def test_is_member_accessible_by_user_true(test_member_1, test_user_1 ):
+
+def test_is_member_accessible_by_user_true(test_member_1, test_user_1):
     """
     Checks if a specific member is accessible by a user through the member's
     associated family. The function ensures the user is logged in, associates
@@ -172,7 +177,8 @@ def test_is_member_accessible_by_user_true(test_member_1, test_user_1 ):
 
     assert service.is_member_accessible_by_user(test_member_1)
 
-def test_is_member_accessible_by_user_false(test_member_1, test_user_1 ):
+
+def test_is_member_accessible_by_user_false(test_member_1, test_user_1):
     """
     Determines if a member is accessible by a specific user and asserts that it is not.
 
@@ -188,6 +194,7 @@ def test_is_member_accessible_by_user_false(test_member_1, test_user_1 ):
 
     service = MemberService()
     assert not service.is_member_accessible_by_user(test_member_1)
+
 
 def test_create_member(app):
     """
@@ -206,16 +213,14 @@ def test_create_member(app):
     service = MemberService()
 
     response, status = service.create_member(
-        first_name="Allan",
-        last_name="Kim",
-        family_id=1,
-        gender=Gender.MALE.value
+        first_name="Allan", last_name="Kim", family_id=1, gender=Gender.MALE.value
     )
 
     assert status == HTTPStatus.CREATED
-    assert response['message'] == "Member created successfully"
-    assert response['category'] == "success"
-    assert response['data'] is not None
+    assert response["message"] == "Member created successfully"
+    assert response["category"] == "success"
+    assert response["data"] is not None
+
 
 def test_create_member_error(app, monkeypatch):
     """
@@ -257,8 +262,9 @@ def test_create_member_error(app, monkeypatch):
     )
 
     assert status == HTTPStatus.INTERNAL_SERVER_ERROR
-    assert response['message'] == "Error creating member"
-    assert response['data'] is None
+    assert response["message"] == "Error creating member"
+    assert response["data"] is None
+
 
 def test_get_member_siblings_not_found(session, test_user_1, test_member_1):
     """
@@ -290,7 +296,10 @@ def test_get_member_siblings_not_found(session, test_user_1, test_member_1):
     assert response["message"] == "No siblings found"
     assert siblings is None
 
-def test_get_member_siblings(session, test_user_1, test_member_1, test_member_2, test_member_3):
+
+def test_get_member_siblings(
+    session, test_user_1, test_member_1, test_member_2, test_member_3
+):
     """
     Tests retrieval of siblings for a given member within the same family. This function verifies that members
     sharing the same father and mother are correctly identified and retrieved as siblings by the service.
@@ -324,7 +333,10 @@ def test_get_member_siblings(session, test_user_1, test_member_1, test_member_2,
     assert test_member_2 in siblings
     assert test_member_3 in siblings
 
-def test_get_member_siblings_error(session, test_user_1, test_member_1, test_member_2, test_member_3, monkeypatch):
+
+def test_get_member_siblings_error(
+    session, test_user_1, test_member_1, test_member_2, test_member_3, monkeypatch
+):
     """
     Tests the behavior of the `get_member_siblings` method of the `MemberService` class
     when the database query for retrieving siblings raises an exception. This test ensures
@@ -382,6 +394,7 @@ def test_get_member_siblings_error(session, test_user_1, test_member_1, test_mem
     assert response["message"] == "Error retrieving siblings"
     assert siblings is None
 
+
 def test_get_member_children_not_found(session, test_user_1, test_member_1):
     """
     Tests the `get_member_children` method when no children are found.
@@ -415,11 +428,14 @@ def test_get_member_children_not_found(session, test_user_1, test_member_1):
     service = MemberService()
     response, status = service.get_member_children(test_member_1.member_id)
     children = response["data"]
-    assert status == HTTPStatus.NOT_FOUND
+    assert status == HTTPStatus.OK
     assert response["message"] == "No children found"
-    assert children is None
+    assert len(children) == 0
 
-def test_get_member_children(session, test_user_1, test_member_1, test_member_2, test_member_3):
+
+def test_get_member_children(
+    session, test_user_1, test_member_1, test_member_2, test_member_3
+):
     """
     Tests retrieving the children of a specific member through the member service.
 
@@ -465,7 +481,10 @@ def test_get_member_children(session, test_user_1, test_member_1, test_member_2,
     assert test_member_2 in children
     assert test_member_3 in children
 
-def test_get_member_children_error(session, test_user_1, test_member_1, test_member_2, test_member_3, monkeypatch):
+
+def test_get_member_children_error(
+    session, test_user_1, test_member_1, test_member_2, test_member_3, monkeypatch
+):
     """
     Tests the behavior of the `get_member_children` function in the face of a simulated database error during the
     retrieval of children of a specific family member.
@@ -526,6 +545,7 @@ def test_get_member_children_error(session, test_user_1, test_member_1, test_mem
     assert response["message"] == "Error retrieving children"
     assert children is None
 
+
 def test_get_member_spouses_not_found(session, test_user_1, test_member_1):
     """
     Test for the get_member_spouses method when no spouses are found.
@@ -561,6 +581,7 @@ def test_get_member_spouses_not_found(session, test_user_1, test_member_1):
     assert response["message"] == "No spouses found"
     assert spouses is None
 
+
 def test_get_member_spouses(session, test_user_1, test_member_1, test_member_2):
     """
     Test the functionality of retrieving spouses for a given family member.
@@ -587,9 +608,11 @@ def test_get_member_spouses(session, test_user_1, test_member_1, test_member_2):
     login_user(test_user_1)
 
     # associate test_member_2 as the spouse of test_member_1
-    relationship = Relationship(member_id_1=test_member_1.member_id,
-                                member_id_2=test_member_2.member_id,
-                                relationship_type=RelationType.SPOUSE)
+    relationship = Relationship(
+        member_id_1=test_member_1.member_id,
+        member_id_2=test_member_2.member_id,
+        relationship_type=RelationType.SPOUSE,
+    )
     session.add(relationship)
     session.commit()
 
@@ -600,7 +623,10 @@ def test_get_member_spouses(session, test_user_1, test_member_1, test_member_2):
     assert response["message"] == "Spouses retrieved successfully"
     assert test_member_2 in spouses
 
-def test_get_member_spouses_error(session, test_user_1, test_member_1, test_member_2, monkeypatch):
+
+def test_get_member_spouses_error(
+    session, test_user_1, test_member_1, test_member_2, monkeypatch
+):
     """
     Tests the error handling of the `get_member_spouses` method when a database error occurs
     during the retrieval of a member's spouses. Ensures that appropriate error status and
@@ -621,9 +647,11 @@ def test_get_member_spouses_error(session, test_user_1, test_member_1, test_memb
     login_user(test_user_1)
 
     # associate test_member_2 as the spouse of test_member_1
-    relationship = Relationship(member_id_1=test_member_1.member_id,
-                                member_id_2=test_member_2.member_id,
-                                relationship_type=RelationType.SPOUSE)
+    relationship = Relationship(
+        member_id_1=test_member_1.member_id,
+        member_id_2=test_member_2.member_id,
+        relationship_type=RelationType.SPOUSE,
+    )
     session.add(relationship)
     session.commit()
 
@@ -649,6 +677,7 @@ def test_get_member_spouses_error(session, test_user_1, test_member_1, test_memb
     assert status == HTTPStatus.INTERNAL_SERVER_ERROR
     assert response["message"] == "Error retrieving spouses"
     assert spouses is None
+
 
 def test_update_member(session, test_user_1, test_member_1):
     """
@@ -681,13 +710,16 @@ def test_update_member(session, test_user_1, test_member_1):
         "first_name": "New",
         "last_name": "Name",
     }
-    response, status = service.update_member(member_id=test_member_1.member_id, member_data=member_data)
+    response, status = service.update_member(
+        member_id=test_member_1.member_id, member_data=member_data
+    )
 
     member = response["data"].member_data
     assert status == HTTPStatus.OK
     assert response["message"] == "Member updated successfully"
     assert member["first_name"] == "New"
     assert member["last_name"] == "Name"
+
 
 def test_update_member_error(session, test_user_1, test_member_1, monkeypatch):
     """
@@ -733,7 +765,9 @@ def test_update_member_error(session, test_user_1, test_member_1, monkeypatch):
         "first_name": "New",
         "last_name": "Name",
     }
-    response, status = service.update_member(member_id=test_member_1.member_id, member_data=member_data)
+    response, status = service.update_member(
+        member_id=test_member_1.member_id, member_data=member_data
+    )
 
     assert status == HTTPStatus.INTERNAL_SERVER_ERROR
     assert response["message"] == "Error updating member"
@@ -741,6 +775,7 @@ def test_update_member_error(session, test_user_1, test_member_1, monkeypatch):
 
     # here we are undoing the monkeypatching to prevent other tests or teardown process using commit from failing
     monkeypatch.undo()
+
 
 def test_delete_member(session, test_user_1):
     """
@@ -773,6 +808,7 @@ def test_delete_member(session, test_user_1):
     response, status = service.delete_member(member.member_id)
     assert status == HTTPStatus.OK
     assert response["message"] == "Member deleted successfully"
+
 
 def test_delete_member_error(session, test_user_1, monkeypatch):
     """
