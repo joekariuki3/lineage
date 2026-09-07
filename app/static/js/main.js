@@ -56,25 +56,38 @@ function getSpouse(event) {
         const spouses = resp[0];
         const login = resp[1]["authenticated"];
         let addBtn = "";
-        $.each(spouses, function (index, spouse) {
-          let spouseClass = "";
-          let alive = "";
-          if (spouse.gender === "Female") {
-            spouseClass = "wife";
-          } else if (spouse.gender === "Male") {
-            spouseClass = "husband";
-          }
-          if (!spouse.alive) {
-            alive = "deceased";
-          }
-
-          if (login) {
-            addBtn = `<a href="/member/${id}/${spouse.member_id}/child" class="member-dropdown-item"><span class="item-icon text-green-600">+</span><span>Add Child</span></a>`;
-          }
-
+        if (spouses.length === 0) {
           $(`#spouse_${id}`).append(
             `<ul>
               <li>
+                <details>
+                  <summary class="member" member1_id="${id}">
+                    <span class="member-name text-gray-500 italic">No Spouse Yet</span>
+                  </summary>
+                </details>
+              </li>
+            </ul>`,
+          );
+        } else {
+          const spouseList = $("<ul></ul>");
+          $.each(spouses, function (index, spouse) {
+            let spouseClass = "";
+            let alive = "";
+            if (spouse.gender === "Female") {
+              spouseClass = "wife";
+            } else if (spouse.gender === "Male") {
+              spouseClass = "husband";
+            }
+            if (!spouse.alive) {
+              alive = "deceased";
+            }
+
+            if (login) {
+              addBtn = `<a href="/member/${id}/${spouse.member_id}/child" class="member-dropdown-item"><span class="item-icon text-green-600">+</span><span>Add Child</span></a>`;
+            }
+
+            spouseList.append(
+              `<li>
                 <details>
                   <summary class="member ${spouseClass} ${alive}" member1_id="${id}" spouse_id="${spouse.member_id}" onclick="getChildren(event)">
                     <span class="member-name">${spouse.first_name} ${spouse.last_name}</span>
@@ -97,11 +110,11 @@ function getSpouse(event) {
                   </summary>
                   <div class="" id="children_${spouse.member_id}"></div>
                 </details>
-              </li>
-            </ul>
-            `,
-          );
-        });
+              </li>`,
+            );
+          });
+          $(`#spouse_${id}`).append(spouseList);
+        }
       },
       fail: function (xhr, textStatus, errorThrown) {
         console.log(xhr);
@@ -146,45 +159,45 @@ function getChildren(event) {
               </li>
             </ul>`,
           );
-        }
-        $.each(children, function (index, child) {
-          let alive = "";
-          if (login) {
-            addBtn = `<a href="/member/${child.member_id}/spouse" class="member-dropdown-item"><span class="item-icon text-green-600">+</span><span>Add Spouse</span></a>`;
-          }
-          if (!child.alive) {
-            alive = "deceased";
-          }
-          $(`#children_${s_id}`).append(
-            `<ul>
-                <li>
-                  <details>
-                    <summary class="member ${alive}" member1_id="${child.member_id}" onclick="getSpouse(event)">
-                      <span class="member-name">${child.first_name} ${child.last_name}</span>
-                      <span class="member-actions" onclick="event.stopPropagation()">
-                        <div class="member-dropdown">
-                          <button type="button" class="member-menu-btn" onclick="toggleMemberMenu(event)" title="Options" aria-label="Options">
-                            <svg class="menu-dots-icon" viewBox="0 0 20 20" fill="currentColor">
-                              <path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z"></path>
-                            </svg>
-                          </button>
-                          <div class="member-dropdown-menu hidden">
-                            ${addBtn}
-                            <a href="/member/${child.member_id}" class="member-dropdown-item">
-                              <span class="item-icon text-blue-500">👤</span>
-                              <span>Profile</span>
-                            </a>
-                          </div>
+        } else {
+          const childrenList = $("<ul></ul>");
+          $.each(children, function (index, child) {
+            let alive = "";
+            if (login) {
+              addBtn = `<a href="/member/${child.member_id}/spouse" class="member-dropdown-item"><span class="item-icon text-green-600">+</span><span>Add Spouse</span></a>`;
+            }
+            if (!child.alive) {
+              alive = "deceased";
+            }
+            childrenList.append(
+              `<li>
+                <details>
+                  <summary class="member ${alive}" member1_id="${child.member_id}" onclick="getSpouse(event)">
+                    <span class="member-name">${child.first_name} ${child.last_name}</span>
+                    <span class="member-actions" onclick="event.stopPropagation()">
+                      <div class="member-dropdown">
+                        <button type="button" class="member-menu-btn" onclick="toggleMemberMenu(event)" title="Options" aria-label="Options">
+                          <svg class="menu-dots-icon" viewBox="0 0 20 20" fill="currentColor">
+                            <path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z"></path>
+                          </svg>
+                        </button>
+                        <div class="member-dropdown-menu hidden">
+                          ${addBtn}
+                          <a href="/member/${child.member_id}" class="member-dropdown-item">
+                            <span class="item-icon text-blue-500">👤</span>
+                            <span>Profile</span>
+                          </a>
                         </div>
-                      </span>
-                    </summary>
-                    <div class="" id="spouse_${child.member_id}"></div>
-                  </details>
-                </li>
-              </ul>
-            `,
-          );
-        });
+                      </div>
+                    </span>
+                  </summary>
+                  <div class="" id="spouse_${child.member_id}"></div>
+                </details>
+              </li>`,
+            );
+          });
+          $(`#children_${s_id}`).append(childrenList);
+        }
       },
       error: function (xhr, textStatus, errorThrown) {
         console.log(xhr);
