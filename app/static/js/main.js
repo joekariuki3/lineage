@@ -56,6 +56,19 @@ function getSpouse(event) {
         const spouses = resp[0];
         const login = resp[1]["authenticated"];
         let addBtn = "";
+        if (spouses.length === 0) {
+          $(`#spouse_${id}`).append(
+            `<ul>
+              <li>
+                <details>
+                  <summary class="member" member1_id="${id}">
+                    <span class="member-name text-gray-500 italic">No Spouse Yet</span>
+                  </summary>
+                </details>
+              </li>
+            </ul>`,
+          );
+        }
         $.each(spouses, function (index, spouse) {
           let spouseClass = "";
           let alive = "";
