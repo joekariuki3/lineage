@@ -1,7 +1,7 @@
-from typing import Tuple, Union, List
 from http import HTTPStatus
 
-def service_response(status_code: int, message: str, category: str, data: Union[dict, List, None]) -> Tuple[dict, int]:
+
+def service_response(status_code: int, message: str, category: str, data: dict | list | None) -> tuple[dict, int]:
     """
     Generates a standard response for a service in the application.
 

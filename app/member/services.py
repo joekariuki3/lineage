@@ -1,10 +1,12 @@
+import traceback
+
+from flask_login import current_user
+
 from app.extensions import db
+from app.family.services import FamilyService
 from app.models import Member, Relationship
 from app.services.service_base import service_response
-from flask_login import current_user
-from typing import Tuple
-from app.family.services import FamilyService
-import traceback
+
 
 class MemberService:
     """Service class for managing family members."""
@@ -13,7 +15,7 @@ class MemberService:
         self.db = db.session or db_session
         self.family_service = FamilyService()
 
-    def get_member(self, member_id: int) -> Tuple[dict, int]: #TODO: get multiple members by id in a list [id1, id2, id3] -> [member1, member2, member3]
+    def get_member(self, member_id: int) -> tuple[dict, int]: #TODO: get multiple members by id in a list [id1, id2, id3] -> [member1, member2, member3]
         """
         Retrieve a member by its ID.
 
@@ -58,7 +60,7 @@ class MemberService:
         """
         return member.family_id in [family.family_id for family in current_user.families]
 
-    def create_member(self, **member_data) -> Tuple[dict, int]:
+    def create_member(self, **member_data) -> tuple[dict, int]:
         """
         Creates a new family member.
 
@@ -76,14 +78,14 @@ class MemberService:
         except ValueError as e:
             self.db.rollback()
             # TODO: log error
-            print(f"Error creating member: {str(e)}")
+            print(f"Error creating member: {e!s}")
             error_message = traceback.format_exc()
             print(f"Traceback: {error_message}")
             return service_response(500, str(e), "danger", None)
         except Exception as e:
             self.db.rollback()
             # TODO: log error
-            print(f"Error creating member: {str(e)}")
+            print(f"Error creating member: {e!s}")
             error_message = traceback.format_exc()
             print(f"Traceback: {error_message}")
             return service_response(500, "Error creating member", "danger", None)
@@ -141,11 +143,11 @@ class MemberService:
                 message, category = family_data.get("message"), family_data.get("category")
                 return service_response(status_code, message, category, None)
             # TODO: log error
-            print(f"Error creating root member: {str(e)}")
+            print(f"Error creating root member: {e!s}")
             self.db.rollback()
             return service_response(500, "Error creating root member", "danger", None)
 
-    def get_member_siblings(self, member_id: int) -> Tuple[dict, int]:
+    def get_member_siblings(self, member_id: int) -> tuple[dict, int]:
         """
         Retrieves all siblings of a family member by their member ID.
 
@@ -178,7 +180,7 @@ class MemberService:
             # TODO: log error
             return service_response(500, "Error retrieving siblings", "danger", None)
 
-    def get_member_children(self, member_id: int) -> Tuple[dict, int]:
+    def get_member_children(self, member_id: int) -> tuple[dict, int]:
         """
         Retrieves all children of a family member by their member ID.
 
@@ -210,7 +212,7 @@ class MemberService:
             # TODO: log error
             return service_response(500, "Error retrieving children", "danger", None)
 
-    def get_member_spouses(self, member_id: int) -> Tuple[dict, int]:
+    def get_member_spouses(self, member_id: int) -> tuple[dict, int]:
         """
         Retrieves all spouses of a family member by their member ID.
 
@@ -250,7 +252,7 @@ class MemberService:
             # TODO: log error
             return service_response(500, "Error retrieving spouses", "danger", None)
 
-    def update_member(self, member_id: int, **member_data) -> Tuple[dict, int]:
+    def update_member(self, member_id: int, **member_data) -> tuple[dict, int]:
         """
         Updates a family member's information.
 
@@ -277,7 +279,7 @@ class MemberService:
             # TODO: log error
             return service_response(500, "Error updating member", "danger", None)
 
-    def delete_member(self,member_id: int) -> Tuple[dict, int]:
+    def delete_member(self,member_id: int) -> tuple[dict, int]:
         """
         Deletes a family member.
 

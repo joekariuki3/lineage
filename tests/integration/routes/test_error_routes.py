@@ -1,5 +1,6 @@
 from flask import abort
 
+
 def test_404_error(client):
     """
     Tests the 404 error handling of the application.

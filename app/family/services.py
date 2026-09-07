@@ -1,19 +1,19 @@
-from app.models import Family
 from app.extensions import db
+from app.models import Family
 from app.services.service_base import service_response
-from typing import Tuple
+
 
 class FamilyService:
     def __init__(self, db_session=None):
         self.db = db.session or db_session
 
-    def get_family_by_id(self, family_id: int, user_id: int = None) -> Tuple[dict, int]:
+    def get_family_by_id(self, family_id: int, user_id: int | None = None) -> tuple[dict, int]:
         """
         Retrieves a family by its id.
 
         Args:
             family_id (int): The id of the family to retrieve.
-            user_id (int): The id of user requesting access to family.
+            user_id (Optional[int]): The id of user requesting access to family.
         Returns:
             Tuple[dict, int]: A tuple containing a dictionary and HTTP status code.
         """
@@ -29,7 +29,7 @@ class FamilyService:
             print(str(e))
             return service_response(500, "Something went wrong", "error", None)
 
-    def get_user_families(self, user_id: int) -> Tuple[dict, int]:
+    def get_user_families(self, user_id: int) -> tuple[dict, int]:
         """
         Retrieves all families for a user.
 
@@ -50,7 +50,7 @@ class FamilyService:
             # Todo: log the error
             return service_response(500, "Error retrieving families", "error", None)
 
-    def create_family(self, family_name: str, user_id: int) -> Tuple[dict, int]:
+    def create_family(self, family_name: str, user_id: int) -> tuple[dict, int]:
         """
         Creates a new family.
 
@@ -85,7 +85,7 @@ class FamilyService:
         family = self.db.query(Family).filter_by(family_id=family_id, user_id=user_id).first()
         return family is not None
 
-    def delete_family(self, family_id: int) -> Tuple[dict, int]:
+    def delete_family(self, family_id: int) -> tuple[dict, int]:
         """
         Deletes a family.
 

@@ -1,6 +1,9 @@
 from datetime import date
+
 import pytest
-from app.models.member import Member, Gender
+
+from app.models.member import Gender, Member
+
 
 def test_member_initialization():
     """

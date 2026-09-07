@@ -56,7 +56,7 @@ def test_get_family_by_id_error(test_family_1, monkeypatch):
     def mock_query(*args):
         raise Exception("Database error")
     monkeypatch.setattr(service.db, "query", mock_query)
-    response, status = service.get_family_by_id(family_id=test_family_1.family_id)
+    _, status = service.get_family_by_id(family_id=test_family_1.family_id)
     assert status == 500
 
 def test_get_user_families(test_user_with_two_families):

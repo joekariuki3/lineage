@@ -1,5 +1,6 @@
-from app.user.services import UserService
 from http import HTTPStatus
+
+from app.user.services import UserService
 
 
 def test_check_user_exists_false(app):

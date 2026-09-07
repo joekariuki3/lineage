@@ -15,3 +15,6 @@ dev = []
 # bandit options
 [tool.bandit]
 exclude_dirs = ["tests", ".venv"]
+
+[tool.ruff]
+lint.ignore = ["TRY002", "BLE001", "DTZ005", "DTZ001", "DTZ011", "RUF012"]

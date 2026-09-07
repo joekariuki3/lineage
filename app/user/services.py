@@ -1,7 +1,8 @@
+
 from app.extensions import db
 from app.models import User
-from typing import Tuple, Union
 from app.services.service_base import service_response
+
 
 class UserService:
     """
@@ -43,7 +44,7 @@ class UserService:
         """
         return self.db.query(db.exists().where(User.email == email)).scalar()
 
-    def create_user(self, name: str, email: str, password: str) -> Tuple[dict, int]:
+    def create_user(self, name: str, email: str, password: str) -> tuple[dict, int]:
         """
         Creates a new user and adds it to the database.
 
@@ -75,10 +76,10 @@ class UserService:
             return service_response(201, "User created successfully", "success", user)
         except Exception as e:
             self.db.rollback()
-            print(f"Error creating user: {str(e)}")
+            print(f"Error creating user: {e!s}")
             return service_response(500, "Something went wrong creating user", "danger", None)
 
-    def get_user(self, email: str = None, user_id: Union[int, None] = None) -> Tuple[dict, int]:
+    def get_user(self, email: str | None = None, user_id: int | None = None) -> tuple[dict, int]:
         """
         Retrieves a user from the database based on email or user_id. The function allows searching by either
         the email or user ID to locate a single user record. You can provide one or the other,
@@ -113,10 +114,10 @@ class UserService:
 
             return service_response(200, "User found", "success", user)
         except Exception as e:
-            print(f"Error retrieving user: {str(e)}")
+            print(f"Error retrieving user: {e!s}")
             return service_response(500, "Something went wrong retrieving user", "danger", None)
 
-    def update_user(self, user: User, **kwargs) -> Tuple[dict, int]:
+    def update_user(self, user: User, **kwargs) -> tuple[dict, int]:
         """
         Updates the attributes of the provided user object based on the keyword arguments and commits the
         changes to the database. If a password update is included, it is properly hashed before being set.
@@ -142,5 +143,5 @@ class UserService:
             return service_response(200, "User updated successfully", "success", user)
         except Exception as e:
             db.session.rollback()
-            print(f"Error updating user: {str(e)}")
+            print(f"Error updating user: {e!s}")
             return service_response(500, "Something went wrong updating user information", "error", None)

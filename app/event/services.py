@@ -1,16 +1,18 @@
+from datetime import datetime
+
+from flask_login import current_user
+
 from app.extensions import db
 from app.models import Event, User
 from app.services.service_base import service_response
-from datetime import datetime
-from typing import Tuple, Union
-from flask_login import current_user
+
 
 class EventService:
 
     def __init__(self, db_session=None):
         self.db = db_session or db.session
 
-    def create_event(self, event_date: datetime, event_name: str, family_id: int, location: Union[str, None], description: Union[str, None]) -> Tuple[dict, int]:
+    def create_event(self, event_date: datetime, event_name: str, family_id: int, location: str | None, description: str | None) -> tuple[dict, int]:
         """
         creates a new event instance and saves it to the database.
 
@@ -37,11 +39,11 @@ class EventService:
 
             return service_response(201, "Event created successfully", "success", event)
         except Exception as e:
-            print(f"Error creating event: {str(e)}")
+            print(f"Error creating event: {e!s}")
             self.db.rollback()
             return service_response(500, "Error creating event", "danger", None)
 
-    def get_upcoming_events(self, family_id: int) -> Tuple[dict, int]:
+    def get_upcoming_events(self, family_id: int) -> tuple[dict, int]:
         """
         Retrieves upcoming events for a specific family.
 
@@ -60,7 +62,7 @@ class EventService:
         except Exception:
             return service_response(500, "Error retrieving upcoming events", "danger", None)
 
-    def get_past_events(self, family_id: int) -> Tuple[dict, int]:
+    def get_past_events(self, family_id: int) -> tuple[dict, int]:
         """
         Retrieves past events for a specific family, ordered by the most recent events first.
 
@@ -79,7 +81,7 @@ class EventService:
         except Exception:
             return service_response(500, "Error retrieving past events", "danger", None)
 
-    def get_event(self, event_id: int) -> Tuple[dict, int]:
+    def get_event(self, event_id: int) -> tuple[dict, int]:
         """
         Retrieves an event by its ID.
 
@@ -112,7 +114,7 @@ class EventService:
         users_family_ids = [family.family_id for family in user.families]
         return event.family_id in users_family_ids
 
-    def delete_an_event(self, event_id: int) -> Tuple[dict, int]:
+    def delete_an_event(self, event_id: int) -> tuple[dict, int]:
         """
         Deletes an event from the database.
 
@@ -139,7 +141,7 @@ class EventService:
             self.db.rollback()
             return service_response(500, "Error deleting event", "danger", None)
 
-    def update_event(self, event: Event, event_date: datetime, event_name: str, location: str, description: str) -> Tuple[dict, int]:
+    def update_event(self, event: Event, event_date: datetime, event_name: str, location: str, description: str) -> tuple[dict, int]:
         """
         updates an event in the database.
 

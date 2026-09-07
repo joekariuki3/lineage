@@ -1,5 +1,7 @@
 from datetime import datetime
+
 from app.models.event import Event
+
 
 def test_event_initialization():
     """

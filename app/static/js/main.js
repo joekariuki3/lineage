@@ -1,6 +1,45 @@
+function toggleMemberMenu(event) {
+  event.stopPropagation();
+  event.preventDefault();
+  const btn = event.currentTarget;
+  const menu = btn.nextElementSibling;
+
+  // Close any other open member dropdowns
+  document.querySelectorAll(".member-dropdown-menu").forEach((m) => {
+    if (m !== menu) {
+      m.classList.add("hidden");
+    }
+  });
+
+  const isOpening = menu.classList.contains("hidden");
+  menu.classList.toggle("hidden");
+
+  if (isOpening) {
+    // Reset to default left alignment
+    menu.style.left = "0";
+    menu.style.right = "auto";
+
+    // If the dropdown extends beyond the right edge of the viewport, anchor to the right
+    const rect = menu.getBoundingClientRect();
+    if (rect.right > window.innerWidth - 8) {
+      menu.style.left = "auto";
+      menu.style.right = "0";
+    }
+  }
+}
+
+// Close member dropdown menus when clicking outside
+$(document).on("click", function (e) {
+  if (!$(e.target).closest(".member-dropdown").length) {
+    $(".member-dropdown-menu").addClass("hidden");
+  }
+});
+
 function getSpouse(event) {
-  let id = event.target.getAttribute("member1_id");
-  let detailIsOpen = event.target.parentElement.hasAttribute("open");
+  let memberEl = event.currentTarget || event.target.closest(".member");
+  if (!memberEl) return;
+  let id = memberEl.getAttribute("member1_id");
+  let detailIsOpen = memberEl.closest("details").hasAttribute("open");
   let myData = JSON.stringify({ member1_id: id });
   let url = "/member/spouses";
   if (detailIsOpen) {
@@ -30,7 +69,7 @@ function getSpouse(event) {
           }
 
           if (login) {
-            addBtn = `<a href="/member/${id}/${spouse.member_id}/child" class="btn btn-light btn-sm">+ Child</a> |`;
+            addBtn = `<a href="/member/${id}/${spouse.member_id}/child" class="member-dropdown-item"><span class="item-icon text-green-600">+</span><span>Add Child</span></a>`;
           }
 
           $(`#spouse_${id}`).append(
@@ -38,12 +77,24 @@ function getSpouse(event) {
               <li>
                 <details>
                   <summary class="member ${spouseClass} ${alive}" member1_id="${id}" spouse_id="${spouse.member_id}" onclick="getChildren(event)">
-                    ${spouse.first_name} ${spouse.last_name}
-                    </summary>
-                    <div class="member-buttons">
-                     ${addBtn}
-                      <a href="/member/${spouse.member_id}">More...</a>
-                    </div>
+                    <span class="member-name">${spouse.first_name} ${spouse.last_name}</span>
+                    <span class="member-actions" onclick="event.stopPropagation()">
+                      <div class="member-dropdown">
+                        <button type="button" class="member-menu-btn" onclick="toggleMemberMenu(event)" title="Options" aria-label="Options">
+                          <svg class="menu-dots-icon" viewBox="0 0 20 20" fill="currentColor">
+                            <path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z"></path>
+                          </svg>
+                        </button>
+                        <div class="member-dropdown-menu hidden">
+                          ${addBtn}
+                          <a href="/member/${spouse.member_id}" class="member-dropdown-item">
+                            <span class="item-icon text-blue-500">👤</span>
+                            <span>Profile</span>
+                          </a>
+                        </div>
+                      </div>
+                    </span>
+                  </summary>
                   <div class="" id="children_${spouse.member_id}"></div>
                 </details>
               </li>
@@ -62,9 +113,11 @@ function getSpouse(event) {
 }
 
 function getChildren(event) {
-  let id = event.target.getAttribute("member1_id");
-  let s_id = event.target.getAttribute("spouse_id");
-  let detailIsOpen = event.target.parentElement.hasAttribute("open");
+  let memberEl = event.currentTarget || event.target.closest(".member");
+  if (!memberEl) return;
+  let id = memberEl.getAttribute("member1_id");
+  let s_id = memberEl.getAttribute("spouse_id");
+  let detailIsOpen = memberEl.closest("details").hasAttribute("open");
   let myData = JSON.stringify({ member1_id: id, spouse_id: s_id });
   let url = "/member/children";
   if (detailIsOpen) {
@@ -87,7 +140,7 @@ function getChildren(event) {
               <li>
                 <details>
                   <summary class="member" member1_id="${id}" spouse_id="${s_id}">
-                    No children Yet
+                    <span class="member-name text-gray-500 italic">No children Yet</span>
                   </summary>
                 </details>
               </li>
@@ -97,7 +150,7 @@ function getChildren(event) {
         $.each(children, function (index, child) {
           let alive = "";
           if (login) {
-            addBtn = `<a href="/member/${child.member_id}/spouse" class="btn btn-light btn-sm">+ spouse</a> |`;
+            addBtn = `<a href="/member/${child.member_id}/spouse" class="member-dropdown-item"><span class="item-icon text-green-600">+</span><span>Add Spouse</span></a>`;
           }
           if (!child.alive) {
             alive = "deceased";
@@ -107,12 +160,24 @@ function getChildren(event) {
                 <li>
                   <details>
                     <summary class="member ${alive}" member1_id="${child.member_id}" onclick="getSpouse(event)">
-                      ${child.first_name} ${child.last_name}
+                      <span class="member-name">${child.first_name} ${child.last_name}</span>
+                      <span class="member-actions" onclick="event.stopPropagation()">
+                        <div class="member-dropdown">
+                          <button type="button" class="member-menu-btn" onclick="toggleMemberMenu(event)" title="Options" aria-label="Options">
+                            <svg class="menu-dots-icon" viewBox="0 0 20 20" fill="currentColor">
+                              <path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z"></path>
+                            </svg>
+                          </button>
+                          <div class="member-dropdown-menu hidden">
+                            ${addBtn}
+                            <a href="/member/${child.member_id}" class="member-dropdown-item">
+                              <span class="item-icon text-blue-500">👤</span>
+                              <span>Profile</span>
+                            </a>
+                          </div>
+                        </div>
+                      </span>
                     </summary>
-                    <div class="member-buttons">
-                      ${addBtn}
-                      <a href="/member/${child.member_id}">More...</a>
-                    </div>
                     <div class="" id="spouse_${child.member_id}"></div>
                   </details>
                 </li>
@@ -160,4 +225,12 @@ function copyLink(linkId) {
     copyButton.classList.add("bg-blue-600");
     copyButton.classList.remove("bg-green-600");
   }, 2000);
+}
+
+// On Error page, get Home button and redirect to home page
+const homeButton = document.getElementById("homeButton");
+if (homeButton) {
+  homeButton.addEventListener("click", function () {
+    window.location.href = "/";
+  });
 }

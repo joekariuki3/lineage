@@ -1,10 +1,12 @@
 from http import HTTPStatus
-from app.models import User
+
 from flask import url_for
-from flask_login import login_user, current_user
+from flask_login import current_user, login_user
+
 from app.auth.services import AuthService
-from app.user.services import UserService
+from app.models import User
 from app.services.service_base import service_response
+from app.user.services import UserService
 
 
 def test_register_get(client, test_user_1):

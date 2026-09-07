@@ -1,10 +1,13 @@
+from datetime import datetime
 from http import HTTPStatus
+
+from flask import url_for
+
 from app.family.services import FamilyService
 from app.services.service_base import service_response
-from tests.utils import login_test_user_1
-from flask import url_for
-from datetime import datetime
 from app.utils.constants import Gender
+from tests.utils import login_test_user_1
+
 
 def test_index(client, test_user_1):
     """
@@ -63,7 +66,7 @@ def test_index_with_invalid_family_id(client, test_user_and_family, test_family_
         AssertionError: If the response status code is not 200, or the error message
         does not appear in the response data.
     """
-    user, family = test_user_and_family
+    user, _ = test_user_and_family
     login_test_user_1(client, user)
     response = client.get(url_for("family.index", family_id=test_family_2.family_id), follow_redirects=True)
     assert response.status_code == 200
@@ -223,7 +226,7 @@ def test_delete_family_error(client, test_user_and_family, test_family_2):
         AssertionError: If the response status code is not 200, or if the expected error message
             is not found in the response data.
     """
-    user, family = test_user_and_family
+    user, _ = test_user_and_family
     login_test_user_1(client, user)
     response = client.post(url_for("family.delete_family", family_id=test_family_2.family_id), follow_redirects=True)
     assert response.status_code == 200

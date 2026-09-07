@@ -1,5 +1,6 @@
 from flask import url_for
 
+
 def login_test_user_1(client, test_user_1):
     """
     Logs a test user into the application using the provided client and credentials.

@@ -1,10 +1,12 @@
-from flask import Blueprint, render_template, redirect, url_for, flash
+from flask import Blueprint, flash, redirect, render_template, url_for
 from flask_login import current_user, login_required
-from .forms import CreateFamilyForm
-from app.member.forms import MemberForm
+
 from app.auth.services import AuthService
-from .services import FamilyService
+from app.member.forms import MemberForm
 from app.member.services import MemberService
+
+from .forms import CreateFamilyForm
+from .services import FamilyService
 
 family_bp = Blueprint("family", __name__)
 

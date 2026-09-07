@@ -1,27 +1,29 @@
+
 from flask import (
     Blueprint,
-    render_template,
-    redirect,
-    url_for,
     flash,
-    request,
     jsonify,
     make_response,
+    redirect,
+    render_template,
+    request,
+    url_for,
 )
 from flask_login import current_user, login_required
-from .forms import MemberForm
-from app.utils.constants import RelationType
-from .services import MemberService
-from app.relationship.services import RelationshipService
-from typing import Dict, Tuple, Union, List
+
 from app.models import Member
+from app.relationship.services import RelationshipService
+from app.utils.constants import RelationType
+
+from .forms import MemberForm
+from .services import MemberService
 
 member_bp = Blueprint("member", __name__)
 
 
 def retrieve_member(
-    member_id: int, call_type: Union[str, None] = None
-) -> Union[Member, None, Tuple[Dict, int]]:
+    member_id: int, call_type: str | None = None
+) -> Member | None | tuple[dict, int]:
     """
     Retrieve a member's details based on the provided member ID.
 
@@ -53,8 +55,8 @@ def retrieve_member(
 
 
 def retrieve_spouses(
-    member_id: int, call_type: Union[str, None] = None
-) -> Union[List[Member], None, Tuple[Dict, int]]:
+    member_id: int, call_type: str | None = None
+) -> list[Member] | None | tuple[dict, int]:
     """
     retrieves the spouses of a member based on the provided member ID. Depending on the provided
     call type or the success of the operation, returns either spouse data, a tuple containing
@@ -81,8 +83,8 @@ def retrieve_spouses(
 
 
 def retrieve_children(
-    member_id: int, call_type: Union[str, None] = None
-) -> Union[List[Member], None, Tuple[Dict, int]]:
+    member_id: int, call_type: str | None = None
+) -> list[Member] | None | tuple[dict, int]:
     """
     Retrieve children for a given member ID with an optional API call type.
 
@@ -117,7 +119,7 @@ def retrieve_children(
 
 def create_relationship(
     member_id: int, new_member_id: int, relationship_type: RelationType
-) -> Tuple[Dict, int]:
+) -> tuple[dict, int]:
     """
     Creates a relationship between two members using the specified relationship type.
 
@@ -351,7 +353,7 @@ def get_spouse():
     member_id = int(data.get("member1_id"))
     spouses_list = []
 
-    data, status = retrieve_spouses(member_id=member_id, call_type="api")
+    data, _ = retrieve_spouses(member_id=member_id, call_type="api")
     spouses = data.get("data")
     if spouses:
         for spouse in spouses:

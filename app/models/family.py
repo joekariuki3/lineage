@@ -1,5 +1,6 @@
-from typing import Optional
+
 from sqlalchemy.orm import Mapped
+
 from app.extensions import db
 
 
@@ -26,7 +27,7 @@ class Family(db.Model):
     )
 
     # Foreign keys
-    user_id: Mapped[Optional[int]] = db.Column(
+    user_id: Mapped[int | None] = db.Column(
         db.Integer,
         db.ForeignKey("users.user_id"),
         nullable=True,
@@ -43,7 +44,7 @@ class Family(db.Model):
         "Link", cascade="all,delete-orphan", back_populates="family"
     )
 
-    def __init__(self, name: str, user_id: Optional[int] = None) -> None:
+    def __init__(self, name: str, user_id: int | None = None) -> None:
         """Initialize a new family instance."""
         self.validate_name(name)
         self.name = name

@@ -1,7 +1,22 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, SelectField, DateField, RadioField, validators
+from wtforms import (
+    DateField,
+    RadioField,
+    SelectField,
+    StringField,
+    SubmitField,
+    validators,
+)
 from wtforms.validators import DataRequired
-from app.utils.constants import MemberConstants, GenderConstants, RelationshipConstants, Gender, RelationType
+
+from app.utils.constants import (
+    Gender,
+    GenderConstants,
+    MemberConstants,
+    RelationshipConstants,
+    RelationType,
+)
+
 
 class MemberForm(FlaskForm):
     """form to add a family member"""
@@ -29,7 +44,7 @@ class MemberForm(FlaskForm):
 
         The relationship field is only configured if add_relative_mode is provided.
         """
-        super(MemberForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         # if add_relative_mode is True means add child or spouse add relationship field.
         if add_relative_mode:

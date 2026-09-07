@@ -1,10 +1,13 @@
 from datetime import datetime
 from http import HTTPStatus
-from app.models.event import Event
-from app.event.services import EventService
-from app.services.service_base import service_response
+
 from flask import url_for
+
+from app.event.services import EventService
+from app.models.event import Event
+from app.services.service_base import service_response
 from tests.utils import login_test_user_1
+
 
 def test_add_event_get_user_no_family(client, test_user_1):
     """
@@ -225,7 +228,7 @@ def test_delete_event(client, session, app, test_user_and_family, test_event_1):
     Raises:
         AssertionError: If the event deletion operation or related conditions fail.
     """
-    user, family = test_user_and_family
+    user, _ = test_user_and_family
     login_test_user_1(client, user)
 
     # before deletion assert event exists
@@ -267,7 +270,7 @@ def test_delete_event_error(client, session, app, test_user_and_family, test_eve
         AssertionError: If any assertion regarding HTTP response, error message, or
             event existence in the database fails.
     """
-    user, family = test_user_and_family
+    user, _ = test_user_and_family
     login_test_user_1(client, user)
 
     # before deletion assert event exists
@@ -361,7 +364,7 @@ def test_edit_event_get(client, test_user_and_family, test_event_1):
         AssertionError: If the response code or content does not match
             expected values.
     """
-    user, family = test_user_and_family
+    user, _ = test_user_and_family
     login_test_user_1(client, user)
 
     response = client.get(url_for("event.edit_event", event_id=test_event_1.event_id), follow_redirects=True)

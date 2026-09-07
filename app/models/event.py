@@ -1,6 +1,7 @@
 from datetime import datetime
-from typing import Optional
+
 from sqlalchemy.orm import Mapped
+
 from app.extensions import db
 
 
@@ -36,8 +37,8 @@ class Event(db.Model):
     event_name: Mapped[str] = db.Column(db.String(NAME_LENGTH), nullable=False)
 
     # Optional fields
-    location: Mapped[Optional[str]] = db.Column(db.String(LOCATION_LENGTH))
-    description: Mapped[Optional[str]] = db.Column(db.String(DESCRIPTION_LENGTH))
+    location: Mapped[str | None] = db.Column(db.String(LOCATION_LENGTH))
+    description: Mapped[str | None] = db.Column(db.String(DESCRIPTION_LENGTH))
 
     # Foreign key
     family_id: Mapped[int] = db.Column(
@@ -52,8 +53,8 @@ class Event(db.Model):
         event_date: datetime,
         event_name: str,
         family_id: int,
-        location: Optional[str] = None,
-        description: Optional[str] = None,
+        location: str | None = None,
+        description: str | None = None,
     ) -> None:
         """
         Initialize a new Event instance.

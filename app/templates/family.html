@@ -144,37 +144,55 @@
     <ul class="tree">
       <li>
         <details>
-          {% if member.alive %}
           <summary
-            class="member"
+            class="member {% if not member.alive %}deceased{% endif %}"
             member1_id="{{member.member_id}}"
             onclick="getSpouse(event)"
           >
-            {% else%}
-            <summary
-              class="member deceased"
-              member1_id="{{member.member_id}}"
-              onclick="getSpouse(event)"
+            <span class="member-name"
+              >{{member.first_name}} {{member.last_name}}</span
             >
-              {% endif%} {{member.first_name}} {{member.last_name}}
-            </summary>
-            <div class="member-buttons mt-1">
-              {% if current_user.is_authenticated%}
-              <a
-                href="{{url_for('member.add_spouse', member_id=member.member_id)}}"
-                class="btn btn-light btn-sm"
-              >
-                + spouse
-              </a>
-              | {% endif%}
-              <a
-                href="{{url_for('member.member_profile', member_id=member.member_id)}}"
-              >
-                More...</a
-              >
-            </div>
-            <div id="spouse_{{member.member_id}}"></div>
+            <span class="member-actions" onclick="event.stopPropagation()">
+              <div class="member-dropdown">
+                <button
+                  type="button"
+                  class="member-menu-btn"
+                  onclick="toggleMemberMenu(event)"
+                  title="Options"
+                  aria-label="Options"
+                >
+                  <svg
+                    class="menu-dots-icon"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z"
+                    ></path>
+                  </svg>
+                </button>
+                <div class="member-dropdown-menu hidden">
+                  {% if current_user.is_authenticated %}
+                  <a
+                    href="{{url_for('member.add_spouse', member_id=member.member_id)}}"
+                    class="member-dropdown-item"
+                  >
+                    <span class="item-icon text-green-600">+</span>
+                    <span>Add Spouse</span>
+                  </a>
+                  {% endif %}
+                  <a
+                    href="{{url_for('member.member_profile', member_id=member.member_id)}}"
+                    class="member-dropdown-item"
+                  >
+                    <span class="item-icon text-blue-500">👤</span>
+                    <span>Profile</span>
+                  </a>
+                </div>
+              </div>
+            </span>
           </summary>
+          <div id="spouse_{{member.member_id}}"></div>
         </details>
       </li>
     </ul>

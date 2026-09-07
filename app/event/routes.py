@@ -1,5 +1,6 @@
-from flask import Blueprint, render_template, redirect, url_for, flash, request, session
+from flask import Blueprint, flash, redirect, render_template, request, session, url_for
 from flask_login import current_user, login_required
+
 from .forms import AddEventForm
 from .services import EventService
 
@@ -68,7 +69,7 @@ def get_events(family_id):
 def delete_event(event_id):
     event_service = EventService()
 
-    data, status = event_service.delete_an_event(event_id)
+    data, _ = event_service.delete_an_event(event_id)
 
     _, message, category = (
         data.get("data"),

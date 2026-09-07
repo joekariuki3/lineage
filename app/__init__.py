@@ -1,5 +1,7 @@
 from flask import Flask
+
 from config import DevelopmentConfig
+
 
 def create_app(config_class=DevelopmentConfig):
     app = Flask(__name__)
@@ -24,14 +26,14 @@ def create_app(config_class=DevelopmentConfig):
         return User.query.get(int(user_id))
 
     # Register blueprints
-    from .main.routes import main_bp
     from .auth import auth_bp
-    from .family import family_bp
-    from .event import event_bp
-    from .user import user_bp
-    from .member import member_bp
     from .error import error_bp
+    from .event import event_bp
+    from .family import family_bp
     from .link import link_bp
+    from .main.routes import main_bp
+    from .member import member_bp
+    from .user import user_bp
 
     app.register_blueprint(main_bp)
     app.register_blueprint(auth_bp)

@@ -1,8 +1,11 @@
-from flask import current_app as app, render_template, request, flash
-from flask_mail import Message
 from threading import Thread
-from app.extensions import mail
+
+from flask import current_app as app
+from flask import flash, render_template, request
+from flask_mail import Message
 from itsdangerous import URLSafeSerializer
+
+from app.extensions import mail
 
 
 def send_async_email(app, msg):

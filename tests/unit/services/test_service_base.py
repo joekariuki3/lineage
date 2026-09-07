@@ -1,6 +1,8 @@
-import pytest
-from app.services.service_base import service_response
 from http import HTTPStatus
+
+import pytest
+
+from app.services.service_base import service_response
 
 
 def test_service_response_success(app):

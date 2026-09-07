@@ -2,9 +2,11 @@
 import os
 import subprocess  # nosec B404
 import sys
+
+from flask_migrate import upgrade
+
 from app import create_app
 from config import ProductionConfig
-from flask_migrate import upgrade  # noqa: E402
 
 # Determine the absolute path to your application directory
 APP_DIR = os.path.dirname(os.path.abspath(__file__))

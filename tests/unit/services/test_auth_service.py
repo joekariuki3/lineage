@@ -1,7 +1,9 @@
 import pytest
-from app.auth.services import AuthService
-from flask_login import logout_user
 from flask import session as flask_session
+from flask_login import logout_user
+
+from app.auth.services import AuthService
+
 
 @pytest.fixture
 def user_with_one_family(session, test_user_1, test_family_1):

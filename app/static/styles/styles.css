@@ -58,11 +58,12 @@ label {
   border: 1px solid#484747;
 }
 .family-section {
-  /* border: 1px solid black; */
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  position: relative;
+  padding-bottom: 2rem;
 }
 
 /* build tree start */
@@ -105,8 +106,12 @@ label {
 }
 
 .tree summary {
-  display: block;
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
   cursor: pointer;
+  line-height: 1.4;
+  vertical-align: middle;
 }
 
 .tree summary::marker,
@@ -147,6 +152,104 @@ label {
 .tree details[open] > summary::before {
   content: "−";
 }
+
+.member-name {
+  display: inline-block;
+  font-weight: 500;
+}
+
+.member-actions {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 8px;
+  vertical-align: middle;
+}
+
+.member-dropdown {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.member-menu-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: #94a3b8;
+  cursor: pointer;
+  transition: all 0.15s ease-in-out;
+  outline: none;
+}
+
+.member-menu-btn:hover {
+  background: #f1f5f9;
+  color: #1e293b;
+  border-color: #e2e8f0;
+}
+
+.menu-dots-icon {
+  width: 15px;
+  height: 15px;
+  pointer-events: none;
+}
+
+.member-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  min-width: 130px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  box-shadow:
+    0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -4px rgba(0, 0, 0, 0.05);
+  padding: 4px;
+  z-index: 50;
+  white-space: nowrap;
+}
+
+.member-dropdown-menu.hidden {
+  display: none;
+}
+
+.member-dropdown-item {
+  display: flex;
+  align-items: center;
+  padding: 6px 10px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: #334155;
+  text-decoration: none;
+  border-radius: 6px;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+  cursor: pointer;
+}
+
+.member-dropdown-item:hover {
+  background-color: #f8fafc;
+  color: #0f172a;
+  text-decoration: none;
+}
+
+.member-dropdown-item .item-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  font-size: 0.95rem;
+  margin-right: 6px;
+  flex-shrink: 0;
+}
+
 .wife {
   color: #fc46aa;
 }

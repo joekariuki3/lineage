@@ -1,4 +1,5 @@
 import pytest
+
 from app.models.link import Link
 
 

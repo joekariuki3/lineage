@@ -1,17 +1,19 @@
 from flask import (
     Blueprint,
+    current_app,
+    flash,
+    redirect,
     render_template,
     request,
-    redirect,
     url_for,
-    flash,
-    current_app,
 )
-from flask_login import login_required, current_user
+from flask_login import current_user, login_required
+from itsdangerous import URLSafeSerializer
+
+from app.services.email_service import sendEmailVerificationLink
+
 from .forms import EditProfileForm
 from .services import UserService
-from app.services.email_service import sendEmailVerificationLink
-from itsdangerous import URLSafeSerializer
 
 user_bp = Blueprint("user", __name__)
 

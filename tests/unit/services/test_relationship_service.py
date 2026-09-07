@@ -1,6 +1,8 @@
+from http import HTTPStatus
+
 from app.relationship.services import RelationshipService
 from app.utils.constants import RelationType
-from http import HTTPStatus
+
 
 def test_create_relationship_invalid_member(test_member_1):
     """

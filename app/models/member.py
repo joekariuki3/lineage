@@ -1,8 +1,10 @@
-from app.extensions import db
 from datetime import date
-from sqlalchemy.orm import Mapped
-from typing import Optional, Dict, Any
+from typing import Any
+
 from flask_login import current_user
+from sqlalchemy.orm import Mapped
+
+from app.extensions import db
 from app.utils.constants import Gender
 
 
@@ -17,23 +19,23 @@ class Member(db.Model):
     last_name: Mapped[str] = db.Column(db.String(50), nullable=False)
     gender: Mapped[Gender] = db.Column(db.String(10))
     birthdate: Mapped[date] = db.Column(db.Date)
-    deathdate: Mapped[Optional[date]] = db.Column(db.Date)
+    deathdate: Mapped[date | None] = db.Column(db.Date)
     alive: Mapped[bool] = db.Column(db.Boolean, default=True)
 
     # Family Tree Structure
     root: Mapped[bool] = db.Column(db.Boolean, default=False)
 
     # Foreign Keys
-    mother: Mapped[Optional[int]] = db.Column(
+    mother: Mapped[int | None] = db.Column(
         db.Integer, db.ForeignKey("members.member_id"), nullable=True
     )
-    father: Mapped[Optional[int]] = db.Column(
+    father: Mapped[int | None] = db.Column(
         db.Integer, db.ForeignKey("members.member_id"), nullable=True
     )
     family_id: Mapped[int] = db.Column(
         db.Integer, db.ForeignKey("families.family_id"), nullable=False
     )
-    user_id: Mapped[Optional[int]] = db.Column(
+    user_id: Mapped[int | None] = db.Column(
         db.Integer, db.ForeignKey("users.user_id"), nullable=True
     )
 
@@ -63,12 +65,12 @@ class Member(db.Model):
         family_id: int,
         gender: Gender,
         birthdate: date | None = None,
-        deathdate: Optional[date] = None,
-        alive: Optional[bool] = None,
+        deathdate: date | None = None,
+        alive: bool | None = None,
         root: bool = False,
-        mother: Optional[int] = None,
-        father: Optional[int] = None,
-        user_id: Optional[int] = None,
+        mother: int | None = None,
+        father: int | None = None,
+        user_id: int | None = None,
     ) -> None:
         """Initialize a new Member instance.
 
@@ -105,7 +107,7 @@ class Member(db.Model):
         return f"{self.first_name} {self.last_name}"
 
     @property
-    def age(self) -> Optional[int]:
+    def age(self) -> int | None:
         """Calculates the member's current age or age at death."""
         if not self.birthdate:
             return None
@@ -157,7 +159,7 @@ class Member(db.Model):
                     f"and Age:{mother.age}"
                 )
 
-    def to_dict(self, access_level: str = "family") -> Dict[str, Any]:
+    def to_dict(self, access_level: str = "family") -> dict[str, Any]:
         """
         Converts the member instance to a dictionary representation based on access level.
 

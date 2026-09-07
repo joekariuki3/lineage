@@ -1,11 +1,12 @@
+from datetime import datetime
+
 import pytest
+
 from app import create_app
 from app.extensions import db as _db
-from config import TestConfig
-from app.models import Family, User, Event, Link, Member
-from datetime import datetime
+from app.models import Event, Family, Link, Member, User
 from app.utils.constants import Gender
-from typing import Union
+from config import TestConfig
 
 
 @pytest.fixture(scope="function")
@@ -87,7 +88,7 @@ def session(db):
     db.session.remove()
 
 
-def clean_up(session, obj: Union[Family, User, Member, Link, Event], obj_id: int):
+def clean_up(session, obj: Family | User | Member | Link | Event, obj_id: int):
     """
     Deletes a given object from the session and commits the changes if the object
     exists in the session. The function checks the existence of the object by its
